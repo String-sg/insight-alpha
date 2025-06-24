@@ -133,22 +133,6 @@ export function QuizQuestion({
         })}
       </View>
 
-      {/* Explanation (shown after answer) */}
-      {showCorrectAnswer && question.explanation && (
-        <View className="mt-6 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-          <View className="flex-row items-start">
-            <Text className="text-blue-500 text-lg mr-2">💡</Text>
-            <View className="flex-1">
-              <Text className="text-blue-800 mb-1 font-geist-semibold">
-                Explanation
-              </Text>
-              <Text className="text-blue-700 text-sm font-geist">
-                {question.explanation}
-              </Text>
-            </View>
-          </View>
-        </View>
-      )}
     </Animated.View>
   );
 }

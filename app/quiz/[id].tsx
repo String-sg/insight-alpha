@@ -14,6 +14,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { mockQuizzes } from '@/data/quizzes';
 import { QuizQuestion } from '@/components/QuizQuestion';
 import { MiniPlayer } from '@/components/MiniPlayer';
+import { BottomSheet } from '@/components/BottomSheet';
+import { AnswerFeedback } from '@/components/AnswerFeedback';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { 
   Quiz, 
@@ -36,7 +38,7 @@ export default function QuizScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
   const [quizStartTime] = useState(Date.now());
-  const [showAnswerFeedback, setShowAnswerFeedback] = useState(false);
+  const [showAnswerSheet, setShowAnswerSheet] = useState(false);
 
   const loadQuiz = useCallback(async () => {
     try {
@@ -65,7 +67,7 @@ export default function QuizScreen() {
   }, [id, loadQuiz]);
 
   const handleOptionSelect = (optionId: string) => {
-    if (!quiz || showAnswerFeedback) return;
+    if (!quiz || showAnswerSheet) return;
 
     const currentQuestion = quiz.questions[currentQuestionIndex];
     const selectedOption = currentQuestion.options.find(opt => opt.id === optionId);
@@ -100,19 +102,22 @@ export default function QuizScreen() {
     );
     setAnswers(updatedAnswers);
 
-    // Show feedback
-    setShowAnswerFeedback(true);
+    // Show answer feedback in bottom sheet
+    setShowAnswerSheet(true);
+  };
 
-    // Move to next question after showing feedback
+  const handleContinueFromFeedback = () => {
+    setShowAnswerSheet(false);
+    
+    // Move to next question or finish quiz
     setTimeout(() => {
-      setShowAnswerFeedback(false);
       if (currentQuestionIndex < quiz.questions.length - 1) {
         setCurrentQuestionIndex(prev => prev + 1);
         setQuestionStartTime(Date.now());
       } else {
-        finishQuiz(updatedAnswers);
+        finishQuiz(answers);
       }
-    }, 1500);
+    }, 300); // Small delay for smooth animation
   };
 
   const finishQuiz = async (finalAnswers: QuizAnswer[]) => {
@@ -279,7 +284,7 @@ export default function QuizScreen() {
           <View className="bg-white h-3 rounded-full overflow-hidden" style={{ width: 180 }}>
             <View 
               className="h-full bg-[#a583ff] rounded-full"
-              style={{ width: `${(Math.min(currentQuestionIndex + (showAnswerFeedback ? 1 : 0), quiz.questions.length - 1) + 1) / quiz.questions.length * 100}%` }}
+              style={{ width: `${(currentQuestionIndex + 1) / quiz.questions.length * 100}%` }}
             />
           </View>
           
@@ -298,8 +303,8 @@ export default function QuizScreen() {
               questionNumber={currentQuestionIndex + 1}
               totalQuestions={quiz.questions.length}
               onOptionSelect={handleOptionSelect}
-              disabled={showAnswerFeedback}
-              showCorrectAnswer={showAnswerFeedback}
+              disabled={showAnswerSheet}
+              showCorrectAnswer={false}
               selectedOptionId={
                 answers.find(answer => answer.questionId === currentQuestion.id)?.selectedOptionId
               }
@@ -312,21 +317,35 @@ export default function QuizScreen() {
         <View className="px-4" style={{ paddingBottom: currentPodcast ? 120 : 40 }}>
           <TouchableOpacity
             className="bg-black rounded-full py-4 items-center justify-center"
-            disabled={!hasSelectedAnswer || showAnswerFeedback}
-            style={{ opacity: hasSelectedAnswer && !showAnswerFeedback ? 1 : 0.5 }}
+            disabled={!hasSelectedAnswer || showAnswerSheet}
+            style={{ opacity: hasSelectedAnswer && !showAnswerSheet ? 1 : 0.5 }}
             onPress={handleCheckAnswer}
           >
             <Text className="text-white text-base font-geist-medium">
-              {showAnswerFeedback 
-                ? (currentQuestionIndex < quiz.questions.length - 1 ? 'Next question...' : 'Finishing quiz...')
-                : 'Check answer'
-              }
+              Check answer
             </Text>
           </TouchableOpacity>
         </View>
       
         {/* Mini Player */}
         {currentPodcast && <MiniPlayer />}
+
+        {/* Answer Feedback Bottom Sheet */}
+        <BottomSheet
+          visible={showAnswerSheet}
+          onClose={() => setShowAnswerSheet(false)}
+          height={490}
+        >
+          <AnswerFeedback
+            isCorrect={answers.find(a => a.questionId === currentQuestion.id)?.isCorrect || false}
+            selectedOption={currentQuestion.options.find(opt => opt.id === answers.find(a => a.questionId === currentQuestion.id)?.selectedOptionId) || currentQuestion.options[0]}
+            correctOption={currentQuestion.options.find(opt => opt.isCorrect) || currentQuestion.options[0]}
+            allOptions={currentQuestion.options}
+            explanation={currentQuestion.explanation || 'No explanation available.'}
+            onContinue={handleContinueFromFeedback}
+            onClose={() => setShowAnswerSheet(false)}
+          />
+        </BottomSheet>
       </SafeAreaView>
     </View>
   );
