@@ -260,7 +260,21 @@ export function AudioProvider({ children }: AudioProviderProps) {
 
       // Create new audio player using createAudioPlayer
       const audioUrl = episode?.audioUrl || podcast.audioUrl;
-      const player = createAudioPlayer({ uri: audioUrl } as AudioSource);
+      
+      // Handle different audio source types
+      let audioSource: AudioSource;
+      if (typeof audioUrl === 'string') {
+        // URL string (external or file:// URLs)
+        audioSource = { uri: audioUrl };
+      } else if (typeof audioUrl === 'number') {
+        // Local asset (require() result)
+        audioSource = audioUrl;
+      } else {
+        // Fallback to treating as URI
+        audioSource = { uri: audioUrl };
+      }
+      
+      const player = createAudioPlayer(audioSource);
       
       playerRef.current = player;
       dispatch({ type: 'SET_PLAYER', payload: player });

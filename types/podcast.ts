@@ -7,7 +7,7 @@ export interface Podcast {
   title: string;
   description: string;
   imageUrl: string;
-  audioUrl: string;
+  audioUrl: string | number;
   duration: number; // Duration in milliseconds
   author: string;
 }
@@ -16,7 +16,7 @@ export interface Episode {
   id: string;
   title: string;
   description: string;
-  audioUrl: string;
+  audioUrl: string | number;
   duration: number; // Duration in milliseconds
   publishedAt: Date;
   podcastId: string; // Reference to parent podcast
