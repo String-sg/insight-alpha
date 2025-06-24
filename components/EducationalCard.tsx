@@ -63,7 +63,7 @@ export const EducationalCard: React.FC<EducationalCardProps> = ({
   return (
     <TouchableOpacity
       onPress={onPress}
-      className={`${content.backgroundColor} rounded-3xl shadow-sm mx-6 mb-4`}
+      className={`${content.backgroundColor} rounded-3xl drop-shadow-sm mx-6 mb-4`}
       activeOpacity={0.8}
     >
       {/* Header Section */}
@@ -96,7 +96,7 @@ export const EducationalCard: React.FC<EducationalCardProps> = ({
           {/* Play Button */}
           <TouchableOpacity
             onPress={handlePlayPress}
-            className="bg-white rounded-full px-5 py-3 flex-row items-center gap-1 shadow-sm border border-black/10"
+            className="bg-white rounded-full px-5 py-3 flex-row items-center gap-1 drop-shadow-sm border border-black/10"
             activeOpacity={0.8}
           >
             {isThisPodcastLoading ? (

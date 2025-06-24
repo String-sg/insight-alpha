@@ -37,21 +37,6 @@ export default function QuizScreen() {
   const [quizStartTime] = useState(Date.now());
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    loadQuiz();
-    
-    // Start timer
-    intervalRef.current = setInterval(() => {
-      setTimeSpent(prev => prev + 1);
-    }, 1000);
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [id, loadQuiz]);
-
   const loadQuiz = useCallback(async () => {
     try {
       const foundQuiz = mockQuizzes.find(q => q.id === id);
@@ -73,6 +58,21 @@ export default function QuizScreen() {
       ]);
     }
   }, [id]);
+
+  useEffect(() => {
+    loadQuiz();
+    
+    // Start timer
+    intervalRef.current = setInterval(() => {
+      setTimeSpent(prev => prev + 1);
+    }, 1000);
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [id, loadQuiz]);
 
   const handleOptionSelect = (optionId: string) => {
     if (!quiz) return;

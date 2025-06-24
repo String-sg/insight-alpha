@@ -131,7 +131,7 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
       <View className="flex-row items-center px-2">
         {/* Main Mini Player */}
         <View className="flex-1 mr-1">
-          <View className="rounded-full overflow-hidden shadow-lg">
+          <View className="rounded-full overflow-hidden drop-shadow-lg">
             <BlurView
               intensity={95}
               tint="light"
@@ -196,7 +196,7 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
 
         {/* AI Chat Button */}
         <View className="ml-2">
-          <View className="w-18 h-18 rounded-full overflow-hidden shadow-lg">
+          <View className="w-18 h-18 rounded-full overflow-hidden drop-shadow-lg">
             <BlurView
               intensity={95}
               tint="light"

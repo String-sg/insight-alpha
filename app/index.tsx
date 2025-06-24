@@ -47,7 +47,7 @@ export default function HomeScreen() {
   );
 
   // Get daily recommendation (first item for now)
-  const dailyRecommendation = educationalContent[1]; // Reflective Practice item
+  const dailyRecommendation = educationalContent[0]; // First available item
 
   return (
     <SafeAreaView className="flex-1 bg-transparent">

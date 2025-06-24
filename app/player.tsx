@@ -147,7 +147,7 @@ className="absolute inset-0 flex-1"
 
           {/* Album Art */}
           <View className="items-center mb-8 mt-8">
-            <View className="shadow-2xl">
+            <View className="drop-shadow-2xl">
               {contentInfo?.imageUrl ? (
                 <View className="w-76 h-76 rounded-[32px] overflow-hidden">
                   <Image

@@ -115,7 +115,7 @@ export function QuizQuestion({
         transform: [{ scale: scaleAnim }],
       }}
     >
-      <ThemedView className="bg-white bg-gray-800 rounded-lg shadow-lg p-6 mx-4 mb-6">
+      <ThemedView className="bg-white bg-gray-800 rounded-lg drop-shadow-lg p-6 mx-4 mb-6">
         {/* Question Header */}
         <View className="flex-row justify-between items-center mb-4">
           <View className="flex-row items-center">

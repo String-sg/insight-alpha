@@ -63,7 +63,7 @@ export function QuizCard({ quiz, progress, status, onPress }: QuizCardProps) {
       disabled={isDisabled}
       className={`mb-4 rounded-lg overflow-hidden ${isDisabled ? 'opacity-50' : ''}`}
     >
-      <ThemedView className="bg-white bg-gray-800 shadow-md">
+      <ThemedView className="bg-white bg-gray-800 drop-shadow-md">
         {/* Quiz Image Header */}
         <View className="h-32 bg-gradient-to-r from-blue-500 to-purple-600 relative">
           {quiz.imageUrl ? (

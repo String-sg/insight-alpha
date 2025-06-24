@@ -99,7 +99,7 @@ export default function QuizResultScreen() {
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <View className="p-6">
           {/* Main Score Card */}
-          <ThemedView className={`rounded-xl p-8 mb-6 shadow-lg ${getScoreBgColor(result.scorePercentage)}`}>
+          <ThemedView className={`rounded-xl p-8 mb-6 drop-shadow-lg ${getScoreBgColor(result.scorePercentage)}`}>
             <View className="items-center">
               <Text className="text-6xl mb-4">
                 {getPerformanceIcon(result.scorePercentage)}
@@ -122,7 +122,7 @@ export default function QuizResultScreen() {
           </ThemedView>
 
           {/* Quiz Stats */}
-          <ThemedView className="bg-white bg-gray-800 rounded-xl p-6 mb-6 shadow-lg">
+          <ThemedView className="bg-white bg-gray-800 rounded-xl p-6 mb-6 drop-shadow-lg">
             <ThemedText type="subtitle" className="font-bold mb-4 text-center">
               Quiz Statistics
             </ThemedText>
@@ -161,7 +161,7 @@ export default function QuizResultScreen() {
           </ThemedView>
 
           {/* Feedback */}
-          <ThemedView className="bg-white bg-gray-800 rounded-xl p-6 mb-6 shadow-lg">
+          <ThemedView className="bg-white bg-gray-800 rounded-xl p-6 mb-6 drop-shadow-lg">
             <View className="flex-row items-center mb-3">
               <Text className="text-2xl mr-2">💡</Text>
               <ThemedText type="subtitle" className="font-bold">
@@ -178,7 +178,7 @@ export default function QuizResultScreen() {
             onPress={() => setShowDetails(!showDetails)}
             className="mb-4"
           >
-            <ThemedView className="bg-white bg-gray-800 rounded-xl p-4 shadow-lg">
+            <ThemedView className="bg-white bg-gray-800 rounded-xl p-4 drop-shadow-lg">
               <View className="flex-row justify-between items-center">
                 <ThemedText type="subtitle" className="font-bold">
                   Question Details
@@ -192,7 +192,7 @@ export default function QuizResultScreen() {
 
           {/* Question Details */}
           {showDetails && (
-            <ThemedView className="bg-white bg-gray-800 rounded-xl p-6 mb-6 shadow-lg">
+            <ThemedView className="bg-white bg-gray-800 rounded-xl p-6 mb-6 drop-shadow-lg">
               <View className="space-y-4">
                 {result.quiz.questions.map((question, index) => {
                   const answer = result.attempt.answers.find(a => a.questionId === question.id);
@@ -242,7 +242,7 @@ export default function QuizResultScreen() {
           <View className="space-y-3">
             <TouchableOpacity
               onPress={() => router.push(`/quiz/${result.quiz.id}`)}
-              className="bg-blue-600 rounded-xl p-4 shadow-lg"
+              className="bg-blue-600 rounded-xl p-4 drop-shadow-lg"
             >
               <Text className="text-white font-bold text-center text-lg">
                 Retake Quiz
@@ -251,7 +251,7 @@ export default function QuizResultScreen() {
             
             <TouchableOpacity
               onPress={() => router.push('/(tabs)/library')}
-              className="bg-gray-600 bg-gray-700 rounded-xl p-4 shadow-lg"
+              className="bg-gray-600 bg-gray-700 rounded-xl p-4 drop-shadow-lg"
             >
               <Text className="text-white font-bold text-center text-lg">
                 Back to Library
