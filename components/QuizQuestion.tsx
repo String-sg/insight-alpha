@@ -85,7 +85,7 @@ export function QuizQuestion({
         opacity: fadeAnim,
         transform: [{ scale: scaleAnim }],
       }}
-      className="px-4"
+      className=""
     >
       {/* Quiz Badge and Podcast Info */}
       <View className="bg-white rounded-full mb-6" style={{ width: 269 }}>

@@ -13,7 +13,6 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { mockQuizzes } from '@/data/quizzes';
 import { QuizQuestion } from '@/components/QuizQuestion';
-import { ThemedView } from '@/components/ThemedView';
 import { MiniPlayer } from '@/components/MiniPlayer';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { 
@@ -37,6 +36,7 @@ export default function QuizScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
   const [quizStartTime] = useState(Date.now());
+  const [showAnswerFeedback, setShowAnswerFeedback] = useState(false);
 
   const loadQuiz = useCallback(async () => {
     try {
@@ -65,30 +65,52 @@ export default function QuizScreen() {
   }, [id, loadQuiz]);
 
   const handleOptionSelect = (optionId: string) => {
-    if (!quiz) return;
+    if (!quiz || hasSelectedAnswer) return;
 
     const currentQuestion = quiz.questions[currentQuestionIndex];
     const selectedOption = currentQuestion.options.find(opt => opt.id === optionId);
-    const questionTimeSpent = Math.floor((Date.now() - questionStartTime) / 1000);
 
     if (!selectedOption) return;
 
-    const answer: QuizAnswer = {
-      questionId: currentQuestion.id,
-      selectedOptionId: optionId,
-      isCorrect: selectedOption.isCorrect,
-      timeSpent: questionTimeSpent
-    };
+    // Only store the selection, don't process the answer yet
+    setAnswers(prev => {
+      // Remove any existing answer for this question
+      const filtered = prev.filter(a => a.questionId !== currentQuestion.id);
+      return [...filtered, {
+        questionId: currentQuestion.id,
+        selectedOptionId: optionId,
+        isCorrect: selectedOption.isCorrect,
+        timeSpent: 0 // Will be calculated when checking answer
+      }];
+    });
+  };
 
-    setAnswers(prev => [...prev, answer]);
-    
-    // Move to next question after a short delay
+  const handleCheckAnswer = () => {
+    if (!quiz || !hasSelectedAnswer) return;
+
+    const currentAnswer = answers.find(a => a.questionId === quiz.questions[currentQuestionIndex].id);
+    if (!currentAnswer) return;
+
+    // Update the answer with the actual time spent
+    const timeSpent = Math.floor((Date.now() - questionStartTime) / 1000);
+    const updatedAnswers = answers.map(a => 
+      a.questionId === currentAnswer.questionId 
+        ? { ...a, timeSpent } 
+        : a
+    );
+    setAnswers(updatedAnswers);
+
+    // Show feedback
+    setShowAnswerFeedback(true);
+
+    // Move to next question after showing feedback
     setTimeout(() => {
+      setShowAnswerFeedback(false);
       if (currentQuestionIndex < quiz.questions.length - 1) {
         setCurrentQuestionIndex(prev => prev + 1);
         setQuestionStartTime(Date.now());
       } else {
-        finishQuiz([...answers, answer]);
+        finishQuiz(updatedAnswers);
       }
     }, 1500);
   };
@@ -206,23 +228,27 @@ export default function QuizScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView className="flex-1 bg-gray-50 bg-gray-900">
-        <StatusBar barStyle="dark-content" />
-        <ThemedView className="flex-1 justify-center items-center">
-          <Text className="text-lg">Loading quiz...</Text>
-        </ThemedView>
-      </SafeAreaView>
+      <View className="flex-1" style={{ backgroundColor: '#ffffff', backgroundImage: 'linear-gradient(to bottom, #f5f5f5 90%, #ddd0ff 100%)' }}>
+        <SafeAreaView className="flex-1">
+          <StatusBar barStyle="dark-content" />
+          <View className="flex-1 justify-center items-center">
+            <Text className="text-lg text-gray-900 font-geist-medium">Loading quiz...</Text>
+          </View>
+        </SafeAreaView>
+      </View>
     );
   }
 
   if (!quiz) {
     return (
-      <SafeAreaView className="flex-1 bg-gray-50 bg-gray-900">
-        <StatusBar barStyle="dark-content" />
-        <ThemedView className="flex-1 justify-center items-center">
-          <Text className="text-lg text-gray-600 text-gray-400">Quiz not found</Text>
-        </ThemedView>
-      </SafeAreaView>
+      <View className="flex-1" style={{ backgroundColor: '#ffffff', backgroundImage: 'linear-gradient(to bottom, #f5f5f5 90%, #ddd0ff 100%)' }}>
+        <SafeAreaView className="flex-1">
+          <StatusBar barStyle="dark-content" />
+          <View className="flex-1 justify-center items-center">
+            <Text className="text-lg text-gray-900 font-geist-medium">Quiz not found</Text>
+          </View>
+        </SafeAreaView>
+      </View>
     );
   }
 
@@ -230,7 +256,7 @@ export default function QuizScreen() {
   const hasSelectedAnswer = answers.some(answer => answer.questionId === currentQuestion.id);
 
   return (
-    <View className="flex-1" style={{ backgroundColor: '#f5f5f5' }}>
+    <View className="flex-1" style={{ backgroundColor: '#ffffff', backgroundImage: 'linear-gradient(to bottom, #f5f5f5 90%, #ddd0ff 100%)' }}>
       <SafeAreaView className="flex-1">
         <Stack.Screen 
           options={{
@@ -238,82 +264,69 @@ export default function QuizScreen() {
           }}
         />
         <StatusBar barStyle="dark-content" />
-        
-        {/* Gradient Background */}
-        <View 
-          className="absolute inset-0"
-          style={{
-            backgroundColor: '#f5f5f5',
-          }}
-        >
-          <View 
-            className="absolute bottom-0 left-0 right-0"
-            style={{
-              height: '20%',
-              backgroundColor: '#ddd0ff',
-              opacity: 0.6,
-            }}
-          />
+
+        {/* Custom Header - Figma Design */}
+        <View className="flex-row items-center justify-between px-4 py-3">
+          <TouchableOpacity
+            onPress={handleExitQuiz}
+            className="w-10 h-10 items-center justify-center rounded-full bg-[#e4e4e4]"
+            activeOpacity={0.7}
+          >
+            <Ionicons name="arrow-back" size={24} color="#000" />
+          </TouchableOpacity>
+          
+          {/* Progress Bar */}
+          <View className="bg-white h-3 rounded-full overflow-hidden" style={{ width: 180 }}>
+            <View 
+              className="h-full bg-[#a583ff] rounded-full"
+              style={{ width: `${(Math.min(currentQuestionIndex + (showAnswerFeedback ? 1 : 0), quiz.questions.length - 1) + 1) / quiz.questions.length * 100}%` }}
+            />
+          </View>
+          
+          <TouchableOpacity
+            className="w-10 h-10 items-center justify-center rounded-full bg-[#e4e4e4]"
+            activeOpacity={0.7}
+          >
+            <Ionicons name="ellipsis-horizontal" size={24} color="#000" />
+          </TouchableOpacity>
         </View>
 
-      {/* Custom Header - Figma Design */}
-      <View className="flex-row items-center justify-between px-4 py-3">
-        <TouchableOpacity
-          onPress={handleExitQuiz}
-          className="w-10 h-10 items-center justify-center rounded-full bg-gray-200"
-          activeOpacity={0.7}
-        >
-          <Ionicons name="arrow-back" size={20} color="#000" />
-        </TouchableOpacity>
-        
-        {/* Progress Bar */}
-        <View className="bg-white h-3 rounded-full overflow-hidden" style={{ width: 180 }}>
-          <View 
-            className="h-full bg-[#a583ff] rounded-full"
-            style={{ width: `${((currentQuestionIndex + 1) / quiz.questions.length) * 100}%` }}
-          />
-        </View>
-        
-        <TouchableOpacity
-          className="w-10 h-10 items-center justify-center rounded-full bg-gray-200"
-          activeOpacity={0.7}
-        >
-          <Ionicons name="ellipsis-horizontal" size={20} color="#000" />
-        </TouchableOpacity>
-      </View>
+        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+          <View className="py-6 px-4">
+            <QuizQuestion
+              question={currentQuestion}
+              questionNumber={currentQuestionIndex + 1}
+              totalQuestions={quiz.questions.length}
+              onOptionSelect={handleOptionSelect}
+              disabled={showAnswerFeedback}
+              showCorrectAnswer={showAnswerFeedback}
+              selectedOptionId={
+                answers.find(answer => answer.questionId === currentQuestion.id)?.selectedOptionId
+              }
+              quiz={quiz}
+            />
+          </View>
+        </ScrollView>
 
-      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-        <View className="py-6">
-          <QuizQuestion
-            question={currentQuestion}
-            questionNumber={currentQuestionIndex + 1}
-            totalQuestions={quiz.questions.length}
-            onOptionSelect={handleOptionSelect}
-            disabled={hasSelectedAnswer}
-            showCorrectAnswer={hasSelectedAnswer}
-            selectedOptionId={
-              answers.find(answer => answer.questionId === currentQuestion.id)?.selectedOptionId
-            }
-            quiz={quiz}
-          />
+        {/* Check Answer Button */}
+        <View className="px-4" style={{ paddingBottom: currentPodcast ? 120 : 40 }}>
+          <TouchableOpacity
+            className="bg-black rounded-full py-4 items-center justify-center"
+            disabled={!hasSelectedAnswer || showAnswerFeedback}
+            style={{ opacity: hasSelectedAnswer && !showAnswerFeedback ? 1 : 0.5 }}
+            onPress={handleCheckAnswer}
+          >
+            <Text className="text-white text-base font-geist-medium">
+              {showAnswerFeedback 
+                ? (currentQuestionIndex < quiz.questions.length - 1 ? 'Next question...' : 'Finishing quiz...')
+                : 'Check answer'
+              }
+            </Text>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-
-      {/* Check Answer Button */}
-      <View className="px-4 pb-6">
-        <TouchableOpacity
-          className="bg-black rounded-full py-4 items-center justify-center"
-          disabled={!hasSelectedAnswer}
-          style={{ opacity: hasSelectedAnswer ? 1 : 0.5 }}
-        >
-          <Text className="text-white text-base font-geist-medium">
-            Check answer
-          </Text>
-        </TouchableOpacity>
-      </View>
       
-      {/* Mini Player */}
-      {currentPodcast && <MiniPlayer />}
+        {/* Mini Player */}
+        {currentPodcast && <MiniPlayer />}
       </SafeAreaView>
     </View>
   );
