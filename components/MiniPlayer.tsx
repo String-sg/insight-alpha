@@ -10,6 +10,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { BlurView } from 'expo-blur';
 import { useAudioContext } from '@/contexts/AudioContext';
 
 interface MiniPlayerProps {
@@ -27,8 +28,6 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
     currentPodcast,
     currentEpisode,
     isLoading,
-    currentTime,
-    duration,
     resumePodcast,
     pausePodcast,
   } = useAudioContext();
@@ -84,9 +83,9 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
     }
   };
 
-  const getProgress = () => {
-    if (!duration || duration === 0) return 0;
-    return (currentTime / duration) * 100;
+  const handleChatPress = () => {
+    // TODO: Implement AI chat functionality
+    console.log('Chat with AI pressed');
   };
 
   const getCurrentInfo = () => {
@@ -111,7 +110,6 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
   }
 
   const contentInfo = getCurrentInfo();
-  const progress = getProgress();
 
   return (
     <Animated.View
@@ -125,81 +123,102 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
         zIndex: 1000,
       }}
     >
-      <TouchableOpacity
-        onPress={handlePlayerPress}
-        activeOpacity={0.9}
-        className="mx-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
-        style={{
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-          elevation: 5,
-        }}
-      >
-        {/* Progress Bar */}
-        <View className="absolute top-0 left-0 right-0 h-1 bg-gray-200 dark:bg-gray-600 rounded-t-xl overflow-hidden">
-          <View 
-            className="h-full bg-blue-500 dark:bg-blue-400"
-            style={{ width: `${progress}%` }}
-          />
+      <View className="flex-row items-center px-2">
+        {/* Main Mini Player */}
+        <View className="flex-1 mr-1">
+          <View className="rounded-full overflow-hidden shadow-lg">
+            <BlurView
+              intensity={95}
+              tint="light"
+              style={{ borderRadius: 1000 }}
+            >
+              <TouchableOpacity
+                onPress={handlePlayerPress}
+                activeOpacity={0.9}
+                className="flex-row items-center p-3 bg-white/10 border border-white/20"
+                style={{ borderRadius: 1000 }}
+              >
+                {/* Podcast Image */}
+                <View className="w-12 h-12 rounded-full overflow-hidden mr-3 bg-purple-500">
+                  {contentInfo?.imageUrl ? (
+                    <Image
+                      source={{ uri: contentInfo.imageUrl }}
+                      className="w-12 h-12"
+                      resizeMode="cover"
+                    />
+                  ) : (
+                    <View className="w-full h-full items-center justify-center">
+                      <Ionicons 
+                        name="musical-notes" 
+                        size={20} 
+                        color="white" 
+                      />
+                    </View>
+                  )}
+                </View>
+
+                {/* Content Info */}
+                <View className="flex-1 mr-3">
+                  <Text 
+                    className="text-sm font-medium text-gray-900"
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {contentInfo?.title || 'Unknown Title'}
+                  </Text>
+                </View>
+
+                {/* Play/Pause Button */}
+                <TouchableOpacity
+                  onPress={handlePlayPause}
+                  className="bg-gray-200 rounded-full p-3"
+                >
+                  {isLoading ? (
+                    <ActivityIndicator size="small" color="#666" />
+                  ) : (
+                    <Ionicons
+                      name={isPlaying ? "pause" : "play"}
+                      size={24}
+                      color="#666"
+                      style={isPlaying ? {} : { marginLeft: 2 }}
+                    />
+                  )}
+                </TouchableOpacity>
+              </TouchableOpacity>
+            </BlurView>
+          </View>
         </View>
 
-        <View className="flex-row items-center p-3 pt-4">
-          {/* Podcast Image */}
-          <View className="w-12 h-12 rounded-lg overflow-hidden mr-3 bg-gray-200 dark:bg-gray-600">
-            {contentInfo?.imageUrl ? (
-              <Image
-                source={{ uri: contentInfo.imageUrl }}
-                className="w-full h-full"
-                resizeMode="cover"
-              />
-            ) : (
-              <View className="w-full h-full items-center justify-center">
-                <Ionicons 
-                  name="musical-notes" 
-                  size={20} 
-                  color="#9CA3AF" 
+        {/* AI Chat Button */}
+        <View className="ml-2">
+          <View className="w-18 h-18 rounded-full overflow-hidden shadow-lg">
+            <BlurView
+              intensity={95}
+              tint="light"
+              style={{ 
+                width: 72, 
+                height: 72, 
+                borderRadius: 36,
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <TouchableOpacity
+                onPress={handleChatPress}
+                activeOpacity={0.9}
+                className="w-full h-full items-center justify-center bg-white/10 border border-white/20"
+                style={{ borderRadius: 36 }}
+              >
+                <Ionicons
+                  name="sparkles"
+                  size={24}
+                  color="#666"
                 />
-              </View>
-            )}
+              </TouchableOpacity>
+            </BlurView>
           </View>
-
-          {/* Content Info */}
-          <View className="flex-1 mr-3">
-            <Text 
-              className="text-sm font-semibold text-gray-900 dark:text-white"
-              numberOfLines={1}
-            >
-              {contentInfo?.title || 'Unknown Title'}
-            </Text>
-            <Text 
-              className="text-xs text-gray-500 dark:text-gray-400 mt-0.5"
-              numberOfLines={1}
-            >
-              {contentInfo?.subtitle || 'Unknown Author'}
-            </Text>
-          </View>
-
-          {/* Play/Pause Button */}
-          <TouchableOpacity
-            onPress={handlePlayPause}
-            className="w-10 h-10 items-center justify-center rounded-full bg-blue-500 dark:bg-blue-600"
-            style={{
-              boxShadow: '0 2px 4px rgba(59, 130, 246, 0.2)',
-              elevation: 3,
-            }}
-          >
-            {isLoading ? (
-              <ActivityIndicator size="small" color="white" />
-            ) : (
-              <Ionicons
-                name={isPlaying ? "pause" : "play"}
-                size={18}
-                color="white"
-                style={isPlaying ? {} : { marginLeft: 2 }} // Adjust play icon position
-              />
-            )}
-          </TouchableOpacity>
         </View>
-      </TouchableOpacity>
+      </View>
     </Animated.View>
   );
 };

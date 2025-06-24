@@ -49,7 +49,7 @@ export const PodcastCard: React.FC<PodcastCardProps> = ({
   return (
     <TouchableOpacity
       onPress={handleCardPress}
-      className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-3 mx-4 active:opacity-80"
+      className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 mb-3 mx-4 active:opacity-80"
       activeOpacity={0.8}
     >
       <View className="flex-row items-start space-x-3">

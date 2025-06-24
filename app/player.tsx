@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -6,7 +6,6 @@ import {
   Image,
   ActivityIndicator,
   ScrollView,
-  Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -14,15 +13,12 @@ import { useRouter } from 'expo-router';
 import Slider from '@react-native-community/slider';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { StatusBar } from 'expo-status-bar';
-import { QuizProgress, QuizStatus } from '@/types/quiz';
-import { mockQuizzes } from '@/data/quizzes';
+import { LinearGradient } from 'expo-linear-gradient';
 
-const { width, height } = Dimensions.get('window');
 
 export default function PlayerScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const [quizProgress, setQuizProgress] = useState<QuizProgress | null>(null);
   
   const {
     isPlaying,
@@ -32,7 +28,6 @@ export default function PlayerScreen() {
     currentTime,
     duration,
     playbackRate,
-    volume,
     error,
     resumePodcast,
     pausePodcast,
@@ -40,24 +35,8 @@ export default function PlayerScreen() {
     skipForward,
     skipBackward,
     setPlaybackRate,
-    setVolume,
-    getQuizProgress,
   } = useAudioContext();
 
-  useEffect(() => {
-    if (currentPodcast) {
-      loadQuizProgress();
-    }
-  }, [currentPodcast]);
-
-  const loadQuizProgress = async () => {
-    if (!currentPodcast) return;
-    const quiz = mockQuizzes.find(q => q.podcastId === currentPodcast.id);
-    if (quiz) {
-      const progress = await getQuizProgress(currentPodcast.id);
-      setQuizProgress(progress);
-    }
-  };
 
   const handlePlayPause = async () => {
     if (isPlaying) {
@@ -96,41 +75,10 @@ export default function PlayerScreen() {
     return (currentTime / duration) * 100;
   };
 
-  const getListeningProgress = () => {
-    if (!duration || duration === 0) return 0;
-    return currentTime / duration;
-  };
 
-  const getQuizStatus = (): QuizStatus => {
-    if (!quizProgress) return 'unlocked'; // Quizzes are always available
-    if (quizProgress.isCompleted) {
-      return quizProgress.bestScore >= 70 ? 'passed' : 'completed';
-    }
-    return 'unlocked';
-  };
 
-  const handleQuizPress = () => {
-    if (!currentPodcast) return;
-    const quiz = mockQuizzes.find(q => q.podcastId === currentPodcast.id);
-    if (quiz) {
-      router.push(`/quiz/${quiz.id}`);
-    }
-  };
 
-  const shouldShowQuizButton = () => {
-    if (!currentPodcast) return false;
-    const quiz = mockQuizzes.find(q => q.podcastId === currentPodcast.id);
-    return !!quiz;
-  };
 
-  const getQuizButtonText = () => {
-    const status = getQuizStatus();
-    
-    if (status === 'completed' || status === 'passed') {
-      return `Retake Quiz (${quizProgress?.bestScore}%)`;
-    }
-    return 'Take Quiz';
-  };
 
   const getCurrentInfo = () => {
     if (currentEpisode) {
@@ -159,13 +107,14 @@ export default function PlayerScreen() {
 
   const contentInfo = getCurrentInfo();
   const progress = getProgress();
-  const imageSize = Math.min(width * 0.8, height * 0.4);
 
   return (
     <>
       <StatusBar style="light" />
-      <View 
-        className="flex-1 bg-gray-900"
+      <LinearGradient
+        colors={['#4CB7FF', '#B875FF']}
+        locations={[0, 0.865]}
+className="absolute inset-0 flex-1"
         style={{ paddingTop: insets.top }}
       >
         <ScrollView 
@@ -174,20 +123,16 @@ export default function PlayerScreen() {
           showsVerticalScrollIndicator={false}
         >
           {/* Header */}
-          <View className="flex-row items-center justify-between px-6 py-4">
+          <View className="flex-row items-center justify-between px-4 py-3">
             <TouchableOpacity
               onPress={() => router.back()}
-              className="w-10 h-10 items-center justify-center rounded-full bg-black/20"
+              className="w-10 h-10 items-center justify-center rounded-full bg-white/20"
             >
-              <Ionicons name="chevron-down" size={24} color="white" />
+              <Ionicons name="close" size={24} color="white" />
             </TouchableOpacity>
             
-            <Text className="text-white font-medium text-lg flex-1 text-center mx-4">
-              Now Playing
-            </Text>
-            
-            <TouchableOpacity className="w-10 h-10 items-center justify-center rounded-full bg-black/20">
-              <Ionicons name="ellipsis-horizontal" size={20} color="white" />
+            <TouchableOpacity className="w-10 h-10 items-center justify-center rounded-full bg-white/20">
+              <Ionicons name="share-outline" size={20} color="white" />
             </TouchableOpacity>
           </View>
 
@@ -198,101 +143,99 @@ export default function PlayerScreen() {
             </View>
           )}
 
-          {/* Podcast Image */}
-          <View className="items-center mb-8">
-            <View 
-              className="rounded-2xl overflow-hidden bg-gray-800 shadow-2xl"
-              style={{
-                width: imageSize,
-                height: imageSize,
-                boxShadow: '0 8px 16px rgba(0, 0, 0, 0.4)',
-              }}
-            >
+          {/* Album Art */}
+          <View className="items-center mb-8 mt-8">
+            <View className="shadow-2xl">
               {contentInfo?.imageUrl ? (
-                <Image
-                  source={{ uri: contentInfo.imageUrl }}
-                  style={{ width: imageSize, height: imageSize }}
-                  resizeMode="cover"
-                />
+                <View className="w-76 h-76 rounded-[32px] overflow-hidden">
+                  <Image
+                    source={{ uri: contentInfo.imageUrl }}
+                    className="w-76 h-76"
+                    resizeMode="cover"
+                  />
+                </View>
               ) : (
-                <View className="w-full h-full items-center justify-center">
-                  <Ionicons name="musical-notes" size={imageSize * 0.3} color="#6B7280" />
+                <View className="w-76 h-76 items-center justify-center bg-[#715EEE] rounded-[32px]">
+                  <Ionicons name="musical-notes" size={120} color="#FFFFFF" />
                 </View>
               )}
             </View>
           </View>
 
-          {/* Content Info */}
-          <View className="px-6 mb-8">
-            <Text className="text-white text-2xl font-bold text-center mb-2">
+          {/* Title Section */}
+          <View className="px-5 mb-8">
+            <View className="bg-[#D4C3FF] px-2 py-1 rounded-full self-start mb-2">
+              <Text className="text-xs font-semibold text-[#3C3256]">Special Educational Needs</Text>
+            </View>
+            <Text className="text-lg font-semibold text-[#F5EFF7] leading-7">
               {contentInfo?.title || 'Unknown Title'}
             </Text>
-            <Text className="text-gray-300 text-lg text-center mb-4">
-              {contentInfo?.subtitle || 'Unknown Author'}
-            </Text>
-            {contentInfo?.description && (
-              <Text className="text-gray-400 text-sm text-center leading-5">
-                {contentInfo.description}
-              </Text>
-            )}
           </View>
 
-          {/* Progress Bar */}
-          <View className="px-6 mb-8">
+          {/* Progress Section */}
+          <View className="px-4 mb-8">
             <Slider
-              style={{ height: 40 }}
+              style={{ height: 20, width: '100%' }}
               minimumValue={0}
               maximumValue={100}
               value={progress}
               onSlidingComplete={(value: number) => handleSeek(value)}
-              minimumTrackTintColor="#3B82F6"
-              maximumTrackTintColor="#374151"
+              minimumTrackTintColor="#792AEF"
+              maximumTrackTintColor="#F5EFF7"
               thumbStyle={{ 
-                backgroundColor: '#3B82F6', 
-                width: 20, 
-                height: 20,
-                boxShadow: '0 2px 4px rgba(59, 130, 246, 0.5)',
+                backgroundColor: '#FFFFFF', 
+                width: 18, 
+                height: 18,
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.25,
+                shadowRadius: 4,
+              }}
+              trackStyle={{
+                height: 8,
+                borderRadius: 4,
               }}
             />
             
             {/* Time Display */}
-            <View className="flex-row justify-between mt-2">
-              <Text className="text-gray-400 text-sm">
+            <View className="flex-row justify-between">
+              <Text className="text-xs font-normal text-[#F5EFF7]">
                 {formatTime(currentTime)}
               </Text>
-              <Text className="text-gray-400 text-sm">
-                {formatTime(duration)}
+              <Text className="text-xs font-normal text-[#F5EFF7]">
+                -{formatTime(duration - currentTime)}
               </Text>
             </View>
           </View>
 
           {/* Main Controls */}
-          <View className="flex-row items-center justify-center px-6 mb-8">
+          <View className="flex-row items-center justify-center px-4 mb-8 gap-8">
+            {/* Subtitles */}
+            <TouchableOpacity className="p-2">
+              <Ionicons name="text" size={24} color="white" />
+            </TouchableOpacity>
+
             {/* Skip Backward */}
             <TouchableOpacity
               onPress={() => skipBackward(15)}
-              className="w-16 h-16 items-center justify-center"
+              className="p-2"
             >
-              <Ionicons name="play-skip-back" size={32} color="white" />
-              <Text className="text-white text-xs mt-1">15s</Text>
+              <Ionicons name="play-skip-back" size={24} color="white" />
             </TouchableOpacity>
 
             {/* Play/Pause */}
             <TouchableOpacity
               onPress={handlePlayPause}
-              className="w-20 h-20 items-center justify-center rounded-full bg-blue-500 mx-8"
-              style={{
-                boxShadow: '0 4px 8px rgba(59, 130, 246, 0.3)',
-              }}
+              className="w-14 h-14 rounded-full bg-white/20 border border-white/30 items-center justify-center"
             >
               {isLoading ? (
                 <ActivityIndicator size="large" color="white" />
               ) : (
                 <Ionicons
                   name={isPlaying ? "pause" : "play"}
-                  size={40}
+                  size={24}
                   color="white"
-                  style={isPlaying ? {} : { marginLeft: 4 }}
+                  style={isPlaying ? {} : { marginLeft: 2 }}
                 />
               )}
             </TouchableOpacity>
@@ -300,105 +243,42 @@ export default function PlayerScreen() {
             {/* Skip Forward */}
             <TouchableOpacity
               onPress={() => skipForward(30)}
-              className="w-16 h-16 items-center justify-center"
+              className="p-2"
             >
-              <Ionicons name="play-skip-forward" size={32} color="white" />
-              <Text className="text-white text-xs mt-1">30s</Text>
+              <Ionicons name="play-skip-forward" size={24} color="white" />
             </TouchableOpacity>
-          </View>
 
-          {/* Quiz Button */}
-          {shouldShowQuizButton() && (
-            <View className="px-6 mb-6">
-              <TouchableOpacity
-                onPress={handleQuizPress}
-                className={`w-full p-4 rounded-xl border-2 flex-row items-center justify-center ${
-                  getQuizStatus() === 'completed' || getQuizStatus() === 'passed'
-                    ? 'bg-green-600/20 border-green-500'
-                    : 'bg-blue-600/20 border-blue-500'
-                }`}
-              >
-                <View className="flex-row items-center">
-                  <Text className="text-2xl mr-3">
-                    {getQuizStatus() === 'completed' || getQuizStatus() === 'passed'
-                      ? '✅'
-                      : '📝'
-                    }
-                  </Text>
-                  <View className="flex-1">
-                    <Text className={`font-bold text-lg ${
-                      getQuizStatus() === 'completed' || getQuizStatus() === 'passed'
-                        ? 'text-green-400'
-                        : 'text-blue-400'
-                    }`}>
-                      {getQuizButtonText()}
-                    </Text>
-                    {(getQuizStatus() === 'completed' || getQuizStatus() === 'passed') && quizProgress && (
-                      <Text className="text-green-300 text-sm mt-1">
-                        {quizProgress.attempts} attempt{quizProgress.attempts !== 1 ? 's' : ''} 
-                        • Best: {quizProgress.bestScore}%
-                      </Text>
-                    )}
-                    {getQuizStatus() === 'unlocked' && (
-                      <Text className="text-blue-300 text-sm mt-1">
-                        Test your knowledge of this podcast!
-                      </Text>
-                    )}
-                  </View>
-                  <Ionicons name="chevron-forward" size={20} color="white" />
-                </View>
-              </TouchableOpacity>
-            </View>
-          )}
-
-          {/* Additional Controls */}
-          <View className="flex-row items-center justify-between px-6">
             {/* Playback Rate */}
             <TouchableOpacity
               onPress={handlePlaybackRatePress}
-              className="px-4 py-2 bg-gray-800 rounded-full border border-gray-600"
+              className="bg-[#EADDFF]/10 px-3 py-1.5 rounded-xl"
             >
-              <Text className="text-white font-medium text-sm">
+              <Text className="text-sm font-medium text-white">
                 {playbackRate}x
               </Text>
             </TouchableOpacity>
-
-            {/* Volume Control */}
-            <View className="flex-row items-center flex-1 ml-6">
-              <Ionicons 
-                name="volume-low" 
-                size={20} 
-                color="#9CA3AF" 
-                style={{ marginRight: 12 }}
-              />
-              
-              <View className="flex-1">
-                <Slider
-                  style={{ height: 30 }}
-                  minimumValue={0}
-                  maximumValue={1}
-                  value={volume || 1.0}
-                  onSlidingComplete={(value: number) => setVolume(value)}
-                  minimumTrackTintColor="#3B82F6"
-                  maximumTrackTintColor="#374151"
-                  thumbStyle={{ 
-                    backgroundColor: '#3B82F6', 
-                    width: 16, 
-                    height: 16 
-                  }}
-                />
-              </View>
-              
-              <Ionicons 
-                name="volume-high" 
-                size={20} 
-                color="#9CA3AF" 
-                style={{ marginLeft: 12 }}
-              />
-            </View>
           </View>
+
+          {/* Bottom Actions */}
+          <View className="flex-row items-center justify-between px-4">
+            <View className="flex-row gap-3">
+              <TouchableOpacity className="bg-[#EADDFF]/50 px-3 py-3 rounded-full">
+                <Ionicons name="thumbs-up-outline" size={20} color="#F5EFF7" />
+              </TouchableOpacity>
+              <TouchableOpacity className="bg-[#EADDFF]/10 w-7 h-12 rounded-full items-center justify-center">
+                <Ionicons name="thumbs-down-outline" size={20} color="#F5EFF7" />
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity className="bg-[#EADDFF]/10 px-3 py-3 rounded-full flex-row items-center gap-1">
+              <Ionicons name="document-text-outline" size={20} color="#FFFFFF" />
+              <Text className="text-sm font-medium text-white">Sources</Text>
+            </TouchableOpacity>
+          </View>
+
         </ScrollView>
-      </View>
+      </LinearGradient>
     </>
   );
 }
+
