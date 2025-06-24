@@ -31,8 +31,8 @@ export default function RootLayout() {
     return null;
   }
 
-  // Hide mini player when fullscreen player is active
-  const shouldShowMiniPlayer = pathname !== '/player';
+  // Hide mini player when fullscreen player is active or on quiz result page
+  const shouldShowMiniPlayer = pathname !== '/player' && pathname !== '/quiz/result';
 
   return (
     <SafeAreaProvider style={{ backgroundColor: 'transparent' }}>

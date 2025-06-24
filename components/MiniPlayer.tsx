@@ -135,8 +135,8 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
             activeOpacity={0.9}
             style={{
               borderRadius: 1000,
-              backgroundColor: 'rgba(255, 255, 255, 0.8)',
-              backdropFilter: 'blur(40px)',
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(80px)',
               borderWidth: 1,
               borderColor: 'rgba(226, 226, 226, 0.5)',
               shadowColor: '#000',
@@ -207,8 +207,8 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
               width: 72,
               height: 72,
               borderRadius: 36,
-              backgroundColor: 'rgba(255, 255, 255, 0.8)',
-              backdropFilter: 'blur(40px)',
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(80px)',
               borderWidth: 1,
               borderColor: 'rgba(226, 226, 226, 0.5)',
               shadowColor: '#000',
