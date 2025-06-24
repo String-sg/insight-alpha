@@ -122,9 +122,52 @@ interface AudioProviderProps {
 
 export function AudioProvider({ children }: AudioProviderProps) {
   const [state, dispatch] = useReducer(audioReducer, initialState);
-  const progressUpdateInterval = useRef<ReturnType<typeof setInterval> | null>(null);
   const isSeekingRef = useRef(false);
   const playerRef = useRef<AudioPlayer | null>(null);
+  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Update player status from expo-audio player
+  const updatePlayerStatus = () => {
+    if (!playerRef.current) return;
+    
+    const player = playerRef.current;
+    const currentTime = (player.currentTime || 0) * 1000; // Convert to milliseconds
+    const duration = (player.duration || 0) * 1000; // Convert to milliseconds
+    
+    if (!isSeekingRef.current) {
+      dispatch({ type: 'SET_CURRENT_TIME', payload: currentTime });
+    }
+    
+    dispatch({ type: 'SET_DURATION', payload: duration });
+    dispatch({ type: 'SET_PLAYING', payload: player.playing || false });
+    dispatch({ type: 'SET_PLAYBACK_RATE', payload: player.playbackRate || 1.0 });
+  };
+
+  // Start progress tracking
+  const startProgressTracking = () => {
+    // Clear existing interval if any
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+    }
+    
+    // Only start if player exists
+    if (!playerRef.current) return;
+    
+    progressIntervalRef.current = setInterval(() => {
+      if (playerRef.current && playerRef.current.playing) {
+        updatePlayerStatus();
+        saveCurrentState();
+      }
+    }, 1000); // Update every second
+  };
+
+  // Stop progress tracking
+  const stopProgressTracking = () => {
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+      progressIntervalRef.current = null;
+    }
+  };
 
   // Initialize audio settings
   useEffect(() => {
@@ -153,9 +196,7 @@ export function AudioProvider({ children }: AudioProviderProps) {
 
     return () => {
       // Cleanup on unmount
-      if (progressUpdateInterval.current) {
-        clearInterval(progressUpdateInterval.current);
-      }
+      stopProgressTracking();
       if (playerRef.current) {
         try {
           playerRef.current.remove();
@@ -203,47 +244,6 @@ export function AudioProvider({ children }: AudioProviderProps) {
     }
   };
 
-  // Update player status from expo-audio player
-  const updatePlayerStatus = () => {
-    if (!playerRef.current) return;
-    
-    const player = playerRef.current;
-    const currentTime = (player.currentTime || 0) * 1000; // Convert to milliseconds
-    const duration = (player.duration || 0) * 1000; // Convert to milliseconds
-    
-    if (!isSeekingRef.current) {
-      dispatch({ type: 'SET_CURRENT_TIME', payload: currentTime });
-    }
-    
-    dispatch({ type: 'SET_DURATION', payload: duration });
-    dispatch({ type: 'SET_PLAYING', payload: player.playing || false });
-    dispatch({ type: 'SET_PLAYBACK_RATE', payload: player.playbackRate || 1.0 });
-    dispatch({ type: 'SET_VOLUME', payload: player.volume || 1.0 });
-    
-    // Quizzes are always available - no unlock requirements
-  };
-
-  // Start progress tracking
-  const startProgressTracking = () => {
-    if (progressUpdateInterval.current) {
-      clearInterval(progressUpdateInterval.current);
-    }
-    
-    progressUpdateInterval.current = setInterval(() => {
-      if (playerRef.current && state.isPlaying) {
-        updatePlayerStatus();
-        saveCurrentState();
-      }
-    }, 1000); // Update every second
-  };
-
-  // Stop progress tracking
-  const stopProgressTracking = () => {
-    if (progressUpdateInterval.current) {
-      clearInterval(progressUpdateInterval.current);
-      progressUpdateInterval.current = null;
-    }
-  };
 
   // Play podcast function
   const playPodcast = async (podcast: Podcast, episode?: Episode) => {
@@ -299,7 +299,9 @@ export function AudioProvider({ children }: AudioProviderProps) {
       // Start playing
       player.play();
       
+      // Start progress tracking
       startProgressTracking();
+      
       dispatch({ type: 'SET_LOADING', payload: false });
     } catch (error) {
       console.error('Failed to play podcast:', error);
@@ -338,12 +340,19 @@ export function AudioProvider({ children }: AudioProviderProps) {
   // Seek to position function
   const seekTo = async (positionMillis: number) => {
     try {
-      if (playerRef.current) {
+      if (playerRef.current && positionMillis >= 0) {
         isSeekingRef.current = true;
         const positionInSeconds = positionMillis / 1000;
         await playerRef.current.seekTo(positionInSeconds);
+        
+        // Update state immediately for responsive UI
         dispatch({ type: 'SET_CURRENT_TIME', payload: positionMillis });
-        isSeekingRef.current = false;
+        
+        // Reset seeking flag after a brief delay to allow status updates
+        setTimeout(() => {
+          isSeekingRef.current = false;
+        }, 100);
+        
         await saveCurrentState();
       }
     } catch (error) {
@@ -395,12 +404,12 @@ export function AudioProvider({ children }: AudioProviderProps) {
   // Stop podcast function
   const stopPodcast = async () => {
     try {
+      stopProgressTracking();
       if (playerRef.current) {
         playerRef.current.remove();
         playerRef.current = null;
         dispatch({ type: 'SET_PLAYER', payload: null });
       }
-      stopProgressTracking();
       dispatch({ type: 'RESET_PLAYBACK' });
       await AsyncStorage.removeItem(STORAGE_KEYS.CURRENT_POSITION);
     } catch (error) {

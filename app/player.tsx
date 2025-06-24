@@ -47,8 +47,10 @@ export default function PlayerScreen() {
   };
 
   const handleSeek = async (value: number) => {
-    const position = (value / 100) * duration;
-    await seekTo(position);
+    if (duration > 0) {
+      const position = (value / 100) * duration;
+      await seekTo(Math.max(0, Math.min(position, duration)));
+    }
   };
 
   const handlePlaybackRatePress = async () => {
@@ -179,6 +181,9 @@ className="absolute inset-0 flex-1"
               minimumValue={0}
               maximumValue={100}
               value={progress}
+              onSlidingStart={() => {
+                // Indicate we're seeking to prevent progress updates
+              }}
               onSlidingComplete={(value: number) => handleSeek(value)}
               minimumTrackTintColor="#792AEF"
               maximumTrackTintColor="#F5EFF7"
@@ -242,7 +247,7 @@ className="absolute inset-0 flex-1"
 
             {/* Skip Forward */}
             <TouchableOpacity
-              onPress={() => skipForward(30)}
+              onPress={() => skipForward(15)}
               className="p-2"
             >
               <Ionicons name="play-skip-forward" size={24} color="white" />

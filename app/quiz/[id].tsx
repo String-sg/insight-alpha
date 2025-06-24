@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   View, 
   Text, 
@@ -13,7 +13,6 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { mockQuizzes } from '@/data/quizzes';
 import { QuizQuestion } from '@/components/QuizQuestion';
-import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { 
   Quiz, 
@@ -31,7 +30,7 @@ export default function QuizScreen() {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<QuizAnswer[]>([]);
-  const [showResult, setShowResult] = useState(false);
+  // const [showResult, setShowResult] = useState(false); // Unused for now
   const [isLoading, setIsLoading] = useState(true);
   const [timeSpent, setTimeSpent] = useState(0);
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
@@ -51,9 +50,9 @@ export default function QuizScreen() {
         clearInterval(intervalRef.current);
       }
     };
-  }, [id]);
+  }, [id, loadQuiz]);
 
-  const loadQuiz = async () => {
+  const loadQuiz = useCallback(async () => {
     try {
       const foundQuiz = mockQuizzes.find(q => q.id === id);
       if (!foundQuiz) {
@@ -73,7 +72,7 @@ export default function QuizScreen() {
         { text: 'OK', onPress: () => router.back() }
       ]);
     }
-  };
+  }, [id]);
 
   const handleOptionSelect = (optionId: string) => {
     if (!quiz) return;
@@ -217,7 +216,7 @@ export default function QuizScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView className="flex-1 bg-gray-50 dark:bg-gray-900">
+      <SafeAreaView className="flex-1 bg-gray-50 bg-gray-900">
         <StatusBar barStyle="dark-content" />
         <ThemedView className="flex-1 justify-center items-center">
           <Text className="text-lg">Loading quiz...</Text>
@@ -228,10 +227,10 @@ export default function QuizScreen() {
 
   if (!quiz) {
     return (
-      <SafeAreaView className="flex-1 bg-gray-50 dark:bg-gray-900">
+      <SafeAreaView className="flex-1 bg-gray-50 bg-gray-900">
         <StatusBar barStyle="dark-content" />
         <ThemedView className="flex-1 justify-center items-center">
-          <Text className="text-lg text-gray-600 dark:text-gray-400">Quiz not found</Text>
+          <Text className="text-lg text-gray-600 text-gray-400">Quiz not found</Text>
         </ThemedView>
       </SafeAreaView>
     );
@@ -241,7 +240,7 @@ export default function QuizScreen() {
   const hasSelectedAnswer = answers.some(answer => answer.questionId === currentQuestion.id);
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50 dark:bg-gray-900">
+    <SafeAreaView className="flex-1 bg-gray-50 bg-gray-900">
       <Stack.Screen 
         options={{
           headerShown: false,
@@ -250,16 +249,16 @@ export default function QuizScreen() {
       <StatusBar barStyle="dark-content" />
 
       {/* Custom Header */}
-      <View className="flex-row items-center justify-between px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+      <View className="flex-row items-center justify-between px-4 py-3 bg-white bg-gray-900 border-b border-gray-200 border-gray-700">
         <TouchableOpacity
           onPress={handleExitQuiz}
-          className="w-10 h-10 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800"
+          className="w-10 h-10 items-center justify-center rounded-full bg-gray-100 bg-gray-800"
           activeOpacity={0.7}
         >
           <Ionicons name="close" size={20} color="#374151" />
         </TouchableOpacity>
         
-        <Text className="text-lg font-semibold text-gray-900 dark:text-white">
+        <Text className="text-lg font-semibold text-gray-900 text-white">
           {quiz.title}
         </Text>
         
@@ -267,9 +266,9 @@ export default function QuizScreen() {
       </View>
 
       {/* Timer Header */}
-      <View className="px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+      <View className="px-4 py-3 bg-white bg-gray-900 border-b border-gray-200 border-gray-700">
         <View className="flex-row justify-center">
-          <Text className="text-gray-500 dark:text-gray-400 text-sm">
+          <Text className="text-gray-500 text-gray-400 text-sm">
             ⏱️ {Math.floor(timeSpent / 60)}:{(timeSpent % 60).toString().padStart(2, '0')}
           </Text>
         </View>
@@ -292,7 +291,7 @@ export default function QuizScreen() {
       </ScrollView>
 
       {/* Bottom Info */}
-      <ThemedView className="px-4 py-3 border-t border-gray-200 dark:border-gray-700">
+      <ThemedView className="px-4 py-3 border-t border-gray-200 border-gray-700">
         <View className="flex-row justify-between items-center">
           <Text className="text-gray-500 text-sm">
             Question {currentQuestionIndex + 1} of {quiz.questions.length}

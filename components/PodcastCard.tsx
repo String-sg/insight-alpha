@@ -49,12 +49,12 @@ export const PodcastCard: React.FC<PodcastCardProps> = ({
   return (
     <TouchableOpacity
       onPress={handleCardPress}
-      className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 mb-3 mx-4 active:opacity-80"
+      className="bg-white rounded-lg border border-gray-200 p-4 mb-3 mx-4 active:opacity-80"
       activeOpacity={0.8}
     >
       <View className="flex-row items-start space-x-3">
         {/* Podcast Image with Play Button Overlay */}
-        <View className="w-16 h-16 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700 relative">
+        <View className="w-16 h-16 rounded-lg overflow-hidden bg-gray-200 relative">
           <Image
             source={{ uri: podcast.imageUrl }}
             className="w-full h-full"
@@ -93,8 +93,8 @@ export const PodcastCard: React.FC<PodcastCardProps> = ({
           <Text 
             className={`text-lg font-semibold leading-tight ${
               isThisPodcastCurrent 
-                ? 'text-blue-600 dark:text-blue-400' 
-                : 'text-gray-900 dark:text-white'
+                ? 'text-blue-600' 
+                : 'text-gray-900'
             }`}
             numberOfLines={2}
           >
@@ -102,14 +102,14 @@ export const PodcastCard: React.FC<PodcastCardProps> = ({
           </Text>
           
           <Text 
-            className="text-sm text-gray-600 dark:text-gray-400 font-medium"
+            className="text-sm text-gray-600 font-medium"
             numberOfLines={1}
           >
             {podcast.author}
           </Text>
           
           <Text 
-            className="text-sm text-gray-500 dark:text-gray-500 leading-relaxed"
+            className="text-sm text-gray-500 leading-relaxed"
             numberOfLines={2}
           >
             {podcast.description}
@@ -118,8 +118,8 @@ export const PodcastCard: React.FC<PodcastCardProps> = ({
           {/* Duration Badge and Status */}
           <View className="flex-row items-center justify-between mt-2">
             <View className="flex-row items-center space-x-2">
-              <View className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded-full">
-                <Text className="text-xs font-medium text-blue-800 dark:text-blue-200">
+              <View className="bg-blue-100 px-2 py-1 rounded-full">
+                <Text className="text-xs font-medium text-blue-800">
                   {formatDuration(podcast.duration)}
                 </Text>
               </View>
@@ -130,7 +130,7 @@ export const PodcastCard: React.FC<PodcastCardProps> = ({
                   <View className={`w-2 h-2 rounded-full ${
                     isThisPodcastPlaying ? 'bg-green-500' : 'bg-gray-400'
                   }`} />
-                  <Text className="text-xs text-gray-500 dark:text-gray-400">
+                  <Text className="text-xs text-gray-500">
                     {isThisPodcastLoading ? 'Loading...' : 
                      isThisPodcastPlaying ? 'Playing' : 'Paused'}
                   </Text>
@@ -142,7 +142,7 @@ export const PodcastCard: React.FC<PodcastCardProps> = ({
             {showPlayButton && (
               <TouchableOpacity
                 onPress={handlePlayPress}
-                className="w-8 h-8 items-center justify-center rounded-full bg-blue-500 dark:bg-blue-600"
+                className="w-8 h-8 items-center justify-center rounded-full bg-blue-500"
                 activeOpacity={0.8}
               >
                 {isThisPodcastLoading ? (

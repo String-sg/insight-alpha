@@ -67,11 +67,16 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
     }
   }, [shouldShow, slideAnim, opacityAnim]);
 
-  const handlePlayPause = async () => {
-    if (isPlaying) {
-      await pausePodcast();
-    } else {
-      await resumePodcast();
+  const handlePlayPause = async (e: any) => {
+    e?.stopPropagation(); // Prevent triggering handlePlayerPress
+    try {
+      if (isPlaying) {
+        await pausePodcast();
+      } else {
+        await resumePodcast();
+      }
+    } catch (error) {
+      console.error('Failed to toggle playback from mini player:', error);
     }
   };
 

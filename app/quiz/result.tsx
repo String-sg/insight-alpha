@@ -7,14 +7,12 @@ import {
   SafeAreaView,
   StatusBar,
   Animated,
-  Dimensions
+  // Dimensions
 } from 'react-native';
 import { useLocalSearchParams, router, Stack } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { QuizResult, QuizAnswer } from '@/types/quiz';
-
-const { width } = Dimensions.get('window');
+import { QuizResult } from '@/types/quiz';
 
 export default function QuizResultScreen() {
   const { resultData } = useLocalSearchParams<{ resultData: string }>();
@@ -39,20 +37,20 @@ export default function QuizResultScreen() {
         router.back();
       }
     }
-  }, [resultData]);
+  }, [resultData, animatedScore]);
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-600 dark:text-green-400';
-    if (score >= 80) return 'text-blue-600 dark:text-blue-400';
-    if (score >= 70) return 'text-yellow-600 dark:text-yellow-400';
-    return 'text-red-600 dark:text-red-400';
+    if (score >= 90) return 'text-green-600 text-green-400';
+    if (score >= 80) return 'text-blue-600 text-blue-400';
+    if (score >= 70) return 'text-yellow-600 text-yellow-400';
+    return 'text-red-600 text-red-400';
   };
 
   const getScoreBgColor = (score: number) => {
-    if (score >= 90) return 'bg-green-100 dark:bg-green-900';
-    if (score >= 80) return 'bg-blue-100 dark:bg-blue-900';
-    if (score >= 70) return 'bg-yellow-100 dark:bg-yellow-900';
-    return 'bg-red-100 dark:bg-red-900';
+    if (score >= 90) return 'bg-green-100 bg-green-900';
+    if (score >= 80) return 'bg-blue-100 bg-blue-900';
+    if (score >= 70) return 'bg-yellow-100 bg-yellow-900';
+    return 'bg-red-100 bg-red-900';
   };
 
   const getPerformanceIcon = (score: number) => {
@@ -78,7 +76,7 @@ export default function QuizResultScreen() {
 
   if (!result) {
     return (
-      <SafeAreaView className="flex-1 bg-gray-50 dark:bg-gray-900">
+      <SafeAreaView className="flex-1 bg-gray-50 bg-gray-900">
         <StatusBar barStyle="dark-content" />
         <ThemedView className="flex-1 justify-center items-center">
           <Text className="text-lg">Loading results...</Text>
@@ -88,7 +86,7 @@ export default function QuizResultScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50 dark:bg-gray-900">
+    <SafeAreaView className="flex-1 bg-gray-50 bg-gray-900">
       <Stack.Screen 
         options={{
           title: 'Quiz Results',
@@ -115,8 +113,8 @@ export default function QuizResultScreen() {
                 Grade: {getGrade(result.scorePercentage)}
               </Text>
               
-              <View className={`px-4 py-2 rounded-full ${result.passed ? 'bg-green-200 dark:bg-green-800' : 'bg-red-200 dark:bg-red-800'}`}>
-                <Text className={`font-bold ${result.passed ? 'text-green-800 dark:text-green-200' : 'text-red-800 dark:text-red-200'}`}>
+              <View className={`px-4 py-2 rounded-full ${result.passed ? 'bg-green-200 bg-green-800' : 'bg-red-200 bg-red-800'}`}>
+                <Text className={`font-bold ${result.passed ? 'text-green-800 text-green-200' : 'text-red-800 text-red-200'}`}>
                   {result.passed ? '✅ PASSED' : '❌ FAILED'}
                 </Text>
               </View>
@@ -124,7 +122,7 @@ export default function QuizResultScreen() {
           </ThemedView>
 
           {/* Quiz Stats */}
-          <ThemedView className="bg-white dark:bg-gray-800 rounded-xl p-6 mb-6 shadow-lg">
+          <ThemedView className="bg-white bg-gray-800 rounded-xl p-6 mb-6 shadow-lg">
             <ThemedText type="subtitle" className="font-bold mb-4 text-center">
               Quiz Statistics
             </ThemedText>
@@ -133,9 +131,9 @@ export default function QuizResultScreen() {
               <View className="flex-row justify-between items-center">
                 <View className="flex-row items-center">
                   <Text className="text-2xl mr-2">✅</Text>
-                  <Text className="text-gray-600 dark:text-gray-300">Correct Answers</Text>
+                  <Text className="text-gray-600 text-gray-300">Correct Answers</Text>
                 </View>
-                <Text className="font-bold text-lg text-green-600 dark:text-green-400">
+                <Text className="font-bold text-lg text-green-600 text-green-400">
                   {result.correctAnswers}/{result.totalQuestions}
                 </Text>
               </View>
@@ -143,7 +141,7 @@ export default function QuizResultScreen() {
               <View className="flex-row justify-between items-center">
                 <View className="flex-row items-center">
                   <Text className="text-2xl mr-2">⏱️</Text>
-                  <Text className="text-gray-600 dark:text-gray-300">Time Spent</Text>
+                  <Text className="text-gray-600 text-gray-300">Time Spent</Text>
                 </View>
                 <Text className="font-bold text-lg">
                   {formatTime(result.attempt.timeSpent)}
@@ -153,7 +151,7 @@ export default function QuizResultScreen() {
               <View className="flex-row justify-between items-center">
                 <View className="flex-row items-center">
                   <Text className="text-2xl mr-2">📊</Text>
-                  <Text className="text-gray-600 dark:text-gray-300">Average per Question</Text>
+                  <Text className="text-gray-600 text-gray-300">Average per Question</Text>
                 </View>
                 <Text className="font-bold text-lg">
                   {formatTime(Math.floor(result.attempt.timeSpent / result.totalQuestions))}
@@ -163,14 +161,14 @@ export default function QuizResultScreen() {
           </ThemedView>
 
           {/* Feedback */}
-          <ThemedView className="bg-white dark:bg-gray-800 rounded-xl p-6 mb-6 shadow-lg">
+          <ThemedView className="bg-white bg-gray-800 rounded-xl p-6 mb-6 shadow-lg">
             <View className="flex-row items-center mb-3">
               <Text className="text-2xl mr-2">💡</Text>
               <ThemedText type="subtitle" className="font-bold">
                 Feedback
               </ThemedText>
             </View>
-            <Text className="text-gray-700 dark:text-gray-300 leading-relaxed">
+            <Text className="text-gray-700 text-gray-300 leading-relaxed">
               {result.feedback}
             </Text>
           </ThemedView>
@@ -180,7 +178,7 @@ export default function QuizResultScreen() {
             onPress={() => setShowDetails(!showDetails)}
             className="mb-4"
           >
-            <ThemedView className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-lg">
+            <ThemedView className="bg-white bg-gray-800 rounded-xl p-4 shadow-lg">
               <View className="flex-row justify-between items-center">
                 <ThemedText type="subtitle" className="font-bold">
                   Question Details
@@ -194,7 +192,7 @@ export default function QuizResultScreen() {
 
           {/* Question Details */}
           {showDetails && (
-            <ThemedView className="bg-white dark:bg-gray-800 rounded-xl p-6 mb-6 shadow-lg">
+            <ThemedView className="bg-white bg-gray-800 rounded-xl p-6 mb-6 shadow-lg">
               <View className="space-y-4">
                 {result.quiz.questions.map((question, index) => {
                   const answer = result.attempt.answers.find(a => a.questionId === question.id);
@@ -202,28 +200,28 @@ export default function QuizResultScreen() {
                   const correctOption = question.options.find(opt => opt.isCorrect);
                   
                   return (
-                    <View key={question.id} className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0">
+                    <View key={question.id} className="border-b border-gray-200 border-gray-700 pb-4 last:border-b-0">
                       <View className="flex-row items-start mb-2">
                         <Text className="text-lg mr-2">
                           {answer?.isCorrect ? '✅' : '❌'}
                         </Text>
                         <View className="flex-1">
-                          <Text className="font-medium text-gray-800 dark:text-gray-200 mb-1">
+                          <Text className="font-medium text-gray-800 text-gray-200 mb-1">
                             Q{index + 1}: {question.question}
                           </Text>
                           
                           {selectedOption && (
                             <Text className={`text-sm mb-1 ${
                               answer?.isCorrect 
-                                ? 'text-green-600 dark:text-green-400' 
-                                : 'text-red-600 dark:text-red-400'
+                                ? 'text-green-600 text-green-400' 
+                                : 'text-red-600 text-red-400'
                             }`}>
                               Your answer: {selectedOption.text}
                             </Text>
                           )}
                           
                           {!answer?.isCorrect && correctOption && (
-                            <Text className="text-sm text-green-600 dark:text-green-400">
+                            <Text className="text-sm text-green-600 text-green-400">
                               Correct answer: {correctOption.text}
                             </Text>
                           )}
@@ -253,7 +251,7 @@ export default function QuizResultScreen() {
             
             <TouchableOpacity
               onPress={() => router.push('/(tabs)/library')}
-              className="bg-gray-600 dark:bg-gray-700 rounded-xl p-4 shadow-lg"
+              className="bg-gray-600 bg-gray-700 rounded-xl p-4 shadow-lg"
             >
               <Text className="text-white font-bold text-center text-lg">
                 Back to Library
@@ -262,9 +260,9 @@ export default function QuizResultScreen() {
             
             <TouchableOpacity
               onPress={() => router.push('/(tabs)/')}
-              className="border-2 border-gray-300 dark:border-gray-600 rounded-xl p-4"
+              className="border-2 border-gray-300 border-gray-600 rounded-xl p-4"
             >
-              <Text className="text-gray-700 dark:text-gray-300 font-bold text-center text-lg">
+              <Text className="text-gray-700 text-gray-300 font-bold text-center text-lg">
                 Discover More Podcasts
               </Text>
             </TouchableOpacity>

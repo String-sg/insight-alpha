@@ -63,7 +63,7 @@ export function QuizCard({ quiz, progress, status, onPress }: QuizCardProps) {
       disabled={isDisabled}
       className={`mb-4 rounded-lg overflow-hidden ${isDisabled ? 'opacity-50' : ''}`}
     >
-      <ThemedView className="bg-white dark:bg-gray-800 shadow-md">
+      <ThemedView className="bg-white bg-gray-800 shadow-md">
         {/* Quiz Image Header */}
         <View className="h-32 bg-gradient-to-r from-blue-500 to-purple-600 relative">
           {quiz.imageUrl ? (
@@ -101,7 +101,7 @@ export function QuizCard({ quiz, progress, status, onPress }: QuizCardProps) {
             {quiz.title}
           </ThemedText>
           
-          <ThemedText className="text-gray-600 dark:text-gray-300 mb-3 text-sm">
+          <ThemedText className="text-gray-600 text-gray-300 mb-3 text-sm">
             {quiz.description}
           </ThemedText>
 
@@ -129,18 +129,18 @@ export function QuizCard({ quiz, progress, status, onPress }: QuizCardProps) {
               status === 'locked' 
                 ? 'text-gray-500' 
                 : status === 'completed' || status === 'passed'
-                ? 'text-green-600 dark:text-green-400'
-                : 'text-blue-600 dark:text-blue-400'
+                ? 'text-green-600 text-green-400'
+                : 'text-blue-600 text-blue-400'
             }`}>
               {getStatusText(status)}
             </Text>
 
             {status !== 'locked' && (
               <View className="flex-row items-center">
-                <Text className="text-blue-600 dark:text-blue-400 text-sm font-medium mr-1">
+                <Text className="text-blue-600 text-blue-400 text-sm font-medium mr-1">
                   {status === 'completed' || status === 'passed' ? 'Retake' : 'Start'}
                 </Text>
-                <Text className="text-blue-600 dark:text-blue-400">→</Text>
+                <Text className="text-blue-600 text-blue-400">→</Text>
               </View>
             )}
           </View>
@@ -148,7 +148,7 @@ export function QuizCard({ quiz, progress, status, onPress }: QuizCardProps) {
           {/* Progress Bar for Partially Completed */}
           {progress && progress.bestScore > 0 && (
             <View className="mt-3">
-              <View className="bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+              <View className="bg-gray-200 bg-gray-700 h-2 rounded-full overflow-hidden">
                 <View 
                   className={`h-full ${
                     progress.bestScore >= 70 ? 'bg-green-500' : 'bg-yellow-500'

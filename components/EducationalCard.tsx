@@ -39,9 +39,9 @@ export const EducationalCard: React.FC<EducationalCardProps> = ({
 
   const renderProgressRing = () => {
     const progress = content.progress || 0;
-    const circumference = 2 * Math.PI * 8; // radius = 8
-    const strokeDasharray = circumference;
-    const strokeDashoffset = circumference - (progress * circumference);
+    // const circumference = 2 * Math.PI * 8; // radius = 8 - unused for now
+    // const strokeDasharray = circumference;
+    // const strokeDashoffset = circumference - (progress * circumference);
 
     return (
       <View className="w-6 h-6 items-center justify-center">

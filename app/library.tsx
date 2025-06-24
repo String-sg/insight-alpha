@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+// import { useSafeAreaInsets } from 'react-native-safe-area-context'; // Unused for now
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { QuizCard } from '@/components/QuizCard';
 import { mockQuizzes } from '@/data/quizzes';
-import { mockPodcasts } from '@/data/podcasts';
+// import { mockPodcasts } from '@/data/podcasts'; // Unused for now
 import { QuizProgress, QuizStatus } from '@/types/quiz';
 import { SegmentedControl } from '@/components/SegmentedControl';
 
 export default function LibraryScreen() {
   const [quizProgress, setQuizProgress] = useState<Record<string, QuizProgress>>({});
   const [activeTab, setActiveTab] = useState<'recent' | 'favorites' | 'downloads' | 'quizzes'>('recent');
-  const insets = useSafeAreaInsets();
-  const { getQuizProgress, currentPodcast } = useAudioContext();
+  const { currentPodcast } = useAudioContext();
 
   // Calculate bottom padding based on mini player visibility
   const bottomPadding = currentPodcast ? 120 : 40;
@@ -58,13 +57,13 @@ export default function LibraryScreen() {
       className={`px-4 py-2 rounded-full mr-2 ${
         activeTab === tab 
           ? 'bg-blue-500' 
-          : 'bg-gray-200 dark:bg-gray-700'
+          : 'bg-gray-200 bg-gray-700'
       }`}
     >
       <Text className={`font-medium ${
         activeTab === tab 
           ? 'text-white' 
-          : 'text-gray-700 dark:text-gray-300'
+          : 'text-gray-700 text-gray-300'
       }`}>
         {title} {count !== undefined ? `(${count})` : ''}
       </Text>
@@ -75,45 +74,39 @@ export default function LibraryScreen() {
     <View className="space-y-6">
       {completedQuizzes.length > 0 && (
         <View>
-          <Text className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+          <Text className="text-lg font-semibold text-gray-900 mb-3">
             🏆 Completed Quizzes ({completedQuizzes.length})
           </Text>
-          {completedQuizzes.map(quiz => {
-            const podcast = mockPodcasts.find(p => p.id === quiz.podcastId);
-            return (
-              <QuizCard
-                key={quiz.id}
-                quiz={quiz}
-                progress={quizProgress[quiz.id]}
-                status={getQuizStatus(quiz.id)}
-              />
-            );
-          })}
+          {completedQuizzes.map(quiz => (
+            <QuizCard
+              key={quiz.id}
+              quiz={quiz}
+              progress={quizProgress[quiz.id]}
+              status={getQuizStatus(quiz.id)}
+            />
+          ))}
         </View>
       )}
       
       {availableQuizzes.length > 0 && (
         <View>
-          <Text className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+          <Text className="text-lg font-semibold text-gray-900 mb-3">
             📝 Available Quizzes ({availableQuizzes.length})
           </Text>
-          {availableQuizzes.map(quiz => {
-            const podcast = mockPodcasts.find(p => p.id === quiz.podcastId);
-            return (
-              <QuizCard
-                key={quiz.id}
-                quiz={quiz}
-                progress={quizProgress[quiz.id]}
-                status={getQuizStatus(quiz.id)}
-              />
-            );
-          })}
+          {availableQuizzes.map(quiz => (
+            <QuizCard
+              key={quiz.id}
+              quiz={quiz}
+              progress={quizProgress[quiz.id]}
+              status={getQuizStatus(quiz.id)}
+            />
+          ))}
         </View>
       )}
       
       {mockQuizzes.length === 0 && (
-        <View className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-          <Text className="text-gray-600 dark:text-gray-400 text-center">
+        <View className="bg-gray-50 bg-gray-800 p-4 rounded-lg">
+          <Text className="text-gray-600 text-gray-400 text-center">
             No quizzes available yet.
           </Text>
         </View>
