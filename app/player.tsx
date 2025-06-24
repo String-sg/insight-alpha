@@ -148,26 +148,20 @@ className="absolute inset-0 flex-1"
           {/* Album Art */}
           <View className="items-center mb-8 mt-8">
             <View className="drop-shadow-2xl">
-              {contentInfo?.imageUrl ? (
-                <View className="w-76 h-76 rounded-[32px] overflow-hidden">
-                  <Image
-                    source={{ uri: contentInfo.imageUrl }}
-                    className="w-76 h-76"
-                    resizeMode="cover"
-                  />
-                </View>
-              ) : (
-                <View className="w-76 h-76 items-center justify-center bg-[#715EEE] rounded-[32px]">
-                  <Ionicons name="musical-notes" size={120} color="#FFFFFF" />
-                </View>
-              )}
+              <View className="w-76 h-76 rounded-[32px] overflow-hidden">
+                <Image
+                  source={require('@/assets/images/podcast-cover-1.png')}
+                  className="w-76 h-76"
+                  resizeMode="cover"
+                />
+              </View>
             </View>
           </View>
 
           {/* Title Section */}
           <View className="px-5 mb-8">
-            <View className="bg-[#D4C3FF] px-2 py-1 rounded-full self-start mb-2">
-              <Text className="text-xs font-semibold text-[#3C3256]">Special Educational Needs</Text>
+            <View className="bg-purple-200 px-2 py-1 rounded-full self-start mb-2">
+              <Text className="text-xs font-semibold text-purple-900">Special Educational Needs</Text>
             </View>
             <Text className="text-lg font-semibold text-[#F5EFF7] leading-7">
               {contentInfo?.title || 'Unknown Title'}

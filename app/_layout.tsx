@@ -42,6 +42,7 @@ export default function RootLayout() {
             <Stack>
               <Stack.Screen name="index" options={{ headerShown: false }} />
               <Stack.Screen name="library" options={{ headerShown: false }} />
+              <Stack.Screen name="explore" options={{ headerShown: false }} />
               <Stack.Screen name="player" options={{ headerShown: false, presentation: 'modal' }} />
               <Stack.Screen name="+not-found" />
             </Stack>

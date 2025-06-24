@@ -8,7 +8,7 @@ interface ProfileHeaderProps {
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ onProfilePress }) => {
   return (
     <View className="flex-row items-center justify-between mx-6 mt-6 mb-4">
-      <Text className="text-black text-2xl font-semibold">
+      <Text className="text-black text-2xl font-geist-semibold">
         Onward
       </Text>
       

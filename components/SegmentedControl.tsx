@@ -41,7 +41,7 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
     },
     {
       key: 'learning' as SegmentType,
-      title: 'Learning',
+      title: 'Learning journey',
       icon: 'school' as const,
     },
     {

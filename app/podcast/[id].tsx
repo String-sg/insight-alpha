@@ -201,20 +201,20 @@ export default function PodcastDetailsScreen() {
           <View className="mx-4 mt-8 relative">
             {/* Glassmorphism Card */}
             <View 
-              className="bg-white/70 backdrop-blur-xl rounded-3xl border border-black/10 drop-shadow-lg"
+              className="bg-white/70 backdrop-blur-xl rounded-3xl border border-black/10 drop-shadow-sm"
               style={{
                 shadowColor: '#000',
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.1,
-                shadowRadius: 12,
-                elevation: 8,
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.05,
+                shadowRadius: 6,
+                elevation: 4,
               }}
             >
               {/* Content Cover - Overlapping */}
-              <View className="absolute -top-6 left-4 w-24 h-24 rounded-2xl overflow-hidden bg-purple-500 drop-shadow-lg">
+              <View className="absolute -top-6 left-4 w-24 h-24 rounded-2xl overflow-hidden bg-purple-500 drop-shadow-md">
                 <Image
-                  source={{ uri: content.imageUrl }}
-                  className="w-full h-full"
+                  source={require('@/assets/images/podcast-cover-1.png')}
+                  style={{ width: 96, height: 96 }}
                   resizeMode="cover"
                 />
               </View>

@@ -1,194 +1,136 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
-// import { useSafeAreaInsets } from 'react-native-safe-area-context'; // Unused for now
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React from 'react';
+import { View, Text, ScrollView, SafeAreaView, TouchableOpacity, Image } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useAudioContext } from '@/contexts/AudioContext';
-import { QuizCard } from '@/components/QuizCard';
-import { mockQuizzes } from '@/data/quizzes';
-// import { mockPodcasts } from '@/data/podcasts'; // Unused for now
-import { QuizProgress, QuizStatus } from '@/types/quiz';
 import { SegmentedControl } from '@/components/SegmentedControl';
 
 export default function LibraryScreen() {
-  const [quizProgress, setQuizProgress] = useState<Record<string, QuizProgress>>({});
-  const [activeTab, setActiveTab] = useState<'recent' | 'favorites' | 'downloads' | 'quizzes'>('recent');
   const { currentPodcast } = useAudioContext();
-
+  
   // Calculate bottom padding based on mini player visibility
   const bottomPadding = currentPodcast ? 120 : 40;
 
-  useEffect(() => {
-    loadQuizProgress();
-  }, []);
-
-  const loadQuizProgress = async () => {
-    try {
-      const progressData = await AsyncStorage.getItem('quiz_progress');
-      if (progressData) {
-        setQuizProgress(JSON.parse(progressData));
-      }
-    } catch (error) {
-      console.error('Error loading quiz progress:', error);
+  const learningSubjects = [
+    {
+      id: 'sen',
+      title: 'Special Educational Needs (SEN)',
+      podcasts: 12,
+      notes: 2,
+      color: 'bg-purple-500',
+      iconBg: 'bg-purple-200',
+      icon: 'accessibility',
+      width: 'full'
+    },
+    {
+      id: 'cce',
+      title: 'Character and Citizenship Education (CCE)',
+      podcasts: 12,
+      notes: 2,
+      color: 'bg-rose-500',
+      iconBg: 'bg-rose-200',
+      icon: 'people',
+      width: 'half'
+    },
+    {
+      id: 'inclusive',
+      title: 'Inclusive Education',
+      podcasts: 12,
+      notes: 2,
+      color: 'bg-amber-500',
+      iconBg: 'bg-amber-200',
+      icon: 'school',
+      width: 'half'
     }
-  };
+  ];
 
-  const getQuizStatus = (quizId: string): QuizStatus => {
-    const progress = quizProgress[quizId];
-    if (!progress) return 'unlocked'; // Quizzes are always available
-    if (progress.isCompleted) {
-      return progress.bestScore >= 70 ? 'passed' : 'completed';
-    }
-    return 'unlocked';
-  };
-
-  const completedQuizzes = mockQuizzes.filter(quiz => {
-    const progress = quizProgress[quiz.id];
-    return progress?.isCompleted;
-  });
-
-  const availableQuizzes = mockQuizzes.filter(quiz => {
-    const progress = quizProgress[quiz.id];
-    return !progress?.isCompleted; // All non-completed quizzes are available
-  });
-
-  const renderTabButton = (tab: typeof activeTab, title: string, count?: number) => (
-    <TouchableOpacity
-      onPress={() => setActiveTab(tab)}
-      className={`px-4 py-2 rounded-full mr-2 ${
-        activeTab === tab 
-          ? 'bg-blue-500' 
-          : 'bg-gray-200 bg-gray-700'
-      }`}
-    >
-      <Text className={`font-medium ${
-        activeTab === tab 
-          ? 'text-white' 
-          : 'text-gray-700 text-gray-300'
-      }`}>
-        {title} {count !== undefined ? `(${count})` : ''}
-      </Text>
-    </TouchableOpacity>
-  );
-
-  const renderQuizzesTab = () => (
-    <View className="space-y-6">
-      {completedQuizzes.length > 0 && (
-        <View>
-          <Text className="text-lg font-semibold text-gray-900 mb-3">
-            🏆 Completed Quizzes ({completedQuizzes.length})
-          </Text>
-          {completedQuizzes.map(quiz => (
-            <QuizCard
-              key={quiz.id}
-              quiz={quiz}
-              progress={quizProgress[quiz.id]}
-              status={getQuizStatus(quiz.id)}
-            />
-          ))}
-        </View>
-      )}
-      
-      {availableQuizzes.length > 0 && (
-        <View>
-          <Text className="text-lg font-semibold text-gray-900 mb-3">
-            📝 Available Quizzes ({availableQuizzes.length})
-          </Text>
-          {availableQuizzes.map(quiz => (
-            <QuizCard
-              key={quiz.id}
-              quiz={quiz}
-              progress={quizProgress[quiz.id]}
-              status={getQuizStatus(quiz.id)}
-            />
-          ))}
-        </View>
-      )}
-      
-      {mockQuizzes.length === 0 && (
-        <View className="bg-gray-50 bg-gray-800 p-4 rounded-lg">
-          <Text className="text-gray-600 text-gray-400 text-center">
-            No quizzes available yet.
-          </Text>
-        </View>
-      )}
-    </View>
-  );
   return (
-    <SafeAreaView className="flex-1 bg-transparent">
+    <SafeAreaView className="flex-1 bg-[#f4f4f4]">
       <ScrollView 
         className="flex-1"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: bottomPadding }}
       >
-        <View className="bg-transparent">
-          <View className="px-4 pt-6 pb-2">
-            <Text className="text-3xl font-bold text-gray-900 mb-2">
-              Your Library
-            </Text>
-            <Text className="text-base text-gray-600">
-              Manage your podcasts, quizzes and favorites
-            </Text>
-          </View>
+        {/* Header */}
+        <View className="flex-row items-center justify-between mx-6 mt-6 mb-4">
+          <Text className="text-black text-2xl font-geist-semibold">
+            Onward
+          </Text>
+          
+          <TouchableOpacity className="w-10 h-10 bg-slate-100 rounded-full overflow-hidden items-center justify-center">
+            <View className="w-8 h-8">
+              <Image
+                source={{ uri: 'https://picsum.photos/32/32?random=profile' }}
+                className="w-full h-full rounded-full"
+                resizeMode="cover"
+              />
+            </View>
+          </TouchableOpacity>
         </View>
 
         {/* Navigation Bar */}
         <SegmentedControl activeSegment="learning" />
 
-        <View className="px-6">
-          {/* Tab Navigation */}
-          <ScrollView 
-            horizontal 
-            showsHorizontalScrollIndicator={false}
-            className="mb-6"
-          >
-            {renderTabButton('recent', 'Recent')}
-            {renderTabButton('favorites', 'Favorites')}
-            {renderTabButton('downloads', 'Downloads')}
-            {renderTabButton('quizzes', 'Quizzes', mockQuizzes.length)}
-          </ScrollView>
+        {/* Your learnings section */}
+        <View className="flex-row items-center justify-between mx-6 mb-6">
+          <Text className="text-black text-xl font-geist-semibold">
+            Your learnings
+          </Text>
+          
+          <View className="flex-row gap-4">
+            <TouchableOpacity className="w-12 h-14 bg-slate-100 rounded-2xl items-center justify-center">
+              <Ionicons name="settings-outline" size={24} color="#020617" />
+            </TouchableOpacity>
+            <TouchableOpacity className="w-12 h-14 bg-slate-100 rounded-2xl items-center justify-center">
+              <Ionicons name="funnel-outline" size={24} color="#020617" />
+            </TouchableOpacity>
+          </View>
         </View>
-        
-        <View className="flex-1 px-6">
-          {activeTab === 'recent' && (
-            <View className="space-y-4">
-              <View className="bg-gray-50 p-4 rounded-lg">
-                <Text className="text-lg font-semibold text-gray-900 mb-2">
-                  Recently Played
-                </Text>
-                <Text className="text-gray-600">
-                  No podcasts played yet
-                </Text>
-              </View>
+
+        {/* Learning Subject Cards */}
+        <View className="mx-6">
+          {/* Full width card - SEN */}
+          <TouchableOpacity 
+            className={`${learningSubjects[0].color} rounded-3xl p-4 mb-4 h-[200px] justify-center`}
+          >
+            <View className={`${learningSubjects[0].iconBg} rounded-lg p-1 w-8 h-8 items-center justify-center mb-2`}>
+              <Ionicons name={learningSubjects[0].icon as any} size={20} color="#3b0764" />
             </View>
-          )}
-          
-          {activeTab === 'favorites' && (
-            <View className="space-y-4">
-              <View className="bg-gray-50 p-4 rounded-lg">
-                <Text className="text-lg font-semibold text-gray-900 mb-2">
-                  Favorites
+            
+            <Text className="text-white text-xl font-geist-semibold mb-2">
+              {learningSubjects[0].title}
+            </Text>
+            
+            <Text className="text-white text-sm font-geist-regular">
+              {learningSubjects[0].podcasts} podcasts{'\n'}{learningSubjects[0].notes} notes
+            </Text>
+          </TouchableOpacity>
+
+          {/* Half width cards - CCE and Inclusive Education */}
+          <View className="flex-row gap-4">
+            {learningSubjects.slice(1).map((subject, index) => (
+              <TouchableOpacity 
+                key={subject.id}
+                className={`${subject.color} rounded-3xl p-4 flex-1`}
+                style={{ minHeight: 200 }}
+              >
+                <View className={`${subject.iconBg} rounded-lg p-1 w-8 h-8 items-center justify-center mb-2`}>
+                  <Ionicons 
+                    name={subject.icon as any} 
+                    size={20} 
+                    color={subject.id === 'cce' ? '#4c0519' : '#451a03'} 
+                  />
+                </View>
+                
+                <Text className="text-white text-xl font-geist-semibold mb-2">
+                  {subject.title}
                 </Text>
-                <Text className="text-gray-600">
-                  No favorite podcasts yet
+                
+                <Text className="text-white text-sm font-geist-regular">
+                  {subject.podcasts} podcasts{'\n'}{subject.notes} notes
                 </Text>
-              </View>
-            </View>
-          )}
-          
-          {activeTab === 'downloads' && (
-            <View className="space-y-4">
-              <View className="bg-gray-50 p-4 rounded-lg">
-                <Text className="text-lg font-semibold text-gray-900 mb-2">
-                  Downloaded
-                </Text>
-                <Text className="text-gray-600">
-                  No downloaded podcasts
-                </Text>
-              </View>
-            </View>
-          )}
-          
-          {activeTab === 'quizzes' && renderQuizzesTab()}
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

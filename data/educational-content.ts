@@ -21,14 +21,14 @@ export const educationalContent: EducationalContent[] = [
     id: '5',
     title: 'Building Safe School Environments: Anti-Bullying Strategies',
     description: 'Comprehensive approaches to create a positive school culture that prevents bullying and promotes student safety and wellbeing.',
-    category: 'Special Education Needs',
+    category: 'Special Educational Needs',
     author: 'Student Development Team',
     duration: 2400000, // 40 minutes
     imageUrl: 'https://picsum.photos/400/400?random=5',
     audioUrl: require('../assets/audio/building-safe-school-environments.mp3'),
-    backgroundColor: 'bg-green-100',
-    badgeColor: 'bg-green-200',
-    textColor: 'text-green-900',
+    backgroundColor: 'bg-purple-100',
+    badgeColor: 'bg-purple-200',
+    textColor: 'text-purple-900',
     timeLeft: '40m left',
     progress: 0.2,
     publishedDate: '1 day ago'
