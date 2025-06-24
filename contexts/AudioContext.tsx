@@ -1,5 +1,5 @@
 import { mockQuizzes } from '@/data/quizzes';
-import { AudioPlayer, AudioPlayerStatus, AudioSource } from '@/types/audio';
+import { AudioPlayer, AudioPlayerStatus } from '@/types/audio';
 import { Episode, PlaybackState, Podcast } from '@/types/podcast';
 import { QuizProgress } from '@/types/quiz';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -248,6 +248,7 @@ export function AudioProvider({ children }: AudioProviderProps) {
   // Play podcast function
   const playPodcast = async (podcast: Podcast, episode?: Episode) => {
     try {
+      console.log('Starting playPodcast for:', podcast.title, 'audioUrl type:', typeof (episode?.audioUrl || podcast.audioUrl));
       dispatch({ type: 'SET_LOADING', payload: true });
       dispatch({ type: 'SET_ERROR', payload: null });
 
@@ -260,21 +261,12 @@ export function AudioProvider({ children }: AudioProviderProps) {
 
       // Create new audio player using createAudioPlayer
       const audioUrl = episode?.audioUrl || podcast.audioUrl;
+      console.log('Creating audio player with audioUrl:', audioUrl);
       
-      // Handle different audio source types
-      let audioSource: AudioSource;
-      if (typeof audioUrl === 'string') {
-        // URL string (external or file:// URLs)
-        audioSource = { uri: audioUrl };
-      } else if (typeof audioUrl === 'number') {
-        // Local asset (require() result)
-        audioSource = audioUrl as any;
-      } else {
-        // Fallback to treating as URI
-        audioSource = { uri: audioUrl };
-      }
-      
-      const player = createAudioPlayer(audioSource);
+      // createAudioPlayer accepts string | number | AudioSource directly
+      // No need to wrap in an object - expo-audio handles this internally
+      const player = createAudioPlayer(audioUrl);
+      console.log('Audio player created successfully:', player.id);
       
       playerRef.current = player;
       dispatch({ type: 'SET_PLAYER', payload: player });
@@ -295,7 +287,9 @@ export function AudioProvider({ children }: AudioProviderProps) {
       await initializeQuizAvailability(podcast.id);
       
       // Start playing
+      console.log('Calling player.play()');
       player.play();
+      console.log('Player.play() called successfully');
       
       // Start progress tracking
       startProgressTracking();
@@ -313,6 +307,7 @@ export function AudioProvider({ children }: AudioProviderProps) {
     try {
       if (playerRef.current) {
         playerRef.current.pause();
+        dispatch({ type: 'SET_PLAYING', payload: false });
         stopProgressTracking();
         await saveCurrentState();
       }
@@ -327,7 +322,15 @@ export function AudioProvider({ children }: AudioProviderProps) {
     try {
       if (playerRef.current) {
         playerRef.current.play();
+        dispatch({ type: 'SET_PLAYING', payload: true });
         startProgressTracking();
+      } else if (state.currentPodcast) {
+        // Player doesn't exist, recreate it with the saved podcast
+        console.log('Player not found, recreating with saved podcast:', state.currentPodcast.title);
+        await playPodcast(state.currentPodcast, state.currentEpisode || undefined);
+      } else {
+        console.warn('No player and no current podcast to resume');
+        dispatch({ type: 'SET_ERROR', payload: 'No audio to resume' });
       }
     } catch (error) {
       console.error('Failed to resume podcast:', error);
