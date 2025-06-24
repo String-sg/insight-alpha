@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { QuizCard } from '@/components/QuizCard';
 import { mockQuizzes } from '@/data/quizzes';
 import { mockPodcasts } from '@/data/podcasts';
 import { QuizProgress, QuizStatus } from '@/types/quiz';
+import { SegmentedControl } from '@/components/SegmentedControl';
 
 export default function LibraryScreen() {
   const [quizProgress, setQuizProgress] = useState<Record<string, QuizProgress>>({});
   const [activeTab, setActiveTab] = useState<'recent' | 'favorites' | 'downloads' | 'quizzes'>('recent');
-  const { getQuizProgress } = useAudioContext();
+  const insets = useSafeAreaInsets();
+  const { getQuizProgress, currentPodcast } = useAudioContext();
+
+  // Calculate bottom padding based on mini player visibility
+  const bottomPadding = currentPodcast ? 120 : 40;
 
   useEffect(() => {
     loadQuizProgress();
@@ -117,11 +123,19 @@ export default function LibraryScreen() {
   return (
     <SafeAreaView className="flex-1 bg-white dark:bg-gray-900">
       <View className="flex-1">
-        <View className="p-6 pb-0">
-          <Text className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            Your Library
-          </Text>
-          
+        <View className="bg-white dark:bg-gray-900">
+          <View className="px-4 pt-6 pb-2">
+            <Text className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              Your Library
+            </Text>
+            <Text className="text-base text-gray-600 dark:text-gray-400">
+              Manage your podcasts, quizzes and favorites
+            </Text>
+          </View>
+          <SegmentedControl activeSegment="library" />
+        </View>
+
+        <View className="px-6">
           {/* Tab Navigation */}
           <ScrollView 
             horizontal 
@@ -135,7 +149,10 @@ export default function LibraryScreen() {
           </ScrollView>
         </View>
         
-        <ScrollView className="flex-1 px-6">
+        <ScrollView 
+          className="flex-1 px-6"
+          contentContainerStyle={{ paddingBottom: bottomPadding }}
+        >
           {activeTab === 'recent' && (
             <View className="space-y-4">
               <View className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">

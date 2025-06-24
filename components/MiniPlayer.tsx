@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRouter, useSegments } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useAudioContext } from '@/contexts/AudioContext';
 
 interface MiniPlayerProps {
@@ -18,7 +18,6 @@ interface MiniPlayerProps {
 
 export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
   const router = useRouter();
-  const segments = useSegments();
   const insets = useSafeAreaInsets();
   const slideAnim = useRef(new Animated.Value(100)).current; // Start hidden below screen
   const opacityAnim = useRef(new Animated.Value(0)).current;
@@ -113,16 +112,12 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
 
   const contentInfo = getCurrentInfo();
   const progress = getProgress();
-  
-  // Check if we're on a tab screen (has '(tabs)' in the route)
-  const isOnTabScreen = segments.includes('(tabs)');
-  const bottomMargin = isOnTabScreen ? insets.bottom + 150 : insets.bottom + 20;
 
   return (
     <Animated.View
       style={{
         position: 'absolute',
-        bottom: bottomMargin,
+        bottom: insets.bottom + 20,
         left: 0,
         right: 0,
         transform: [{ translateY: slideAnim }],

@@ -103,8 +103,8 @@ export default function PodcastDetailsScreen() {
   // Check if mini player is visible (any podcast is currently loaded)
   const isMiniPlayerVisible = currentlyPlayingPodcast !== null;
   
-  // Calculate dynamic padding for scroll content
-  const scrollPaddingBottom = insets.bottom + (isMiniPlayerVisible ? 160 : 20);
+  // Calculate dynamic padding for scroll content - match other screens
+  const scrollPaddingBottom = isMiniPlayerVisible ? 120 : 40;
 
   return (
     <>
