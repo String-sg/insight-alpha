@@ -1,11 +1,16 @@
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
 import { Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-reanimated';
 import '../global.css';
+import { 
+  Geist_400Regular,
+  Geist_500Medium,
+  Geist_600SemiBold,
+  useFonts 
+} from '@expo-google-fonts/geist';
 
 // import { useColorScheme } from '@/hooks/useColorScheme'; // Disabled dark mode
 import { AudioProvider } from '@/contexts/AudioContext';
@@ -16,6 +21,9 @@ export default function RootLayout() {
   const pathname = usePathname();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    Geist_400Regular,
+    Geist_500Medium,
+    Geist_600SemiBold,
   });
 
   if (!loaded) {

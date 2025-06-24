@@ -80,7 +80,7 @@ export function QuizCard({ quiz, progress, status, onPress }: QuizCardProps) {
           
           {/* Status Badge */}
           <View className={`absolute top-3 right-3 px-3 py-1 rounded-full ${getStatusColor(status)}`}>
-            <Text className="text-white text-xs font-medium">
+            <Text className="text-white text-xs font-geist-medium">
               {status.charAt(0).toUpperCase() + status.slice(1)}
             </Text>
           </View>
@@ -97,7 +97,7 @@ export function QuizCard({ quiz, progress, status, onPress }: QuizCardProps) {
 
         {/* Quiz Content */}
         <View className="p-4">
-          <ThemedText type="subtitle" className="font-bold mb-2 text-lg">
+          <ThemedText type="subtitle" className="font-geist-semibold mb-2 text-lg">
             {quiz.title}
           </ThemedText>
           
@@ -125,7 +125,7 @@ export function QuizCard({ quiz, progress, status, onPress }: QuizCardProps) {
 
           {/* Status Text */}
           <View className="flex-row items-center justify-between">
-            <Text className={`text-sm font-medium ${
+            <Text className={`text-sm font-geist-medium ${
               status === 'locked' 
                 ? 'text-gray-500' 
                 : status === 'completed' || status === 'passed'
@@ -137,7 +137,7 @@ export function QuizCard({ quiz, progress, status, onPress }: QuizCardProps) {
 
             {status !== 'locked' && (
               <View className="flex-row items-center">
-                <Text className="text-blue-600 text-blue-400 text-sm font-medium mr-1">
+                <Text className="text-blue-600 text-blue-400 text-sm font-geist-medium mr-1">
                   {status === 'completed' || status === 'passed' ? 'Retake' : 'Start'}
                 </Text>
                 <Text className="text-blue-600 text-blue-400">→</Text>

@@ -165,7 +165,7 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
                 {/* Content Info */}
                 <View className="flex-1 mr-3">
                   <Text 
-                    className="text-sm font-medium text-gray-900"
+                    className="text-sm text-gray-900 font-geist-medium"
                     numberOfLines={1}
                     ellipsizeMode="tail"
                   >

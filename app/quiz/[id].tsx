@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   View, 
   Text, 
@@ -14,6 +14,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { mockQuizzes } from '@/data/quizzes';
 import { QuizQuestion } from '@/components/QuizQuestion';
 import { ThemedView } from '@/components/ThemedView';
+import { MiniPlayer } from '@/components/MiniPlayer';
+import { useAudioContext } from '@/contexts/AudioContext';
 import { 
   Quiz, 
   QuizAttempt, 
@@ -27,15 +29,14 @@ const QUIZ_PROGRESS_KEY = 'quiz_progress';
 
 export default function QuizScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { currentPodcast } = useAudioContext();
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<QuizAnswer[]>([]);
   // const [showResult, setShowResult] = useState(false); // Unused for now
   const [isLoading, setIsLoading] = useState(true);
-  const [timeSpent, setTimeSpent] = useState(0);
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
   const [quizStartTime] = useState(Date.now());
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const loadQuiz = useCallback(async () => {
     try {
@@ -61,17 +62,6 @@ export default function QuizScreen() {
 
   useEffect(() => {
     loadQuiz();
-    
-    // Start timer
-    intervalRef.current = setInterval(() => {
-      setTimeSpent(prev => prev + 1);
-    }, 1000);
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
   }, [id, loadQuiz]);
 
   const handleOptionSelect = (optionId: string) => {
@@ -240,38 +230,56 @@ export default function QuizScreen() {
   const hasSelectedAnswer = answers.some(answer => answer.questionId === currentQuestion.id);
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50 bg-gray-900">
-      <Stack.Screen 
-        options={{
-          headerShown: false,
-        }}
-      />
-      <StatusBar barStyle="dark-content" />
+    <View className="flex-1" style={{ backgroundColor: '#f5f5f5' }}>
+      <SafeAreaView className="flex-1">
+        <Stack.Screen 
+          options={{
+            headerShown: false,
+          }}
+        />
+        <StatusBar barStyle="dark-content" />
+        
+        {/* Gradient Background */}
+        <View 
+          className="absolute inset-0"
+          style={{
+            backgroundColor: '#f5f5f5',
+          }}
+        >
+          <View 
+            className="absolute bottom-0 left-0 right-0"
+            style={{
+              height: '20%',
+              backgroundColor: '#ddd0ff',
+              opacity: 0.6,
+            }}
+          />
+        </View>
 
-      {/* Custom Header */}
-      <View className="flex-row items-center justify-between px-4 py-3 bg-white bg-gray-900 border-b border-gray-200 border-gray-700">
+      {/* Custom Header - Figma Design */}
+      <View className="flex-row items-center justify-between px-4 py-3">
         <TouchableOpacity
           onPress={handleExitQuiz}
-          className="w-10 h-10 items-center justify-center rounded-full bg-gray-100 bg-gray-800"
+          className="w-10 h-10 items-center justify-center rounded-full bg-gray-200"
           activeOpacity={0.7}
         >
-          <Ionicons name="close" size={20} color="#374151" />
+          <Ionicons name="arrow-back" size={20} color="#000" />
         </TouchableOpacity>
         
-        <Text className="text-lg font-semibold text-gray-900 text-white">
-          {quiz.title}
-        </Text>
-        
-        <View className="w-10" />
-      </View>
-
-      {/* Timer Header */}
-      <View className="px-4 py-3 bg-white bg-gray-900 border-b border-gray-200 border-gray-700">
-        <View className="flex-row justify-center">
-          <Text className="text-gray-500 text-gray-400 text-sm">
-            ⏱️ {Math.floor(timeSpent / 60)}:{(timeSpent % 60).toString().padStart(2, '0')}
-          </Text>
+        {/* Progress Bar */}
+        <View className="bg-white h-3 rounded-full overflow-hidden" style={{ width: 180 }}>
+          <View 
+            className="h-full bg-[#a583ff] rounded-full"
+            style={{ width: `${((currentQuestionIndex + 1) / quiz.questions.length) * 100}%` }}
+          />
         </View>
+        
+        <TouchableOpacity
+          className="w-10 h-10 items-center justify-center rounded-full bg-gray-200"
+          activeOpacity={0.7}
+        >
+          <Ionicons name="ellipsis-horizontal" size={20} color="#000" />
+        </TouchableOpacity>
       </View>
 
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
@@ -286,21 +294,27 @@ export default function QuizScreen() {
             selectedOptionId={
               answers.find(answer => answer.questionId === currentQuestion.id)?.selectedOptionId
             }
+            quiz={quiz}
           />
         </View>
       </ScrollView>
 
-      {/* Bottom Info */}
-      <ThemedView className="px-4 py-3 border-t border-gray-200 border-gray-700">
-        <View className="flex-row justify-between items-center">
-          <Text className="text-gray-500 text-sm">
-            Question {currentQuestionIndex + 1} of {quiz.questions.length}
+      {/* Check Answer Button */}
+      <View className="px-4 pb-6">
+        <TouchableOpacity
+          className="bg-black rounded-full py-4 items-center justify-center"
+          disabled={!hasSelectedAnswer}
+          style={{ opacity: hasSelectedAnswer ? 1 : 0.5 }}
+        >
+          <Text className="text-white text-base font-geist-medium">
+            Check answer
           </Text>
-          <Text className="text-gray-500 text-sm">
-            {answers.filter(a => a.isCorrect).length} correct so far
-          </Text>
-        </View>
-      </ThemedView>
-    </SafeAreaView>
+        </TouchableOpacity>
+      </View>
+      
+      {/* Mini Player */}
+      {currentPodcast && <MiniPlayer />}
+      </SafeAreaView>
+    </View>
   );
 }

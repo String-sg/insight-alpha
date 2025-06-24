@@ -91,7 +91,7 @@ export const PodcastCard: React.FC<PodcastCardProps> = ({
         {/* Podcast Info */}
         <View className="flex-1 space-y-1">
           <Text 
-            className={`text-lg font-semibold leading-tight ${
+            className={`text-lg font-geist-semibold leading-tight ${
               isThisPodcastCurrent 
                 ? 'text-blue-600' 
                 : 'text-gray-900'
@@ -102,7 +102,7 @@ export const PodcastCard: React.FC<PodcastCardProps> = ({
           </Text>
           
           <Text 
-            className="text-sm text-gray-600 font-medium"
+            className="text-sm text-gray-600 font-geist-medium"
             numberOfLines={1}
           >
             {podcast.author}
@@ -119,7 +119,7 @@ export const PodcastCard: React.FC<PodcastCardProps> = ({
           <View className="flex-row items-center justify-between mt-2">
             <View className="flex-row items-center space-x-2">
               <View className="bg-blue-100 px-2 py-1 rounded-full">
-                <Text className="text-xs font-medium text-blue-800">
+                <Text className="text-xs font-geist-medium text-blue-800">
                   {formatDuration(podcast.duration)}
                 </Text>
               </View>
