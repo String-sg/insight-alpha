@@ -121,13 +121,13 @@ export default function LibraryScreen() {
     </View>
   );
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
+    <SafeAreaView className="flex-1 bg-transparent">
       <ScrollView 
         className="flex-1"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: bottomPadding }}
       >
-        <View className="bg-gray-50">
+        <View className="bg-transparent">
           <View className="px-4 pt-6 pb-2">
             <Text className="text-3xl font-bold text-gray-900 mb-2">
               Your Library

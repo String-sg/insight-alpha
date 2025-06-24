@@ -52,7 +52,7 @@ export default function HomeScreen() {
   const dailyRecommendation = educationalContent[1]; // Reflective Practice item
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
+    <SafeAreaView className="flex-1 bg-transparent">
       <StatusBar barStyle="dark-content" />
       
       <ScrollView 

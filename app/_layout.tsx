@@ -27,10 +27,10 @@ export default function RootLayout() {
   const shouldShowMiniPlayer = pathname !== '/player';
 
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider style={{ backgroundColor: 'transparent' }}>
       <AudioProvider>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, backgroundColor: 'transparent' }}>
             <Stack>
               <Stack.Screen name="index" options={{ headerShown: false }} />
               <Stack.Screen name="library" options={{ headerShown: false }} />
