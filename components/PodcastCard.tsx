@@ -1,0 +1,164 @@
+import React from 'react';
+import { TouchableOpacity, View, Text, Image, ActivityIndicator } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Podcast } from '@/types/podcast';
+import { formatDuration } from '@/data/podcasts';
+import { useAudio } from '@/hooks/useAudio';
+
+interface PodcastCardProps {
+  podcast: Podcast;
+  onPress?: () => void;
+  showPlayButton?: boolean;
+}
+
+export const PodcastCard: React.FC<PodcastCardProps> = ({ 
+  podcast, 
+  onPress, 
+  showPlayButton = true 
+}) => {
+  const { 
+    isContentPlaying, 
+    isCurrentPodcast, 
+    playContent, 
+    togglePlayPause, 
+    isLoading,
+    isContentBuffering 
+  } = useAudio();
+
+  const isThisPodcastCurrent = isCurrentPodcast(podcast.id);
+  const isThisPodcastPlaying = isContentPlaying(podcast.id);
+  const isThisPodcastLoading = isThisPodcastCurrent && (isLoading || isContentBuffering);
+
+  const handlePlayPress = async (e: any) => {
+    e.stopPropagation(); // Prevent triggering onPress
+    
+    if (isThisPodcastCurrent) {
+      await togglePlayPause();
+    } else {
+      await playContent(podcast);
+    }
+  };
+
+  const handleCardPress = () => {
+    if (onPress) {
+      onPress();
+    }
+    // Card press should navigate to details, not play audio
+  };
+
+  return (
+    <TouchableOpacity
+      onPress={handleCardPress}
+      className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-3 mx-4 active:opacity-80"
+      activeOpacity={0.8}
+    >
+      <View className="flex-row items-start space-x-3">
+        {/* Podcast Image with Play Button Overlay */}
+        <View className="w-16 h-16 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700 relative">
+          <Image
+            source={{ uri: podcast.imageUrl }}
+            className="w-full h-full"
+            resizeMode="cover"
+          />
+          
+          {/* Play/Pause Button Overlay */}
+          {showPlayButton && (
+            <TouchableOpacity
+              onPress={handlePlayPress}
+              className="absolute inset-0 bg-black/40 items-center justify-center"
+              activeOpacity={0.8}
+            >
+              {isThisPodcastLoading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Ionicons
+                  name={isThisPodcastPlaying ? "pause" : "play"}
+                  size={20}
+                  color="white"
+                />
+              )}
+            </TouchableOpacity>
+          )}
+          
+          {/* Currently Playing Indicator */}
+          {isThisPodcastCurrent && (
+            <View className="absolute top-1 right-1">
+              <View className="w-2 h-2 bg-green-500 rounded-full" />
+            </View>
+          )}
+        </View>
+        
+        {/* Podcast Info */}
+        <View className="flex-1 space-y-1">
+          <Text 
+            className={`text-lg font-semibold leading-tight ${
+              isThisPodcastCurrent 
+                ? 'text-blue-600 dark:text-blue-400' 
+                : 'text-gray-900 dark:text-white'
+            }`}
+            numberOfLines={2}
+          >
+            {podcast.title}
+          </Text>
+          
+          <Text 
+            className="text-sm text-gray-600 dark:text-gray-400 font-medium"
+            numberOfLines={1}
+          >
+            {podcast.author}
+          </Text>
+          
+          <Text 
+            className="text-sm text-gray-500 dark:text-gray-500 leading-relaxed"
+            numberOfLines={2}
+          >
+            {podcast.description}
+          </Text>
+          
+          {/* Duration Badge and Status */}
+          <View className="flex-row items-center justify-between mt-2">
+            <View className="flex-row items-center space-x-2">
+              <View className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded-full">
+                <Text className="text-xs font-medium text-blue-800 dark:text-blue-200">
+                  {formatDuration(podcast.duration)}
+                </Text>
+              </View>
+              
+              {/* Playing Status */}
+              {isThisPodcastCurrent && (
+                <View className="flex-row items-center space-x-1">
+                  <View className={`w-2 h-2 rounded-full ${
+                    isThisPodcastPlaying ? 'bg-green-500' : 'bg-gray-400'
+                  }`} />
+                  <Text className="text-xs text-gray-500 dark:text-gray-400">
+                    {isThisPodcastLoading ? 'Loading...' : 
+                     isThisPodcastPlaying ? 'Playing' : 'Paused'}
+                  </Text>
+                </View>
+              )}
+            </View>
+            
+            {/* Play Button (alternative position) */}
+            {showPlayButton && (
+              <TouchableOpacity
+                onPress={handlePlayPress}
+                className="w-8 h-8 items-center justify-center rounded-full bg-blue-500 dark:bg-blue-600"
+                activeOpacity={0.8}
+              >
+                {isThisPodcastLoading ? (
+                  <ActivityIndicator size="small" color="white" />
+                ) : (
+                  <Ionicons
+                    name={isThisPodcastPlaying ? "pause" : "play"}
+                    size={16}
+                    color="white"
+                  />
+                )}
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+};

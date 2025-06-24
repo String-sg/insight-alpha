@@ -7,9 +7,11 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { useAudioContext } from '@/contexts/AudioContext';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { currentPodcast } = useAudioContext();
 
   return (
     <Tabs
@@ -22,22 +24,27 @@ export default function TabLayout() {
           ios: {
             // Use a transparent background on iOS to show the blur effect
             position: 'absolute',
+            // Add bottom margin when mini player is visible
+            ...(currentPodcast && { marginBottom: 80 }),
           },
-          default: {},
+          default: {
+            // Add bottom margin when mini player is visible on Android
+            ...(currentPodcast && { marginBottom: 80 }),
+          },
         }),
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'Podcasts',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="waveform.circle.fill" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="library"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Library',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="books.vertical.fill" color={color} />,
         }}
       />
     </Tabs>
