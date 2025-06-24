@@ -15,6 +15,7 @@ This is a comprehensive podcast listening app built with React Native, Expo SDK 
 - **Audio**: Expo AV with background playback support
 - **Storage**: AsyncStorage for progress and quiz data
 - **Package Manager**: npm
+- **Styling Approach**: Always using tailwind/native wind
 
 ## Development Commands
 

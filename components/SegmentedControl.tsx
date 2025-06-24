@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, usePathname } from 'expo-router';
 
-type SegmentType = 'podcasts' | 'library';
+type SegmentType = 'home' | 'learning' | 'explore';
 
 interface SegmentedControlProps {
   activeSegment?: SegmentType;
@@ -16,34 +16,44 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
   const pathname = usePathname();
   
   // Determine active segment from pathname if not provided
-  const currentSegment: SegmentType = activeSegment || (pathname === '/library' ? 'library' : 'podcasts');
+  const currentSegment: SegmentType = activeSegment || (
+    pathname === '/library' ? 'learning' : 
+    pathname === '/explore' ? 'explore' : 'home'
+  );
 
   const handleSegmentPress = (segment: SegmentType) => {
     if (segment === currentSegment) return;
     
-    if (segment === 'podcasts') {
+    if (segment === 'home') {
       router.push('/');
-    } else {
+    } else if (segment === 'learning') {
       router.push('/library');
+    } else if (segment === 'explore') {
+      router.push('/explore');
     }
   };
 
   const segments = [
     {
-      key: 'podcasts' as SegmentType,
-      title: 'Podcasts',
-      icon: 'headset-outline' as const,
+      key: 'home' as SegmentType,
+      title: 'Home',
+      icon: 'home' as const,
     },
     {
-      key: 'library' as SegmentType,
-      title: 'Library',
-      icon: 'library-outline' as const,
+      key: 'learning' as SegmentType,
+      title: 'Learning',
+      icon: 'school' as const,
+    },
+    {
+      key: 'explore' as SegmentType,
+      title: 'Explore',
+      icon: 'compass' as const,
     },
   ];
 
   return (
-    <View className="mx-4 mb-4">
-      <View className="flex-row bg-gray-100 dark:bg-gray-800 rounded-xl p-1">
+    <View className="mx-auto w-96 bg-white rounded-[80px] shadow-lg mb-4">
+      <View className="flex-row items-center justify-center px-2 py-0 h-20">
         {segments.map((segment) => {
           const isActive = currentSegment === segment.key;
           
@@ -51,30 +61,22 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
             <TouchableOpacity
               key={segment.key}
               onPress={() => handleSegmentPress(segment.key)}
-              className={`flex-1 flex-row items-center justify-center py-3 px-4 rounded-lg ${
-                isActive 
-                  ? 'bg-white dark:bg-gray-700 shadow-sm' 
-                  : ''
-              }`}
-              style={isActive ? {
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 1 },
-                shadowOpacity: 0.1,
-                shadowRadius: 2,
-                elevation: 2,
-              } : {}}
+              className="min-w-28 flex-col items-center justify-center gap-1 pb-4 pt-3 px-0"
               activeOpacity={0.7}
             >
-              <Ionicons
-                name={segment.icon}
-                size={18}
-                color={isActive ? '#3B82F6' : '#6B7280'}
-                style={{ marginRight: 8 }}
-              />
-              <Text className={`font-medium text-sm ${
+              <View className={`w-16 h-8 items-center justify-center rounded-full ${
+                isActive ? 'bg-slate-950' : ''
+              }`}>
+                <Ionicons
+                  name={segment.icon}
+                  size={24}
+                  color={isActive ? '#f8fafc' : '#64748b'}
+                />
+              </View>
+              <Text className={`font-semibold text-xs text-center ${
                 isActive 
-                  ? 'text-blue-500 dark:text-blue-400' 
-                  : 'text-gray-600 dark:text-gray-400'
+                  ? 'text-slate-950' 
+                  : 'text-slate-700'
               }`}>
                 {segment.title}
               </Text>

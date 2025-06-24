@@ -7,139 +7,127 @@ import { Quiz } from '@/types/quiz';
 export const mockQuizzes: Quiz[] = [
   {
     id: 'quiz-1',
-    podcastId: '1', // Tech Talk Daily
-    title: 'Tech Trends & Innovation Quiz',
-    description: 'Test your knowledge about the latest technology trends and startup innovations discussed in this episode.',
+    podcastId: '1', // Special Educational Needs
+    title: 'Special Educational Needs Quiz',
+    description: 'Test your understanding of supporting students with special educational needs and creating inclusive learning environments.',
     durationThreshold: 0.8, // 80% listening required
-    estimatedTime: 5,
+    estimatedTime: 6,
     questions: [
       {
         id: 'q1-1',
-        question: 'What are the key characteristics of successful tech startups according to the episode?',
+        question: 'What is the most important principle when supporting students with special educational needs?',
         difficulty: 'medium',
         options: [
-          { id: 'opt1-1', text: 'Fast growth and high valuations only', isCorrect: false },
-          { id: 'opt1-2', text: 'Solving real problems, strong team, and scalable business model', isCorrect: true },
-          { id: 'opt1-3', text: 'Having the most advanced technology', isCorrect: false },
-          { id: 'opt1-4', text: 'Large initial funding rounds', isCorrect: false }
+          { id: 'opt1-1', text: 'Treating all students exactly the same', isCorrect: false },
+          { id: 'opt1-2', text: 'Individualized support based on each student\'s unique needs', isCorrect: true },
+          { id: 'opt1-3', text: 'Separating students with SEN from mainstream classes', isCorrect: false },
+          { id: 'opt1-4', text: 'Focusing only on academic achievements', isCorrect: false }
         ],
-        explanation: 'Successful startups focus on solving real problems with strong teams and scalable models rather than just technology or funding.'
+        explanation: 'Each student with SEN has unique needs and requires individualized support strategies to reach their full potential.'
       },
       {
         id: 'q1-2',
-        question: 'Which emerging technology trend was highlighted as most promising for 2024?',
+        question: 'What does "inclusion" mean in the context of special educational needs?',
         difficulty: 'easy',
         options: [
-          { id: 'opt2-1', text: 'Artificial Intelligence and Machine Learning', isCorrect: true },
-          { id: 'opt2-2', text: 'Virtual Reality Gaming', isCorrect: false },
-          { id: 'opt2-3', text: '3D Printing', isCorrect: false },
-          { id: 'opt2-4', text: 'Cryptocurrency Mining', isCorrect: false }
+          { id: 'opt2-1', text: 'All students learning together with appropriate support', isCorrect: true },
+          { id: 'opt2-2', text: 'Separate classes for students with different needs', isCorrect: false },
+          { id: 'opt2-3', text: 'Lowering expectations for all students', isCorrect: false },
+          { id: 'opt2-4', text: 'Only accepting students without disabilities', isCorrect: false }
         ],
-        explanation: 'AI and ML were emphasized as the most transformative technologies for various industries in 2024.'
+        explanation: 'Inclusion means all students, regardless of their abilities or disabilities, learn together in the same classroom with appropriate support.'
       },
       {
         id: 'q1-3',
-        question: 'What advice was given for tech professionals looking to stay relevant?',
+        question: 'Which strategy is most effective for supporting students with learning difficulties?',
         difficulty: 'medium',
         options: [
-          { id: 'opt3-1', text: 'Focus only on one programming language', isCorrect: false },
-          { id: 'opt3-2', text: 'Continuous learning and adapting to new technologies', isCorrect: true },
-          { id: 'opt3-3', text: 'Avoid working with startups', isCorrect: false },
-          { id: 'opt3-4', text: 'Only work on established technologies', isCorrect: false }
+          { id: 'opt3-1', text: 'Using only one teaching method for all students', isCorrect: false },
+          { id: 'opt3-2', text: 'Differentiated instruction and multiple learning modalities', isCorrect: true },
+          { id: 'opt3-3', text: 'Excluding them from group activities', isCorrect: false },
+          { id: 'opt3-4', text: 'Giving them easier work than other students', isCorrect: false }
         ],
-        explanation: 'The key is continuous learning and staying adaptable to new technological developments.'
+        explanation: 'Differentiated instruction using visual, auditory, and kinesthetic approaches helps accommodate different learning styles and needs.'
       },
       {
         id: 'q1-4',
-        question: 'What was mentioned as a major challenge for tech companies in 2024?',
+        question: 'What is the primary goal of an Individualized Education Plan (IEP)?',
         difficulty: 'hard',
         options: [
-          { id: 'opt4-1', text: 'Lack of talent and skills gap', isCorrect: true },
-          { id: 'opt4-2', text: 'Too much competition', isCorrect: false },
-          { id: 'opt4-3', text: 'Government regulations', isCorrect: false },
-          { id: 'opt4-4', text: 'Limited market opportunities', isCorrect: false }
+          { id: 'opt4-1', text: 'To create personalized learning goals and support strategies', isCorrect: true },
+          { id: 'opt4-2', text: 'To label students with their disabilities', isCorrect: false },
+          { id: 'opt4-3', text: 'To determine which students cannot learn', isCorrect: false },
+          { id: 'opt4-4', text: 'To separate students from their peers', isCorrect: false }
         ],
-        explanation: 'The skills gap and difficulty finding qualified talent was identified as a primary challenge.'
+        explanation: 'An IEP provides a roadmap for each student\'s education, outlining specific goals, accommodations, and services needed for success.'
       }
     ]
   },
   {
     id: 'quiz-2',
-    podcastId: '2', // Business Beyond Borders
-    title: 'Global Business Strategy Quiz',
-    description: 'Explore your understanding of international business strategies and entrepreneurship insights.',
+    podcastId: '2', // Reflective Practice
+    title: 'Reflective Practice in Education Quiz',
+    description: 'Test your understanding of reflective teaching practices and professional development strategies.',
     durationThreshold: 0.8,
-    estimatedTime: 6,
+    estimatedTime: 5,
     questions: [
       {
         id: 'q2-1',
-        question: 'What is the most important factor when expanding a business internationally?',
+        question: 'What is the primary purpose of reflective practice in teaching?',
         difficulty: 'medium',
         options: [
-          { id: 'opt1-1', text: 'Having the lowest prices', isCorrect: false },
-          { id: 'opt1-2', text: 'Understanding local culture and market needs', isCorrect: true },
-          { id: 'opt1-3', text: 'Using the same strategy everywhere', isCorrect: false },
-          { id: 'opt1-4', text: 'Having a large marketing budget', isCorrect: false }
+          { id: 'opt1-1', text: 'To critique and blame teachers for poor performance', isCorrect: false },
+          { id: 'opt1-2', text: 'To continuously improve teaching methods and student outcomes', isCorrect: true },
+          { id: 'opt1-3', text: 'To document lessons for administration only', isCorrect: false },
+          { id: 'opt1-4', text: 'To compare teachers against each other', isCorrect: false }
         ],
-        explanation: 'Cultural understanding and local market adaptation are crucial for successful international expansion.'
+        explanation: 'Reflective practice helps teachers analyze their teaching methods and make improvements to better serve their students.'
       },
       {
         id: 'q2-2',
-        question: 'Which business model was highlighted as most resilient during economic uncertainty?',
+        question: 'Which stage comes first in the reflective practice cycle?',
         difficulty: 'easy',
         options: [
-          { id: 'opt2-1', text: 'Subscription-based services', isCorrect: true },
-          { id: 'opt2-2', text: 'One-time product sales', isCorrect: false },
-          { id: 'opt2-3', text: 'Luxury goods only', isCorrect: false },
-          { id: 'opt2-4', text: 'Real estate investment', isCorrect: false }
+          { id: 'opt2-1', text: 'Action - implementing changes', isCorrect: false },
+          { id: 'opt2-2', text: 'Description - what happened in the lesson', isCorrect: true },
+          { id: 'opt2-3', text: 'Analysis - evaluating effectiveness', isCorrect: false },
+          { id: 'opt2-4', text: 'Planning - designing next steps', isCorrect: false }
         ],
-        explanation: 'Subscription models provide predictable recurring revenue, making them more stable during uncertain times.'
+        explanation: 'Reflective practice begins with describing what actually happened before analyzing and planning improvements.'
       },
       {
         id: 'q2-3',
-        question: 'What was emphasized as the key to successful remote team management?',
+        question: 'What is the most effective way to gather evidence for reflection?',
         difficulty: 'medium',
         options: [
-          { id: 'opt3-1', text: 'Constant monitoring and micromanagement', isCorrect: false },
-          { id: 'opt3-2', text: 'Clear communication and trust-building', isCorrect: true },
-          { id: 'opt3-3', text: 'Only hiring local talent', isCorrect: false },
-          { id: 'opt3-4', text: 'Avoiding video calls', isCorrect: false }
+          { id: 'opt3-1', text: 'Relying solely on memory and assumptions', isCorrect: false },
+          { id: 'opt3-2', text: 'Using multiple sources: student feedback, observations, and assessment data', isCorrect: true },
+          { id: 'opt3-3', text: 'Only looking at test scores', isCorrect: false },
+          { id: 'opt3-4', text: 'Asking administrators for their opinions only', isCorrect: false }
         ],
-        explanation: 'Trust and clear communication are fundamental for effective remote team management.'
+        explanation: 'Multiple data sources provide a comprehensive view of teaching effectiveness and student learning.'
       },
       {
         id: 'q2-4',
-        question: 'According to the episode, what is the biggest mistake entrepreneurs make when scaling?',
+        question: 'How should teachers approach challenging reflective insights about their practice?',
         difficulty: 'hard',
         options: [
-          { id: 'opt4-1', text: 'Hiring too quickly without proper planning', isCorrect: true },
-          { id: 'opt4-2', text: 'Not raising enough funding', isCorrect: false },
-          { id: 'opt4-3', text: 'Focusing too much on marketing', isCorrect: false },
-          { id: 'opt4-4', text: 'Not automating processes', isCorrect: false }
+          { id: 'opt4-1', text: 'View them as opportunities for professional growth and learning', isCorrect: true },
+          { id: 'opt4-2', text: 'Ignore them and continue with current methods', isCorrect: false },
+          { id: 'opt4-3', text: 'Blame external factors like students or resources', isCorrect: false },
+          { id: 'opt4-4', text: 'Only share positive reflections with colleagues', isCorrect: false }
         ],
-        explanation: 'Rapid hiring without proper planning and systems can lead to culture dilution and operational chaos.'
-      },
-      {
-        id: 'q2-5',
-        question: 'What trend in global business was predicted to grow significantly?',
-        difficulty: 'medium',
-        options: [
-          { id: 'opt5-1', text: 'Sustainable and ESG-focused businesses', isCorrect: true },
-          { id: 'opt5-2', text: 'Traditional manufacturing', isCorrect: false },
-          { id: 'opt5-3', text: 'Brick-and-mortar retail only', isCorrect: false },
-          { id: 'opt5-4', text: 'Single-market businesses', isCorrect: false }
-        ],
-        explanation: 'Environmental, Social, and Governance (ESG) focused businesses are gaining significant traction globally.'
+        explanation: 'Challenging insights are valuable learning opportunities that lead to professional growth and improved teaching.'
       }
     ]
   },
   {
     id: 'quiz-3',
-    podcastId: '3', // Mindful Health Journey
-    title: 'Wellness & Mindfulness Quiz',
-    description: 'Check your understanding of wellness practices and mental health strategies for a balanced life.',
+    podcastId: '3', // Inclusive Education
+    title: 'Inclusive Classroom Strategies Quiz',
+    description: 'Test your knowledge of creating inclusive learning environments and practical classroom strategies.',
     durationThreshold: 0.8,
-    estimatedTime: 4,
+    estimatedTime: 5,
     questions: [
       {
         id: 'q3-1',

@@ -121,19 +121,25 @@ export default function LibraryScreen() {
     </View>
   );
   return (
-    <SafeAreaView className="flex-1 bg-white dark:bg-gray-900">
-      <View className="flex-1">
-        <View className="bg-white dark:bg-gray-900">
+    <SafeAreaView className="flex-1 bg-gray-50">
+      <ScrollView 
+        className="flex-1"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: bottomPadding }}
+      >
+        <View className="bg-gray-50">
           <View className="px-4 pt-6 pb-2">
-            <Text className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            <Text className="text-3xl font-bold text-gray-900 mb-2">
               Your Library
             </Text>
-            <Text className="text-base text-gray-600 dark:text-gray-400">
+            <Text className="text-base text-gray-600">
               Manage your podcasts, quizzes and favorites
             </Text>
           </View>
-          <SegmentedControl activeSegment="library" />
         </View>
+
+        {/* Navigation Bar */}
+        <SegmentedControl activeSegment="learning" />
 
         <View className="px-6">
           {/* Tab Navigation */}
@@ -149,17 +155,14 @@ export default function LibraryScreen() {
           </ScrollView>
         </View>
         
-        <ScrollView 
-          className="flex-1 px-6"
-          contentContainerStyle={{ paddingBottom: bottomPadding }}
-        >
+        <View className="flex-1 px-6">
           {activeTab === 'recent' && (
             <View className="space-y-4">
-              <View className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                <Text className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              <View className="bg-gray-50 p-4 rounded-lg">
+                <Text className="text-lg font-semibold text-gray-900 mb-2">
                   Recently Played
                 </Text>
-                <Text className="text-gray-600 dark:text-gray-400">
+                <Text className="text-gray-600">
                   No podcasts played yet
                 </Text>
               </View>
@@ -168,11 +171,11 @@ export default function LibraryScreen() {
           
           {activeTab === 'favorites' && (
             <View className="space-y-4">
-              <View className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                <Text className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              <View className="bg-gray-50 p-4 rounded-lg">
+                <Text className="text-lg font-semibold text-gray-900 mb-2">
                   Favorites
                 </Text>
-                <Text className="text-gray-600 dark:text-gray-400">
+                <Text className="text-gray-600">
                   No favorite podcasts yet
                 </Text>
               </View>
@@ -181,11 +184,11 @@ export default function LibraryScreen() {
           
           {activeTab === 'downloads' && (
             <View className="space-y-4">
-              <View className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                <Text className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              <View className="bg-gray-50 p-4 rounded-lg">
+                <Text className="text-lg font-semibold text-gray-900 mb-2">
                   Downloaded
                 </Text>
-                <Text className="text-gray-600 dark:text-gray-400">
+                <Text className="text-gray-600">
                   No downloaded podcasts
                 </Text>
               </View>
@@ -193,8 +196,8 @@ export default function LibraryScreen() {
           )}
           
           {activeTab === 'quizzes' && renderQuizzesTab()}
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
