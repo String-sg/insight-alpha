@@ -65,14 +65,14 @@ export default function QuizScreen() {
   }, [id, loadQuiz]);
 
   const handleOptionSelect = (optionId: string) => {
-    if (!quiz || hasSelectedAnswer) return;
+    if (!quiz || showAnswerFeedback) return;
 
     const currentQuestion = quiz.questions[currentQuestionIndex];
     const selectedOption = currentQuestion.options.find(opt => opt.id === optionId);
 
     if (!selectedOption) return;
 
-    // Only store the selection, don't process the answer yet
+    // Allow changing selection - store the new selection
     setAnswers(prev => {
       // Remove any existing answer for this question
       const filtered = prev.filter(a => a.questionId !== currentQuestion.id);

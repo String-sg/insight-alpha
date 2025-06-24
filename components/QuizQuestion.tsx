@@ -115,7 +115,7 @@ export function QuizQuestion({
               <TouchableOpacity
                 onPress={() => !disabled && onOptionSelect(option.id)}
                 disabled={disabled}
-                className={`p-3 rounded-2xl ${getOptionStyle(option)}`}
+                className={`p-3 rounded-2xl ${getOptionStyle(option)} ${isSelected ? 'outline outline-2 outline-[#a583ff] outline-offset-2' : ''}`}
               >
                 <View className="flex-row items-center">
                   <View className={`rounded-lg px-2 py-1 mr-3 ${getOptionBadgeStyle(option)}`}>
@@ -128,12 +128,6 @@ export function QuizQuestion({
                   </Text>
                 </View>
               </TouchableOpacity>
-              {isSelected && (
-                <View 
-                  className="absolute inset-0 rounded-2xl border-2 border-[#a583ff] pointer-events-none"
-                  style={{ margin: -4 }}
-                />
-              )}
             </View>
           );
         })}

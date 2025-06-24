@@ -18,7 +18,7 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ weekData }) => {
     <View className="flex-row items-center justify-between mx-6 my-4">
       {weekData.map((dayInfo, index) => (
         <View key={index} className="flex-1 items-center">
-          <View className={`flex-col items-center justify-center px-2 py-3 gap-2 h-full ${
+          <View className={`flex-col items-center justify-center px-2 py-3 gap-2 ${
             dayInfo.isToday ? 'bg-slate-200 rounded-[100px]' : ''
           }`}>
             <Text className={`font-medium text-sm ${

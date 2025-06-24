@@ -52,7 +52,7 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
   ];
 
   return (
-    <View className="mx-auto w-96 bg-white rounded-[80px] mb-4">
+    <View className="mx-6 bg-white rounded-[80px] mb-4">
       <View className="flex-row items-center justify-center px-2 py-0 h-20">
         {segments.map((segment) => {
           const isActive = currentSegment === segment.key;
