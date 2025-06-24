@@ -1,6 +1,6 @@
-import { useCallback, useMemo } from 'react';
 import { useAudioContext } from '@/contexts/AudioContext';
-import { Podcast, Episode } from '@/types/podcast';
+import { Episode, Podcast } from '@/types/podcast';
+import { useCallback, useMemo } from 'react';
 
 // Custom hook for convenient audio operations
 export function useAudio() {
@@ -38,11 +38,6 @@ export function useAudio() {
     }
   }, [isPlaying, currentPodcast, pausePodcast, resumePodcast]);
 
-  // Function to play a specific podcast or episode
-  const playContent = useCallback(async (podcast: Podcast, episode?: Episode) => {
-    await playPodcast(podcast, episode);
-  }, [playPodcast]);
-
   // Function to check if a specific podcast is currently playing
   const isCurrentPodcast = useCallback((podcastId: string, episodeId?: string) => {
     if (!currentPodcast) return false;
@@ -55,6 +50,15 @@ export function useAudio() {
     
     return podcastMatches && !currentEpisode;
   }, [currentPodcast, currentEpisode]);
+
+  // Function to play a specific podcast or episode
+  const playContent = useCallback(async (podcast: Podcast, episode?: Episode) => {
+    if (isCurrentPodcast(podcast.id, episode?.id)) {
+      await togglePlayPause();
+    } else {
+      await playPodcast(podcast, episode);
+    }
+  }, [playPodcast, isCurrentPodcast, togglePlayPause]);
 
   // Function to check if content is currently playing
   const isContentPlaying = useCallback((podcastId: string, episodeId?: string) => {

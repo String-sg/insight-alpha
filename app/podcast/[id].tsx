@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  ActivityIndicator,
-  ScrollView,
-  StatusBar,
-  Dimensions,
-} from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
+import { useAudioContext } from '@/contexts/AudioContext';
 import { educationalContent, EducationalContent } from '@/data/educational-content';
 import { mockQuizzes } from '@/data/quizzes';
 import { useAudio } from '@/hooks/useAudio';
-import { useAudioContext } from '@/contexts/AudioContext';
+import { Ionicons } from '@expo/vector-icons';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  Dimensions,
+  Image,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 export default function PodcastDetailsScreen() {
   const router = useRouter();
@@ -97,21 +97,17 @@ export default function PodcastDetailsScreen() {
   const handlePlayPress = async () => {
     if (!content) return;
 
-    if (isCurrentPodcast(content.id)) {
-      await togglePlayPause();
-    } else {
-      // Convert EducationalContent to Podcast format for audio system
-      const podcastFormat = {
-        id: content.id,
-        title: content.title,
-        description: content.description,
-        imageUrl: content.imageUrl,
-        audioUrl: content.audioUrl,
-        duration: content.duration,
-        author: content.author
-      };
-      await playContent(podcastFormat);
-    }
+    // Convert EducationalContent to Podcast format for audio system
+    const podcastFormat = {
+      id: content.id,
+      title: content.title,
+      description: content.description,
+      imageUrl: content.imageUrl,
+      audioUrl: content.audioUrl,
+      duration: content.duration,
+      author: content.author
+    };
+    await playContent(podcastFormat);
   };
 
   const handleQuizPress = () => {

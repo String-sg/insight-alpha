@@ -1,19 +1,17 @@
-import React from 'react';
-import { ScrollView, View, Text, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { EducationalContent, educationalContent, weeklyProgress } from '@/data/educational-content';
 import { EducationalCard } from '@/components/EducationalCard';
-import { WeekCalendar } from '@/components/WeekCalendar';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { SegmentedControl } from '@/components/SegmentedControl';
-import { useAudioContext } from '@/contexts/AudioContext';
+import { WeekCalendar } from '@/components/WeekCalendar';
+import { EducationalContent, educationalContent, weeklyProgress } from '@/data/educational-content';
 import { useAudio } from '@/hooks/useAudio';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import React from 'react';
+import { SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { currentPodcast } = useAudioContext();
-  const { playContent } = useAudio();
+  const { currentPodcast, playContent } = useAudio();
   
   const handleContentPress = (content: EducationalContent) => {
     router.push(`/podcast/${content.id}`);

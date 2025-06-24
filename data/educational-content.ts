@@ -25,7 +25,7 @@ export const educationalContent: EducationalContent[] = [
     author: 'Guidance Branch',
     duration: 1800000, // 30 minutes (estimated)
     imageUrl: 'https://picsum.photos/400/400?random=1',
-    audioUrl: require('../assets/audio/school-bullying-prevention-and-intervention.wav'),
+    audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
     backgroundColor: 'bg-purple-100',
     badgeColor: 'bg-purple-200',
     textColor: 'text-purple-900',
@@ -90,7 +90,7 @@ export const educationalContent: EducationalContent[] = [
     author: 'Student Development Team',
     duration: 2400000, // 40 minutes
     imageUrl: 'https://picsum.photos/400/400?random=5',
-    audioUrl: require('../assets/audio/school-bullying-prevention-and-intervention.wav'),
+    audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
     backgroundColor: 'bg-green-100',
     badgeColor: 'bg-green-200',
     textColor: 'text-green-900',

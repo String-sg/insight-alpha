@@ -1,8 +1,8 @@
-import React from 'react';
-import { TouchableOpacity, View, Text, ActivityIndicator } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { EducationalContent } from '@/data/educational-content';
 import { useAudio } from '@/hooks/useAudio';
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
 
 interface EducationalCardProps {
   content: EducationalContent;
@@ -27,12 +27,9 @@ export const EducationalCard: React.FC<EducationalCardProps> = ({
   const isThisPodcastPlaying = isContentPlaying(content.id);
   const isThisPodcastLoading = isThisPodcastCurrent && (isLoading || isContentBuffering);
 
-  const handlePlayPress = async (e: any) => {
+  const handlePlayPress = (e: any) => {
     e.stopPropagation();
-    
-    if (isThisPodcastCurrent) {
-      await togglePlayPause();
-    } else if (onPlayPress) {
+    if (onPlayPress) {
       onPlayPress();
     }
   };
@@ -112,8 +109,13 @@ export const EducationalCard: React.FC<EducationalCardProps> = ({
               />
             )}
             <Text className="text-black text-sm font-medium">
-              {isThisPodcastLoading ? 'Loading...' : 
-               isThisPodcastPlaying ? 'Pause' : 'Play'}
+              {isThisPodcastLoading
+                ? 'Loading...'
+                : isThisPodcastCurrent
+                ? isThisPodcastPlaying
+                  ? 'Pause'
+                  : 'Resume'
+                : 'Play'}
             </Text>
           </TouchableOpacity>
           

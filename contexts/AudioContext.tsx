@@ -1,10 +1,10 @@
-import React, { createContext, useContext, useReducer, useEffect, useRef, ReactNode } from 'react';
-import { createAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Podcast, Episode, PlaybackState } from '@/types/podcast';
-import { QuizProgress } from '@/types/quiz';
 import { mockQuizzes } from '@/data/quizzes';
 import { AudioPlayer, AudioPlayerStatus, AudioSource } from '@/types/audio';
+import { Episode, PlaybackState, Podcast } from '@/types/podcast';
+import { QuizProgress } from '@/types/quiz';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createAudioPlayer } from 'expo-audio';
+import React, { createContext, ReactNode, useContext, useEffect, useReducer, useRef } from 'react';
 
 // Audio context state interface
 interface AudioContextState extends PlaybackState {
@@ -124,7 +124,7 @@ export function AudioProvider({ children }: AudioProviderProps) {
   const [state, dispatch] = useReducer(audioReducer, initialState);
   const isSeekingRef = useRef(false);
   const playerRef = useRef<AudioPlayer | null>(null);
-  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const progressIntervalRef = useRef<number | null>(null);
   
   // Update player status from expo-audio player
   const updatePlayerStatus = () => {
@@ -268,7 +268,7 @@ export function AudioProvider({ children }: AudioProviderProps) {
         audioSource = { uri: audioUrl };
       } else if (typeof audioUrl === 'number') {
         // Local asset (require() result)
-        audioSource = audioUrl;
+        audioSource = audioUrl as any;
       } else {
         // Fallback to treating as URI
         audioSource = { uri: audioUrl };
@@ -279,9 +279,7 @@ export function AudioProvider({ children }: AudioProviderProps) {
       playerRef.current = player;
       dispatch({ type: 'SET_PLAYER', payload: player });
       dispatch({ type: 'SET_CURRENT_PODCAST', payload: podcast });
-      if (episode) {
-        dispatch({ type: 'SET_CURRENT_EPISODE', payload: episode });
-      }
+      dispatch({ type: 'SET_CURRENT_EPISODE', payload: episode || null });
 
       // Set initial playback rate
       player.setPlaybackRate(state.playbackRate || 1.0);
