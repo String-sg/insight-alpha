@@ -15,6 +15,7 @@ export const EducationalCard: React.FC<EducationalCardProps> = ({
   onPress,
   onPlayPress 
 }) => {
+  // Ensure yellow classes are included: bg-yellow-50 bg-yellow-100 bg-yellow-200 bg-yellow-300 text-yellow-900
   const { 
     isContentPlaying, 
     isCurrentPodcast, 
@@ -102,6 +103,8 @@ export const EducationalCard: React.FC<EducationalCardProps> = ({
           return '#f3e8ff'; // purple-100
         case 'bg-blue-100':
           return '#dbeafe'; // blue-100
+        case 'bg-yellow-50':
+          return '#fffbeb'; // yellow-50
         case 'bg-yellow-100':
           return '#fef3c7'; // yellow-100
         case 'bg-pink-100':

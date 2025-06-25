@@ -41,13 +41,13 @@ export default function HomeScreen() {
   // Calculate bottom padding based on mini player visibility
   const bottomPadding = currentPodcast ? 120 : 40;
 
-  // Get recently learned content (filter by progress)
+  // Get recently learned content (filter by progress + include new AI content)
   const recentlyLearned = educationalContent.filter(content => 
-    content.progress && content.progress > 0 && content.progress < 1
+    (content.progress && content.progress > 0 && content.progress < 1) || content.id === '6'
   );
 
-  // Get daily recommendation (first item for now)
-  const dailyRecommendation = educationalContent[0]; // First available item
+  // Get daily recommendation (newest content - the AI one)
+  const dailyRecommendation = educationalContent[educationalContent.length - 1]; // Latest added content
 
   return (
     <SafeAreaView className="flex-1 bg-transparent">

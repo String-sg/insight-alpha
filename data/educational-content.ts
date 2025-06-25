@@ -32,6 +32,22 @@ export const educationalContent: EducationalContent[] = [
     timeLeft: '40m left',
     progress: 0.2,
     publishedDate: '1 day ago'
+  },
+  {
+    id: '6',
+    title: "AI's Role in Singapore's Education Transformation",
+    description: 'Comprehensive overview of how artificial intelligence is reshaping educational practices, personalized learning, and administrative efficiency in Singapore\'s schools.',
+    category: 'Artificial Intelligent',
+    author: 'Education Technology Team',
+    duration: 2100000, // 35 minutes
+    imageUrl: 'https://picsum.photos/400/400?random=6',
+    audioUrl: require('../assets/audio/ais-role-in-singapores-education-transformation.wav'),
+    backgroundColor: 'bg-yellow-100',
+    badgeColor: 'bg-yellow-200',
+    textColor: 'text-yellow-900',
+    timeLeft: '35m left',
+    progress: 0,
+    publishedDate: 'Today'
   }
 ];
 
