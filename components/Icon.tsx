@@ -34,6 +34,7 @@ const iconMap: Record<string, keyof typeof LucideIcons> = {
   'accessibility': 'Accessibility',
   'people': 'Users',
   'musical-note': 'Music',
+  'trash-outline': 'Trash2',
 };
 
 interface IconProps {

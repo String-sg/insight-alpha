@@ -135,10 +135,10 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
             activeOpacity={0.9}
             style={{
               borderRadius: 1000,
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              backdropFilter: 'blur(80px)',
+              backgroundColor: 'rgba(255, 255, 255, 0.7)',
+              backdropFilter: 'blur(20px)',
               borderWidth: 1,
-              borderColor: 'rgba(226, 226, 226, 0.5)',
+              borderColor: 'rgba(221, 221, 221, 0.7)',
               shadowColor: '#000',
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.05,
@@ -149,6 +149,24 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
               alignItems: 'center',
             }}
           >
+            {/* Inner shadow overlay for glass effect */}
+            <View 
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                borderRadius: 1000,
+                shadowColor: 'rgba(255, 255, 255, 0.25)',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 1,
+                shadowRadius: 2,
+                elevation: 1,
+              }}
+              pointerEvents="none"
+            />
+            
             {/* Podcast Image */}
             <View className="w-12 h-12 rounded-full overflow-hidden mr-3 bg-purple-500">
               <Image
@@ -197,10 +215,10 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
               width: 72,
               height: 72,
               borderRadius: 36,
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              backdropFilter: 'blur(80px)',
+              backgroundColor: 'rgba(255, 255, 255, 0.7)',
+              backdropFilter: 'blur(20px)',
               borderWidth: 1,
-              borderColor: 'rgba(226, 226, 226, 0.5)',
+              borderColor: 'rgba(221, 221, 221, 0.7)',
               shadowColor: '#000',
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.05,
@@ -210,6 +228,24 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
               justifyContent: 'center',
             }}
           >
+            {/* Inner shadow overlay for glass effect */}
+            <View 
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                borderRadius: 36,
+                shadowColor: 'rgba(255, 255, 255, 0.25)',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 1,
+                shadowRadius: 2,
+                elevation: 1,
+              }}
+              pointerEvents="none"
+            />
+            
             <Icon
               name="sparkles"
               size={24}

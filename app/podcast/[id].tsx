@@ -1,4 +1,6 @@
+import { BottomSheet } from '@/components/BottomSheet';
 import { Icon } from '@/components/Icon';
+import { NoteEditor } from '@/components/NoteEditor';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { useNotes } from '@/contexts/NotesContext';
 import { educationalContent, EducationalContent } from '@/data/educational-content';
@@ -27,6 +29,9 @@ export default function PodcastDetailsScreen() {
   const [descriptionLines, setDescriptionLines] = useState(0);
   const [notesInView, setNotesInView] = useState(false);
   const [notes, setNotes] = useState<Note[]>([]);
+  const [showNoteEditor, setShowNoteEditor] = useState(false);
+  const [editingNote, setEditingNote] = useState<Note | null>(null);
+  const [isNewNote, setIsNewNote] = useState(false);
   
   // Animation values for each note card - start at 0 degrees
   const note1Rotation = useSharedValue(0);
@@ -91,7 +96,7 @@ export default function PodcastDetailsScreen() {
   } = useAudio();
 
   const { currentPodcast: currentlyPlayingPodcast } = useAudioContext();
-  const { getNotesForPodcast } = useNotes();
+  const { getNotesForPodcast, createNote, updateNote, deleteNote } = useNotes();
 
   const loadNotes = useCallback(async (podcastId: string) => {
     const podcastNotes = await getNotesForPodcast(podcastId);
@@ -158,11 +163,55 @@ export default function PodcastDetailsScreen() {
   };
 
   const handleNotePress = (noteId: string) => {
-    router.push(`/notes/${noteId}?podcastId=${id}`);
+    const note = notes.find(n => n.id === noteId);
+    if (note) {
+      setEditingNote(note);
+      setIsNewNote(false);
+      setShowNoteEditor(true);
+    }
   };
 
   const handleNewNotePress = () => {
-    router.push(`/notes/new?podcastId=${id}`);
+    setEditingNote(null);
+    setIsNewNote(true);
+    setShowNoteEditor(true);
+  };
+
+  const handleSaveNote = async (title: string, content: string) => {
+    if (!id) return;
+    
+    try {
+      if (isNewNote) {
+        await createNote(id, { title, content });
+      } else if (editingNote) {
+        await updateNote(editingNote.id, { title, content });
+      }
+      // Reload notes after saving
+      await loadNotes(id);
+    } catch (error) {
+      console.error('Failed to save note:', error);
+      throw error;
+    }
+  };
+
+  const handleDeleteNote = async () => {
+    if (!editingNote) return;
+    
+    try {
+      await deleteNote(editingNote.id);
+      setShowNoteEditor(false);
+      // Reload notes after deletion
+      if (id) await loadNotes(id);
+    } catch (error) {
+      console.error('Failed to delete note:', error);
+      throw error;
+    }
+  };
+
+  const handleCloseNoteEditor = () => {
+    setShowNoteEditor(false);
+    setEditingNote(null);
+    setIsNewNote(false);
   };
 
   if (!content) {
@@ -434,6 +483,21 @@ export default function PodcastDetailsScreen() {
             </View>
           </View>
         </ScrollView>
+        
+        {/* Note Editor Bottom Sheet */}
+        <BottomSheet
+          visible={showNoteEditor}
+          onClose={handleCloseNoteEditor}
+          height={600}
+        >
+          <NoteEditor
+            note={editingNote}
+            isNewNote={isNewNote}
+            onSave={handleSaveNote}
+            onDelete={isNewNote ? undefined : handleDeleteNote}
+            onClose={handleCloseNoteEditor}
+          />
+        </BottomSheet>
       </View>
     </>
   );

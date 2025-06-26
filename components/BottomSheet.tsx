@@ -25,8 +25,8 @@ export function BottomSheet({ visible, onClose, children, height = 490 }: Bottom
         Animated.spring(translateY, {
           toValue: 0,
           useNativeDriver: true,
-          tension: 100,
-          friction: 8,
+          tension: 50,
+          friction: 12,
         }),
         Animated.timing(backdropOpacity, {
           toValue: 1,
@@ -40,8 +40,8 @@ export function BottomSheet({ visible, onClose, children, height = 490 }: Bottom
         Animated.spring(translateY, {
           toValue: height,
           useNativeDriver: true,
-          tension: 100,
-          friction: 8,
+          tension: 50,
+          friction: 12,
         }),
         Animated.timing(backdropOpacity, {
           toValue: 0,
@@ -69,8 +69,8 @@ export function BottomSheet({ visible, onClose, children, height = 490 }: Bottom
         Animated.spring(translateY, {
           toValue: 0,
           useNativeDriver: true,
-          tension: 100,
-          friction: 8,
+          tension: 50,
+          friction: 12,
         }).start();
       }
     },
