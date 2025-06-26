@@ -1,19 +1,19 @@
+import { Icon } from '@/components/Icon';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { educationalContent, EducationalContent } from '@/data/educational-content';
 import { mockQuizzes } from '@/data/quizzes';
 import { useAudio } from '@/hooks/useAudio';
-import { Ionicons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
-  Dimensions,
-  Image,
-  ScrollView,
-  StatusBar,
-  Text,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    Dimensions,
+    Image,
+    ScrollView,
+    StatusBar,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
@@ -180,13 +180,13 @@ export default function PodcastDetailsScreen() {
             onPress={() => router.back()}
             className="w-10 h-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm border border-white/30"
           >
-            <Ionicons name="chevron-back" size={24} color="#000" />
+            <Icon name="chevron-back" size={24} color="#000" />
           </TouchableOpacity>
           
           <TouchableOpacity
             className="w-10 h-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm border border-white/30"
           >
-            <Ionicons name="share-outline" size={20} color="#000" />
+            <Icon name="share-outline" size={20} color="#000" />
           </TouchableOpacity>
         </View>
 
@@ -250,7 +250,7 @@ export default function PodcastDetailsScreen() {
                       <ActivityIndicator size="small" color="white" />
                     ) : (
                       <>
-                        <Ionicons
+                        <Icon
                           name={isThisPodcastPlaying ? "pause" : "play"}
                           size={16}
                           color="white"
@@ -273,7 +273,7 @@ export default function PodcastDetailsScreen() {
                       className="w-full bg-white/50 backdrop-blur-sm rounded-full py-3 flex-row items-center justify-center border border-black/10"
                       activeOpacity={0.8}
                     >
-                      <Ionicons
+                      <Icon
                         name="bulb-outline"
                         size={16}
                         color="#000"
@@ -383,7 +383,7 @@ export default function PodcastDetailsScreen() {
                   style={[note4AnimatedStyle]}
                 >
                   <View className="bg-gray-200 rounded-full p-2 self-start">
-                    <Ionicons name="add" size={16} color="#000" />
+                    <Icon name="add" size={16} color="#000" />
                   </View>
                   <Text className="text-gray-600 text-base font-medium">
                     New note

@@ -1,29 +1,29 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  View, 
-  Text, 
-  ScrollView, 
-  TouchableOpacity, 
-  Alert, 
-  SafeAreaView,
-  StatusBar 
-} from 'react-native';
-import { useLocalSearchParams, router, Stack } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { mockQuizzes } from '@/data/quizzes';
-import { QuizQuestion } from '@/components/QuizQuestion';
-import { MiniPlayer } from '@/components/MiniPlayer';
-import { BottomSheet } from '@/components/BottomSheet';
 import { AnswerFeedback } from '@/components/AnswerFeedback';
+import { BottomSheet } from '@/components/BottomSheet';
+import { Icon } from '@/components/Icon';
+import { MiniPlayer } from '@/components/MiniPlayer';
+import { QuizQuestion } from '@/components/QuizQuestion';
 import { useAudioContext } from '@/contexts/AudioContext';
-import { 
-  Quiz, 
-  QuizAttempt, 
-  QuizAnswer, 
-  QuizProgress,
-  QuizResult 
+import { mockQuizzes } from '@/data/quizzes';
+import {
+    Quiz,
+    QuizAnswer,
+    QuizAttempt,
+    QuizProgress,
+    QuizResult
 } from '@/types/quiz';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router, Stack, useLocalSearchParams } from 'expo-router';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+    Alert,
+    SafeAreaView,
+    ScrollView,
+    StatusBar,
+    Text,
+    TouchableOpacity,
+    View
+} from 'react-native';
 
 const QUIZ_STORAGE_KEY = 'quiz_attempts';
 const QUIZ_PROGRESS_KEY = 'quiz_progress';
@@ -277,7 +277,7 @@ export default function QuizScreen() {
             className="w-10 h-10 items-center justify-center rounded-full bg-[#e4e4e4]"
             activeOpacity={0.7}
           >
-            <Ionicons name="arrow-back" size={24} color="#000" />
+            <Icon name="arrow-back" size={24} color="#000" />
           </TouchableOpacity>
           
           {/* Progress Bar */}
@@ -292,7 +292,7 @@ export default function QuizScreen() {
             className="w-10 h-10 items-center justify-center rounded-full bg-[#e4e4e4]"
             activeOpacity={0.7}
           >
-            <Ionicons name="ellipsis-horizontal" size={24} color="#000" />
+            <Icon name="ellipsis-horizontal" size={24} color="#000" />
           </TouchableOpacity>
         </View>
 

@@ -1,19 +1,19 @@
+import { Icon } from '@/components/Icon';
+import { useAudioContext } from '@/contexts/AudioContext';
+import Slider from '@react-native-community/slider';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  ActivityIndicator,
-  ScrollView,
+    ActivityIndicator,
+    Image,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import Slider from '@react-native-community/slider';
-import { useAudioContext } from '@/contexts/AudioContext';
-import { StatusBar } from 'expo-status-bar';
-import { LinearGradient } from 'expo-linear-gradient';
 
 
 export default function PlayerScreen() {
@@ -130,11 +130,11 @@ className="absolute inset-0 flex-1"
               onPress={() => router.back()}
               className="w-10 h-10 items-center justify-center rounded-full bg-white/20"
             >
-              <Ionicons name="close" size={24} color="white" />
+              <Icon name="close" size={24} color="white" />
             </TouchableOpacity>
             
             <TouchableOpacity className="w-10 h-10 items-center justify-center rounded-full bg-white/20">
-              <Ionicons name="share-outline" size={20} color="white" />
+              <Icon name="share-outline" size={20} color="white" />
             </TouchableOpacity>
           </View>
 
@@ -211,7 +211,7 @@ className="absolute inset-0 flex-1"
           <View className="flex-row items-center justify-center px-4 mb-8 gap-8">
             {/* Subtitles */}
             <TouchableOpacity className="p-2">
-              <Ionicons name="text" size={24} color="white" />
+              <Icon name="text" size={24} color="white" />
             </TouchableOpacity>
 
             {/* Skip Backward */}
@@ -219,7 +219,7 @@ className="absolute inset-0 flex-1"
               onPress={() => skipBackward(15)}
               className="p-2"
             >
-              <Ionicons name="play-skip-back" size={24} color="white" />
+              <Icon name="play-skip-back" size={24} color="white" />
             </TouchableOpacity>
 
             {/* Play/Pause */}
@@ -230,7 +230,7 @@ className="absolute inset-0 flex-1"
               {isLoading ? (
                 <ActivityIndicator size="large" color="white" />
               ) : (
-                <Ionicons
+                <Icon
                   name={isPlaying ? "pause" : "play"}
                   size={24}
                   color="white"
@@ -244,7 +244,7 @@ className="absolute inset-0 flex-1"
               onPress={() => skipForward(15)}
               className="p-2"
             >
-              <Ionicons name="play-skip-forward" size={24} color="white" />
+              <Icon name="play-skip-forward" size={24} color="white" />
             </TouchableOpacity>
 
             {/* Playback Rate */}
@@ -262,15 +262,15 @@ className="absolute inset-0 flex-1"
           <View className="flex-row items-center justify-between px-4">
             <View className="flex-row gap-3">
               <TouchableOpacity className="bg-[#EADDFF]/50 px-3 py-3 rounded-full">
-                <Ionicons name="thumbs-up-outline" size={20} color="#F5EFF7" />
+                <Icon name="thumbs-up-outline" size={20} color="#F5EFF7" />
               </TouchableOpacity>
               <TouchableOpacity className="bg-[#EADDFF]/10 w-7 h-12 rounded-full items-center justify-center">
-                <Ionicons name="thumbs-down-outline" size={20} color="#F5EFF7" />
+                <Icon name="thumbs-down-outline" size={20} color="#F5EFF7" />
               </TouchableOpacity>
             </View>
 
             <TouchableOpacity className="bg-[#EADDFF]/10 px-3 py-3 rounded-full flex-row items-center gap-1">
-              <Ionicons name="document-text-outline" size={20} color="#FFFFFF" />
+              <Icon name="document-text-outline" size={20} color="#FFFFFF" />
               <Text className="text-sm font-medium text-white">Sources</Text>
             </TouchableOpacity>
           </View>

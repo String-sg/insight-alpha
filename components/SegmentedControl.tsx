@@ -1,7 +1,7 @@
+import { usePathname, useRouter } from 'expo-router';
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter, usePathname } from 'expo-router';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { Icon } from './Icon';
 
 type SegmentType = 'home' | 'learning' | 'explore';
 
@@ -67,7 +67,7 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
               <View className={`w-16 h-8 items-center justify-center rounded-full ${
                 isActive ? 'bg-slate-950' : ''
               }`}>
-                <Ionicons
+                <Icon
                   name={segment.icon}
                   size={24}
                   color={isActive ? '#f8fafc' : '#64748b'}

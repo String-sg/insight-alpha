@@ -1,10 +1,10 @@
 import { EducationalCard } from '@/components/EducationalCard';
+import { Icon } from '@/components/Icon';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { SegmentedControl } from '@/components/SegmentedControl';
 import { WeekCalendar } from '@/components/WeekCalendar';
 import { EducationalContent, educationalContent, weeklyProgress } from '@/data/educational-content';
 import { useAudio } from '@/hooks/useAudio';
-import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
@@ -106,7 +106,7 @@ export default function HomeScreen() {
               className="w-8 h-8 bg-white rounded-full items-center justify-center"
               activeOpacity={0.8}
             >
-              <Ionicons name="refresh" size={16} color="#09090b" />
+              <Icon name="refresh" size={16} color="#09090b" />
             </TouchableOpacity>
           </View>
           

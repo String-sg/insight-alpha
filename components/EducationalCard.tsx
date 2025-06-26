@@ -1,8 +1,9 @@
 import { EducationalContent } from '@/data/educational-content';
 import { useAudio } from '@/hooks/useAudio';
-import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
+import CircularProgress from 'react-native-circular-progress-indicator';
+import { Icon } from './Icon';
 
 interface EducationalCardProps {
   content: EducationalContent;
@@ -94,69 +95,19 @@ export const EducationalCard: React.FC<EducationalCardProps> = ({
     const progress = getActualProgress();
     const progressPercentage = Math.min(100, Math.max(0, progress * 100)); // Ensure 0-100 range
     
-    // Get the background color class and convert to actual color for inner circle
-    const getInnerCircleColor = () => {
-      switch (content.backgroundColor) {
-        case 'bg-green-100':
-          return '#dcfce7'; // green-100
-        case 'bg-purple-100':
-          return '#f3e8ff'; // purple-100
-        case 'bg-blue-100':
-          return '#dbeafe'; // blue-100
-        case 'bg-yellow-50':
-          return '#fffbeb'; // yellow-50
-        case 'bg-yellow-100':
-          return '#fef3c7'; // yellow-100
-        case 'bg-pink-100':
-          return '#fce7f3'; // pink-100
-        case 'bg-indigo-100':
-          return '#e0e7ff'; // indigo-100
-        default:
-          return '#f1f5f9'; // slate-100 as fallback
-      }
-    };
-
     return (
-      <View className="w-6 h-6 relative">
-        {/* Background donut ring */}
-        <View className="w-6 h-6 rounded-full border-2 border-slate-200" />
-        
-        {/* Progress overlay - starts from 12 o'clock */}
-        <View className="absolute inset-0 w-6 h-6 rounded-full overflow-hidden transform -rotate-90">
-          {/* First half progress (0-50%) */}
-          <View 
-            className="absolute right-0 top-0 w-3 h-6 origin-left"
-            style={{
-              backgroundColor: progressPercentage > 0 ? '#000000' : 'transparent',
-              transform: [
-                { 
-                  rotate: `${Math.min(progressPercentage * 3.6, 180)}deg` 
-                }
-              ],
-            }}
-          />
-          
-          {/* Second half progress (50-100%) */}
-          {progressPercentage > 50 && (
-            <View 
-              className="absolute left-0 top-0 w-3 h-6 origin-right bg-black"
-              style={{
-                transform: [
-                  { 
-                    rotate: `${Math.min((progressPercentage - 50) * 3.6, 180)}deg` 
-                  }
-                ],
-              }}
-            />
-          )}
-        </View>
-        
-        {/* Inner circle to create donut hole - matches card background */}
-        <View 
-          className="absolute inset-1 w-4 h-4 rounded-full"
-          style={{ backgroundColor: getInnerCircleColor() }}
-        />
-      </View>
+      <CircularProgress 
+        value={progressPercentage} 
+        radius={12}
+        duration={300}
+        activeStrokeWidth={2}
+        inActiveStrokeWidth={2}
+        activeStrokeColor="#000000"
+        inActiveStrokeColor="#e5e7eb"
+        showProgressValue={false}
+        clockwise={true}
+        strokeLinecap="round"
+      />
     );
   };
 
@@ -202,7 +153,7 @@ export const EducationalCard: React.FC<EducationalCardProps> = ({
             {isThisPodcastLoading ? (
               <ActivityIndicator size="small" color="#000000" />
             ) : (
-              <Ionicons 
+              <Icon 
                 name={isThisPodcastPlaying ? "pause" : "play"} 
                 size={16} 
                 color="#000000" 

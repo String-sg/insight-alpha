@@ -1,9 +1,9 @@
-import React from 'react';
-import { TouchableOpacity, View, Text, Image, ActivityIndicator } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { Podcast } from '@/types/podcast';
 import { formatDuration } from '@/data/podcasts';
 import { useAudio } from '@/hooks/useAudio';
+import { Podcast } from '@/types/podcast';
+import React from 'react';
+import { ActivityIndicator, Image, Text, TouchableOpacity, View } from 'react-native';
+import { Icon } from './Icon';
 
 interface PodcastCardProps {
   podcast: Podcast;
@@ -71,7 +71,7 @@ export const PodcastCard: React.FC<PodcastCardProps> = ({
               {isThisPodcastLoading ? (
                 <ActivityIndicator size="small" color="white" />
               ) : (
-                <Ionicons
+                <Icon
                   name={isThisPodcastPlaying ? "pause" : "play"}
                   size={20}
                   color="white"
@@ -148,7 +148,7 @@ export const PodcastCard: React.FC<PodcastCardProps> = ({
                 {isThisPodcastLoading ? (
                   <ActivityIndicator size="small" color="white" />
                 ) : (
-                  <Ionicons
+                  <Icon
                     name={isThisPodcastPlaying ? "pause" : "play"}
                     size={16}
                     color="white"

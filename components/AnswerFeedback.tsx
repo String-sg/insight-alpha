@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { QuizOption } from '@/types/quiz';
+import React from 'react';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Icon } from './Icon';
 
 interface AnswerFeedbackProps {
   isCorrect: boolean;
@@ -36,10 +36,9 @@ export function AnswerFeedback({
         </Text>
         <TouchableOpacity
           onPress={onClose}
-          className="w-[35px] h-[35px] items-center justify-center rounded-full bg-[#e4e4e4]"
-          activeOpacity={0.7}
+          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 items-center justify-center"
         >
-          <Ionicons name="close" size={16} color="#000" />
+          <Icon name="close" size={16} color="#000" />
         </TouchableOpacity>
       </View>
 

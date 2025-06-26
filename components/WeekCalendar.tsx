@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Text, View } from 'react-native';
+import { Icon } from './Icon';
 
 interface DayData {
   day: string;
@@ -29,7 +29,7 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ weekData }) => {
             
             {dayInfo.isCompleted ? (
               <View className="w-5 h-5 items-center justify-center">
-                <Ionicons name="checkmark" size={16} color="#09090b" />
+                <Icon name="checkmark" size={16} color="#09090b" />
               </View>
             ) : (
               <Text className={`font-semibold text-base ${

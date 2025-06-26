@@ -1,8 +1,8 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import Slider from '@react-native-community/slider';
 import { useAudio } from '@/hooks/useAudio';
+import Slider from '@react-native-community/slider';
+import React from 'react';
+import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
+import { Icon } from './Icon';
 
 interface AudioPlayerProps {
   className?: string;
@@ -54,7 +54,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
             {isLoading ? (
               <ActivityIndicator size="small" color="white" />
             ) : (
-              <Ionicons
+              <Icon
                 name={isPlaying ? "pause" : "play"}
                 size={20}
                 color="white"
@@ -160,7 +160,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
           disabled={!canControl}
           className="w-12 h-12 items-center justify-center disabled:opacity-50"
         >
-          <Ionicons
+          <Icon
             name="play-skip-back"
             size={24}
             color="#6B7280"
@@ -176,7 +176,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
           {isLoading ? (
             <ActivityIndicator size="large" color="white" />
           ) : (
-            <Ionicons
+            <Icon
               name={isPlaying ? "pause" : "play"}
               size={32}
               color="white"
@@ -190,7 +190,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
           disabled={!canControl}
           className="w-12 h-12 items-center justify-center disabled:opacity-50"
         >
-          <Ionicons
+          <Icon
             name="play-skip-forward"
             size={24}
             color="#6B7280"
@@ -218,7 +218,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
             disabled={!canControl}
             className="disabled:opacity-50"
           >
-            <Ionicons
+            <Icon
               name={(volume || 0) === 0 ? "volume-mute" : (volume || 0) < 0.5 ? "volume-low" : "volume-high"}
               size={20}
               color="#6B7280"

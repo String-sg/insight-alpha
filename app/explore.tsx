@@ -1,9 +1,9 @@
-import React from 'react';
-import { ScrollView, View, Text, SafeAreaView, StatusBar, TouchableOpacity, Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { Stack } from 'expo-router';
+import { Icon } from '@/components/Icon';
 import { SegmentedControl } from '@/components/SegmentedControl';
 import { useAudioContext } from '@/contexts/AudioContext';
+import { Stack } from 'expo-router';
+import React from 'react';
+import { Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 export default function ExploreScreen() {
   const { currentPodcast } = useAudioContext();
@@ -125,7 +125,7 @@ export default function ExploreScreen() {
                 <View className={`absolute top-2 right-2 ${creator.badge.color} rounded-full px-2 py-1 z-10`}>
                   {creator.badge.icon ? (
                     <View className="w-4 h-4 items-center justify-center">
-                      <Ionicons name={creator.badge.icon as any} size={12} color="white" />
+                      <Icon name={creator.badge.icon as any} size={12} color="white" />
                     </View>
                   ) : (
                     <Text className="text-white text-xs font-geist-bold">

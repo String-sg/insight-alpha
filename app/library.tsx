@@ -1,8 +1,8 @@
-import React from 'react';
-import { View, Text, ScrollView, SafeAreaView, TouchableOpacity, Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useAudioContext } from '@/contexts/AudioContext';
+import { Icon } from '@/components/Icon';
 import { SegmentedControl } from '@/components/SegmentedControl';
+import { useAudioContext } from '@/contexts/AudioContext';
+import React from 'react';
+import { Image, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 export default function LibraryScreen() {
   const { currentPodcast } = useAudioContext();
@@ -78,10 +78,10 @@ export default function LibraryScreen() {
           
           <View className="flex-row gap-4">
             <TouchableOpacity className="w-12 h-14 bg-slate-100 rounded-2xl items-center justify-center">
-              <Ionicons name="settings-outline" size={24} color="#020617" />
+              <Icon name="settings-outline" size={24} color="#020617" />
             </TouchableOpacity>
             <TouchableOpacity className="w-12 h-14 bg-slate-100 rounded-2xl items-center justify-center">
-              <Ionicons name="funnel-outline" size={24} color="#020617" />
+              <Icon name="funnel-outline" size={24} color="#020617" />
             </TouchableOpacity>
           </View>
         </View>
@@ -93,7 +93,7 @@ export default function LibraryScreen() {
             className={`${learningSubjects[0].color} rounded-3xl p-4 mb-4 h-[200px] justify-center`}
           >
             <View className={`${learningSubjects[0].iconBg} rounded-lg p-1 w-8 h-8 items-center justify-center mb-2`}>
-              <Ionicons name={learningSubjects[0].icon as any} size={20} color="#3b0764" />
+              <Icon name={learningSubjects[0].icon as any} size={20} color="#3b0764" />
             </View>
             
             <Text className="text-white text-xl font-geist-semibold mb-2">
@@ -114,7 +114,7 @@ export default function LibraryScreen() {
                 style={{ minHeight: 200 }}
               >
                 <View className={`${subject.iconBg} rounded-lg p-1 w-8 h-8 items-center justify-center mb-2`}>
-                  <Ionicons 
+                  <Icon 
                     name={subject.icon as any} 
                     size={20} 
                     color={subject.id === 'cce' ? '#4c0519' : '#451a03'} 

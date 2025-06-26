@@ -1,16 +1,16 @@
-import React, { useEffect, useRef } from 'react';
-import { 
-  View, 
-  Text, 
-  TouchableOpacity, 
-  Image, 
-  ActivityIndicator, 
-  Animated
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
 import { useAudioContext } from '@/contexts/AudioContext';
+import { useRouter } from 'expo-router';
+import React, { useEffect, useRef } from 'react';
+import {
+    ActivityIndicator,
+    Animated,
+    Image,
+    Text,
+    TouchableOpacity,
+    View
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Icon } from './Icon';
 
 interface MiniPlayerProps {
   onPlayerPress?: () => void;
@@ -177,7 +177,7 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
               {isLoading ? (
                 <ActivityIndicator size="small" color="#666" />
               ) : (
-                <Ionicons
+                <Icon
                   name={isPlaying ? "pause" : "play"}
                   size={24}
                   color="#666"
@@ -210,7 +210,7 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
               justifyContent: 'center',
             }}
           >
-            <Ionicons
+            <Icon
               name="sparkles"
               size={24}
               color="#666"

@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  View, 
-  Text, 
-  TouchableOpacity, 
-  SafeAreaView,
-  StatusBar,
-  Dimensions,
-  Image
-} from 'react-native';
-import { useLocalSearchParams, router, Stack } from 'expo-router';
-import ConfettiCannon from 'react-native-confetti-cannon';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '@/components/Icon';
 import { QuizResult } from '@/types/quiz';
+import { router, Stack, useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+    Dimensions,
+    Image,
+    SafeAreaView,
+    StatusBar,
+    Text,
+    TouchableOpacity,
+    View
+} from 'react-native';
+import ConfettiCannon from 'react-native-confetti-cannon';
 
 const { width } = Dimensions.get('window');
 
@@ -119,7 +119,7 @@ export default function QuizResultScreen() {
               <View className="flex-row items-center justify-between">
                 {/* Play Icon - Left */}
                 <View className="w-8 h-8 bg-[#D5FF88] rounded-full items-center justify-center z-10">
-                  <Ionicons name="play" size={16} color="#3D4A24" />
+                  <Icon name="play" size={16} color="#3D4A24" />
                 </View>
                 
                 {/* First Progress Line */}
@@ -133,7 +133,7 @@ export default function QuizResultScreen() {
                 
                 {/* Headphones Icon - Center */}
                 <View className="w-8 h-8 bg-[#D5FF88] rounded-full items-center justify-center z-10">
-                  <Ionicons name="headset" size={16} color="#3D4A24" />
+                  <Icon name="headset" size={16} color="#3D4A24" />
                 </View>
                 
                 {/* Second Progress Line */}
@@ -147,7 +147,7 @@ export default function QuizResultScreen() {
                 
                 {/* Lightbulb Icon - Right */}
                 <View className="w-8 h-8 bg-[#D5FF88] rounded-full items-center justify-center z-10">
-                  <Ionicons name="bulb" size={16} color="#3D4A24" />
+                  <Icon name="bulb" size={16} color="#3D4A24" />
                 </View>
               </View>
             </View>
