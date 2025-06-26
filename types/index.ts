@@ -46,4 +46,11 @@ export type {
   QuizStatus,
 } from './quiz';
 
+export type {
+  Note,
+  NoteCreate,
+  NoteUpdate,
+  NotesState,
+} from './notes';
+
 export { AudioFormat, SkipDirection, AudioErrorType } from './audio';

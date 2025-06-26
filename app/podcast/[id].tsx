@@ -1,10 +1,12 @@
 import { Icon } from '@/components/Icon';
 import { useAudioContext } from '@/contexts/AudioContext';
+import { useNotes } from '@/contexts/NotesContext';
 import { educationalContent, EducationalContent } from '@/data/educational-content';
 import { mockQuizzes } from '@/data/quizzes';
 import { useAudio } from '@/hooks/useAudio';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import { Note } from '@/types/notes';
+import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     ActivityIndicator,
     Dimensions,
@@ -24,12 +26,13 @@ export default function PodcastDetailsScreen() {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [descriptionLines, setDescriptionLines] = useState(0);
   const [notesInView, setNotesInView] = useState(false);
+  const [notes, setNotes] = useState<Note[]>([]);
   
-  // Animation values for each note card
-  const note1Rotation = useSharedValue(-4);
-  const note2Rotation = useSharedValue(4);
-  const note3Rotation = useSharedValue(4);
-  const note4Rotation = useSharedValue(-4);
+  // Animation values for each note card - start at 0 degrees
+  const note1Rotation = useSharedValue(0);
+  const note2Rotation = useSharedValue(0);
+  const note3Rotation = useSharedValue(0);
+  const note4Rotation = useSharedValue(0);
   
   const note1AnimatedStyle = useAnimatedStyle(() => {
     return {
@@ -59,11 +62,14 @@ export default function PodcastDetailsScreen() {
   const animateNotesIntoView = () => {
     if (!notesInView) {
       setNotesInView(true);
+      // Generate random rotations between -4 and 4 degrees
+      const randomRotation = () => Math.random() * 8 - 4;
+      
       // Stagger the animations with slight delays
-      setTimeout(() => note1Rotation.value = withTiming(0, { duration: 400 }), 0);
-      setTimeout(() => note2Rotation.value = withTiming(0, { duration: 400 }), 100);
-      setTimeout(() => note3Rotation.value = withTiming(0, { duration: 400 }), 200);
-      setTimeout(() => note4Rotation.value = withTiming(0, { duration: 400 }), 300);
+      setTimeout(() => note1Rotation.value = withTiming(randomRotation(), { duration: 400 }), 0);
+      setTimeout(() => note2Rotation.value = withTiming(randomRotation(), { duration: 400 }), 100);
+      setTimeout(() => note3Rotation.value = withTiming(randomRotation(), { duration: 400 }), 200);
+      setTimeout(() => note4Rotation.value = withTiming(randomRotation(), { duration: 400 }), 300);
     }
   };
   
@@ -80,12 +86,17 @@ export default function PodcastDetailsScreen() {
     isContentPlaying,
     isCurrentPodcast,
     playContent,
-    togglePlayPause,
     isLoading,
     isContentBuffering,
   } = useAudio();
 
   const { currentPodcast: currentlyPlayingPodcast } = useAudioContext();
+  const { getNotesForPodcast } = useNotes();
+
+  const loadNotes = useCallback(async (podcastId: string) => {
+    const podcastNotes = await getNotesForPodcast(podcastId);
+    setNotes(podcastNotes);
+  }, [getNotesForPodcast]);
 
   useEffect(() => {
     if (id) {
@@ -93,6 +104,15 @@ export default function PodcastDetailsScreen() {
       setContent(foundContent || null);
     }
   }, [id]);
+
+  // Load notes when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      if (id) {
+        loadNotes(id);
+      }
+    }, [id, loadNotes])
+  );
 
   const handlePlayPress = async () => {
     if (!content) return;
@@ -124,6 +144,25 @@ export default function PodcastDetailsScreen() {
 
   const toggleDescription = () => {
     setIsDescriptionExpanded(!isDescriptionExpanded);
+  };
+
+  const formatNoteDate = (timestamp: number) => {
+    const now = new Date();
+    const noteDate = new Date(timestamp);
+    const diffDays = Math.floor((now.getTime() - noteDate.getTime()) / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    
+    return noteDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  };
+
+  const handleNotePress = (noteId: string) => {
+    router.push(`/notes/${noteId}?podcastId=${id}`);
+  };
+
+  const handleNewNotePress = () => {
+    router.push(`/notes/new?podcastId=${id}`);
   };
 
   if (!content) {
@@ -321,62 +360,64 @@ export default function PodcastDetailsScreen() {
             
             {/* Responsive Grid Container */}
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: noteGap }}>
-              {/* First Note Card */}
-              <TouchableOpacity 
-                className="relative" 
-                style={{ width: noteCardWidth, height: 120 }}
-                activeOpacity={0.8}
-              >
-                <Animated.View 
-                  className="bg-purple-100 rounded-3xl border border-black/10 p-4 w-full h-full justify-between"
-                  style={[note1AnimatedStyle]}
-                >
-                  <Text className="text-gray-600 text-xs">Today</Text>
-                  <Text className="text-gray-900 text-base font-medium leading-6">
-                    Notes on SEN basics
-                  </Text>
-                </Animated.View>
-              </TouchableOpacity>
+              {/* Existing Notes */}
+              {notes.slice(0, 3).map((note, index) => {
+                const animatedStyle = index === 0 ? note1AnimatedStyle :
+                                    index === 1 ? note2AnimatedStyle :
+                                    note3AnimatedStyle;
+                
+                return (
+                  <TouchableOpacity 
+                    key={note.id}
+                    className="relative" 
+                    style={{ width: noteCardWidth, height: 120 }}
+                    activeOpacity={0.8}
+                    onPress={() => handleNotePress(note.id)}
+                  >
+                    <Animated.View 
+                      className="bg-purple-100 rounded-3xl border border-black/10 p-4 w-full h-full justify-between"
+                      style={[animatedStyle]}
+                    >
+                      <Text className="text-gray-600 text-xs">{formatNoteDate(note.createdAt)}</Text>
+                      <Text className="text-gray-900 text-base font-medium leading-6" numberOfLines={2}>
+                        {note.title}
+                      </Text>
+                    </Animated.View>
+                  </TouchableOpacity>
+                );
+              })}
 
-              {/* Second Note Card */}
-              <TouchableOpacity 
-                className="relative" 
-                style={{ width: noteCardWidth, height: 120 }}
-                activeOpacity={0.8}
-              >
-                <Animated.View 
-                  className="bg-purple-100 rounded-3xl border border-black/10 p-4 w-full h-full justify-between"
-                  style={[note2AnimatedStyle]}
-                >
-                  <Text className="text-gray-600 text-xs">Yesterday</Text>
-                  <Text className="text-gray-900 text-base font-medium leading-6">
-                    Methodologies for SEN
-                  </Text>
-                </Animated.View>
-              </TouchableOpacity>
-
-              {/* Third Note Card */}
-              <TouchableOpacity 
-                className="relative" 
-                style={{ width: noteCardWidth, height: 120 }}
-                activeOpacity={0.8}
-              >
-                <Animated.View 
-                  className="bg-purple-100 rounded-3xl border border-black/10 p-4 w-full h-full justify-between"
-                  style={[note3AnimatedStyle]}
-                >
-                  <Text className="text-gray-600 text-xs">Jun 19</Text>
-                  <Text className="text-gray-900 text-base font-medium leading-6">
-                    Some examples
-                  </Text>
-                </Animated.View>
-              </TouchableOpacity>
+              {/* Placeholder cards if less than 3 notes */}
+              {notes.length < 3 && Array.from({ length: 3 - notes.length }).map((_, index) => {
+                const actualIndex = notes.length + index;
+                const animatedStyle = actualIndex === 0 ? note1AnimatedStyle :
+                                    actualIndex === 1 ? note2AnimatedStyle :
+                                    note3AnimatedStyle;
+                
+                return (
+                  <TouchableOpacity 
+                    key={`placeholder-${index}`}
+                    className="relative" 
+                    style={{ width: noteCardWidth, height: 120 }}
+                    activeOpacity={0.7}
+                    onPress={handleNewNotePress}
+                  >
+                    <Animated.View 
+                      className="bg-white/30 backdrop-blur-sm rounded-3xl border border-dashed border-black/10 p-4 w-full h-full justify-center items-center"
+                      style={[animatedStyle]}
+                    >
+                      <Text className="text-gray-400 text-sm">No note yet</Text>
+                    </Animated.View>
+                  </TouchableOpacity>
+                );
+              })}
 
               {/* New Note Card */}
               <TouchableOpacity 
                 className="relative" 
                 style={{ width: noteCardWidth, height: 120 }}
                 activeOpacity={0.7}
+                onPress={handleNewNotePress}
               >
                 <Animated.View 
                   className="bg-white/50 backdrop-blur-sm rounded-3xl border-2 border-dashed border-black/20 p-4 w-full h-full justify-between"

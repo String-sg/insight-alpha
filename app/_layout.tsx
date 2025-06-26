@@ -14,6 +14,7 @@ import {
 
 // import { useColorScheme } from '@/hooks/useColorScheme'; // Disabled dark mode
 import { AudioProvider } from '@/contexts/AudioContext';
+import { NotesProvider } from '@/contexts/NotesContext';
 import { MiniPlayer } from '@/components/MiniPlayer';
 
 export default function RootLayout() {
@@ -37,19 +38,21 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider style={{ backgroundColor: 'transparent' }}>
       <AudioProvider>
-        <ThemeProvider value={DefaultTheme}>
-          <View style={{ flex: 1, backgroundColor: 'transparent' }}>
-            <Stack>
-              <Stack.Screen name="index" options={{ headerShown: false }} />
-              <Stack.Screen name="library" options={{ headerShown: false }} />
-              <Stack.Screen name="explore" options={{ headerShown: false }} />
-              <Stack.Screen name="player" options={{ headerShown: false, presentation: 'modal' }} />
-              <Stack.Screen name="+not-found" />
-            </Stack>
-            {shouldShowMiniPlayer && <MiniPlayer />}
-            <StatusBar style="auto" />
-          </View>
-        </ThemeProvider>
+        <NotesProvider>
+          <ThemeProvider value={DefaultTheme}>
+            <View style={{ flex: 1, backgroundColor: 'transparent' }}>
+              <Stack>
+                <Stack.Screen name="index" options={{ headerShown: false }} />
+                <Stack.Screen name="library" options={{ headerShown: false }} />
+                <Stack.Screen name="explore" options={{ headerShown: false }} />
+                <Stack.Screen name="player" options={{ headerShown: false, presentation: 'modal' }} />
+                <Stack.Screen name="+not-found" />
+              </Stack>
+              {shouldShowMiniPlayer && <MiniPlayer />}
+              <StatusBar style="auto" />
+            </View>
+          </ThemeProvider>
+        </NotesProvider>
       </AudioProvider>
     </SafeAreaProvider>
   );
