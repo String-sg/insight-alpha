@@ -1,4 +1,5 @@
 import { useAudioContext } from '@/contexts/AudioContext';
+import { useChatContext } from '@/contexts/ChatContext';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useRef } from 'react';
 import {
@@ -30,6 +31,8 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
     resumePodcast,
     pausePodcast,
   } = useAudioContext();
+
+  const { showChat } = useChatContext();
 
   // Show/hide animation based on whether audio is playing or loaded
   const shouldShow = currentPodcast !== null;
@@ -88,8 +91,7 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
   };
 
   const handleChatPress = () => {
-    // TODO: Implement AI chat functionality
-    console.log('Chat with AI pressed');
+    showChat();
   };
 
   const getCurrentInfo = () => {

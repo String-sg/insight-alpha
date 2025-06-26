@@ -35,6 +35,13 @@ const iconMap: Record<string, keyof typeof LucideIcons> = {
   'people': 'Users',
   'musical-note': 'Music',
   'trash-outline': 'Trash2',
+  'message-circle': 'MessageCircle',
+  'send': 'Send',
+  'bot': 'Bot',
+  'user': 'User',
+  'clock': 'Clock',
+  'check-check': 'CheckCheck',
+  'alert-circle': 'AlertCircle',
 };
 
 interface IconProps {
@@ -49,7 +56,7 @@ export const Icon: React.FC<IconProps> = ({ name, size = 24, color = '#000000', 
   const lucideIconName = iconMap[name] || name;
   
   // Get the icon component from LucideIcons
-  const IconComponent = LucideIcons[lucideIconName as keyof typeof LucideIcons] as any;
+  const IconComponent = (LucideIcons as any)[lucideIconName];
   
   if (!IconComponent) {
     console.warn(`Icon "${name}" (mapped to "${lucideIconName}") not found in Lucide icons`);

@@ -53,4 +53,14 @@ export type {
   NotesState,
 } from './notes';
 
+export type {
+  ChatUser,
+  ChatMessage,
+  ChatSession,
+  ChatContextState,
+  ChatContextActions,
+  ChatContextType,
+  ChatConfig,
+} from './chat';
+
 export { AudioFormat, SkipDirection, AudioErrorType } from './audio';
