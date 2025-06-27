@@ -42,6 +42,8 @@ const iconMap: Record<string, keyof typeof LucideIcons> = {
   'clock': 'Clock',
   'check-check': 'CheckCheck',
   'alert-circle': 'AlertCircle',
+  'rotate-cw': 'RotateCw',
+  'rotate-ccw': 'RotateCcw',
 };
 
 interface IconProps {

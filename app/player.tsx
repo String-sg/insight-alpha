@@ -219,7 +219,7 @@ className="absolute inset-0 flex-1"
               onPress={() => skipBackward(15)}
               className="p-2"
             >
-              <Icon name="play-skip-back" size={24} color="white" />
+              <Icon name="rotate-ccw" size={24} color="white" />
             </TouchableOpacity>
 
             {/* Play/Pause */}
@@ -244,7 +244,7 @@ className="absolute inset-0 flex-1"
               onPress={() => skipForward(15)}
               className="p-2"
             >
-              <Icon name="play-skip-forward" size={24} color="white" />
+              <Icon name="rotate-cw" size={24} color="white" />
             </TouchableOpacity>
 
             {/* Playback Rate */}
