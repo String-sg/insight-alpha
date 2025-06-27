@@ -103,7 +103,11 @@ export default function PlayerScreen() {
 
   // Redirect if no audio is loaded
   if (!currentPodcast) {
-    router.back();
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.replace('/');
+    }
     return null;
   }
 
@@ -127,7 +131,13 @@ className="absolute inset-0 flex-1"
           {/* Header */}
           <View className="flex-row items-center justify-between px-4 py-3">
             <TouchableOpacity
-              onPress={() => router.back()}
+              onPress={() => {
+                if (router.canGoBack()) {
+                  router.back();
+                } else {
+                  router.replace('/');
+                }
+              }}
               className="w-10 h-10 items-center justify-center rounded-full bg-white/20"
             >
               <Icon name="close" size={24} color="white" />

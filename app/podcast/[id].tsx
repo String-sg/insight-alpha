@@ -265,7 +265,13 @@ export default function PodcastDetailsScreen() {
         {/* Custom Header */}
         <View className="absolute top-0 left-0 right-0 z-10 flex-row items-center justify-between px-4 pt-12 pb-4 bg-transparent">
           <TouchableOpacity
-            onPress={() => router.back()}
+            onPress={() => {
+              if (router.canGoBack()) {
+                router.back();
+              } else {
+                router.replace('/');
+              }
+            }}
             className="w-10 h-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm border border-white/30"
           >
             <Icon name="chevron-back" size={24} color="#000" />
