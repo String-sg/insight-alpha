@@ -50,7 +50,7 @@ export default function HomeScreen() {
   const dailyRecommendation = educationalContent[educationalContent.length - 1]; // Latest added content
 
   return (
-    <SafeAreaView className="flex-1 bg-transparent">
+    <SafeAreaView className="flex-1 bg-[#f4f4f4]">
       <StatusBar barStyle="dark-content" />
       
       <ScrollView 
