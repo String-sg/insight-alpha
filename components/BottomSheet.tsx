@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import {
-  View,
-  Modal,
-  Animated,
-  TouchableWithoutFeedback,
-  PanResponder,
+    Animated,
+    Modal,
+    PanResponder,
+    TouchableWithoutFeedback,
+    View,
 } from 'react-native';
 
 interface BottomSheetProps {

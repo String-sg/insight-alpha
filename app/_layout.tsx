@@ -1,25 +1,25 @@
-import React from 'react';
+import {
+    Geist_400Regular,
+    Geist_500Medium,
+    Geist_600SemiBold,
+    useFonts
+} from '@expo-google-fonts/geist';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import React from 'react';
 import { View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-reanimated';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import '../global.css';
-import { 
-  Geist_400Regular,
-  Geist_500Medium,
-  Geist_600SemiBold,
-  useFonts 
-} from '@expo-google-fonts/geist';
 
 // import { useColorScheme } from '@/hooks/useColorScheme'; // Disabled dark mode
-import { AudioProvider } from '@/contexts/AudioContext';
-import { NotesProvider } from '@/contexts/NotesContext';
-import { ChatProvider, useChatContext } from '@/contexts/ChatContext';
-import { MiniPlayer } from '@/components/MiniPlayer';
-import { ChatInterface } from '@/components/ChatInterface';
 import { BottomSheet } from '@/components/BottomSheet';
+import { ChatInterface } from '@/components/ChatInterface';
+import { MiniPlayer } from '@/components/MiniPlayer';
+import { AudioProvider } from '@/contexts/AudioContext';
+import { ChatProvider, useChatContext } from '@/contexts/ChatContext';
+import { NotesProvider } from '@/contexts/NotesContext';
 
 function AppContent() {
   const pathname = usePathname();

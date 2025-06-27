@@ -1,14 +1,15 @@
 import { useAudioContext } from '@/contexts/AudioContext';
 import { useChatContext } from '@/contexts/ChatContext';
-import { useRouter } from 'expo-router';
+import { useRouter, usePathname } from 'expo-router';
 import React, { useEffect, useRef } from 'react';
 import {
-    ActivityIndicator,
-    Animated,
-    Image,
-    Text,
-    TouchableOpacity,
-    View
+  ActivityIndicator,
+  Animated,
+  Image,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icon } from './Icon';
@@ -19,6 +20,7 @@ interface MiniPlayerProps {
 
 export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const insets = useSafeAreaInsets();
   const slideAnim = useRef(new Animated.Value(100)).current; // Start hidden below screen
   const opacityAnim = useRef(new Animated.Value(0)).current;
@@ -35,7 +37,8 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
   const { showChat } = useChatContext();
 
   // Show/hide animation based on whether audio is playing or loaded
-  const shouldShow = currentPodcast !== null;
+  // Hide when on player screen
+  const shouldShow = currentPodcast !== null && pathname !== '/player';
 
   useEffect(() => {
     if (shouldShow) {
@@ -132,10 +135,10 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
       <View className="flex-row items-center px-2">
         {/* Main Mini Player */}
         <View className="flex-1 mr-1">
-          <TouchableOpacity
+          <TouchableWithoutFeedback
             onPress={handlePlayerPress}
-            activeOpacity={0.9}
-            style={{
+          >
+            <View style={{
               borderRadius: 1000,
               backgroundColor: 'rgba(255, 255, 255, 0.7)',
               backdropFilter: 'blur(20px)',
@@ -205,15 +208,16 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
                 />
               )}
             </TouchableOpacity>
-          </TouchableOpacity>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
 
         {/* AI Chat Button */}
         <View className="ml-2">
-          <TouchableOpacity
+          <TouchableWithoutFeedback
             onPress={handleChatPress}
-            activeOpacity={0.9}
-            style={{
+          >
+            <View style={{
               width: 72,
               height: 72,
               borderRadius: 36,
@@ -253,7 +257,8 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
               size={24}
               color="#666"
             />
-          </TouchableOpacity>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
       </View>
     </Animated.View>
