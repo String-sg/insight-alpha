@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Animated,
   Image,
+  Platform,
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -141,7 +142,13 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
             <View style={{
               borderRadius: 1000,
               backgroundColor: 'rgba(255, 255, 255, 0.7)',
-              backdropFilter: 'blur(20px)',
+              ...Platform.select({
+                web: {
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)', // Safari support
+                },
+                default: {},
+              }),
               borderWidth: 1,
               borderColor: 'rgba(221, 221, 221, 0.7)',
               shadowColor: '#000',
@@ -222,7 +229,13 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
               height: 72,
               borderRadius: 36,
               backgroundColor: 'rgba(255, 255, 255, 0.7)',
-              backdropFilter: 'blur(20px)',
+              ...Platform.select({
+                web: {
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)', // Safari support
+                },
+                default: {},
+              }),
               borderWidth: 1,
               borderColor: 'rgba(221, 221, 221, 0.7)',
               shadowColor: '#000',
