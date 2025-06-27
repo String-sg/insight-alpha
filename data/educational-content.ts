@@ -29,8 +29,8 @@ export const educationalContent: EducationalContent[] = [
     backgroundColor: 'bg-purple-100',
     badgeColor: 'bg-purple-200',
     textColor: 'text-purple-900',
-    timeLeft: '40m left',
-    progress: 0.2,
+    timeLeft: '12m left',
+    progress: 0,
     publishedDate: '1 day ago'
   },
   {
@@ -45,7 +45,7 @@ export const educationalContent: EducationalContent[] = [
     backgroundColor: 'bg-yellow-100',
     badgeColor: 'bg-yellow-200',
     textColor: 'text-yellow-900',
-    timeLeft: '35m left',
+    timeLeft: '10m left',
     progress: 0,
     publishedDate: 'Today'
   }

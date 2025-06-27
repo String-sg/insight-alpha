@@ -133,7 +133,8 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
         zIndex: 1000,
       }}
     >
-      <View className="flex-row items-center px-2">
+      <View className="max-w-3xl mx-auto w-full px-2">
+        <View className="flex-row items-center">
         {/* Main Mini Player */}
         <View className="flex-1 mr-1">
           <TouchableWithoutFeedback
@@ -272,6 +273,7 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
             />
             </View>
           </TouchableWithoutFeedback>
+        </View>
         </View>
       </View>
     </Animated.View>

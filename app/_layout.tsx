@@ -30,14 +30,16 @@ function AppContent() {
 
   return (
     <ThemeProvider value={DefaultTheme}>
-      <View style={{ flex: 1, backgroundColor: 'transparent' }}>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="library" options={{ headerShown: false }} />
-          <Stack.Screen name="explore" options={{ headerShown: false }} />
-          <Stack.Screen name="player" options={{ headerShown: false, presentation: 'modal' }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
+      <View style={{ flex: 1, backgroundColor: '#f4f4f4' }}>
+        <View className="flex-1 max-w-3xl mx-auto w-full">
+          <Stack>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="library" options={{ headerShown: false }} />
+            <Stack.Screen name="explore" options={{ headerShown: false }} />
+            <Stack.Screen name="player" options={{ headerShown: false, presentation: 'modal' }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </View>
         {shouldShowMiniPlayer && <MiniPlayer />}
         <StatusBar style="auto" />
         
@@ -69,7 +71,7 @@ export default function RootLayout() {
   }
 
   return (
-    <SafeAreaProvider style={{ backgroundColor: 'transparent' }}>
+    <SafeAreaProvider style={{ backgroundColor: '#f4f4f4' }}>
       <AudioProvider>
         <NotesProvider>
           <ChatProvider>

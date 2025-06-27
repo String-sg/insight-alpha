@@ -15,7 +15,7 @@ interface WeekCalendarProps {
 
 export const WeekCalendar: React.FC<WeekCalendarProps> = ({ weekData }) => {
   return (
-    <View className="flex-row items-center justify-between mx-6 my-4">
+    <View className="flex-row items-center justify-between my-4">
       {weekData.map((dayInfo, index) => (
         <View key={index} className="flex-1 items-center">
           <View className={`flex-col items-center justify-center px-2 py-3 gap-2 ${

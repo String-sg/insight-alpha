@@ -62,14 +62,18 @@ export default function HomeScreen() {
         <ProfileHeader />
         
         {/* Navigation Bar */}
-        <SegmentedControl activeSegment="home" />
+        <View className="px-4">
+          <SegmentedControl activeSegment="home" />
+        </View>
         
         {/* Week Calendar */}
-        <WeekCalendar weekData={weeklyProgress} />
+        <View className="px-4">
+          <WeekCalendar weekData={weeklyProgress} />
+        </View>
         
         {/* Recently Learned Section */}
         <View className="mt-8 mb-4">
-          <View className="flex-row items-center justify-between mx-6 mb-4">
+          <View className="flex-row items-center justify-between mx-4 mb-4">
             <Text className="text-black text-xl font-semibold">
               Recently learned
             </Text>
@@ -83,19 +87,21 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
           
-          {recentlyLearned.map((content) => (
-            <EducationalCard
-              key={content.id}
-              content={content}
-              onPress={() => handleContentPress(content)}
-              onPlayPress={() => handlePlayPress(content)}
-            />
-          ))}
+          <View className="px-4">
+            {recentlyLearned.map((content) => (
+              <EducationalCard
+                key={content.id}
+                content={content}
+                onPress={() => handleContentPress(content)}
+                onPlayPress={() => handlePlayPress(content)}
+              />
+            ))}
+          </View>
         </View>
 
         {/* Daily Recommendation Section */}
         <View className="mt-4 mb-8">
-          <View className="flex-row items-center mx-6 mb-4">
+          <View className="flex-row items-center mx-4 mb-4">
             <View className="flex-row items-center gap-1 flex-1">
               <Text className="text-black text-xl font-semibold">
                 Daily recommendation
@@ -110,11 +116,13 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
           
-          <EducationalCard
-            content={dailyRecommendation}
-            onPress={() => handleContentPress(dailyRecommendation)}
-            onPlayPress={() => handlePlayPress(dailyRecommendation)}
-          />
+          <View className="px-4">
+            <EducationalCard
+              content={dailyRecommendation}
+              onPress={() => handleContentPress(dailyRecommendation)}
+              onPlayPress={() => handlePlayPress(dailyRecommendation)}
+            />
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

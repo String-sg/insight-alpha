@@ -90,7 +90,7 @@ export default function ExploreScreen() {
         contentContainerStyle={{ paddingBottom: bottomPadding }}
       >
         {/* Header */}
-        <View className="flex-row items-center justify-between mx-6 mt-6 mb-4">
+        <View className="flex-row items-center justify-between mx-4 mt-6 mb-4">
           <Text className="text-black text-2xl font-geist-semibold">
             Onward
           </Text>
@@ -107,48 +107,13 @@ export default function ExploreScreen() {
         </View>
 
         {/* Navigation Bar */}
-        <SegmentedControl activeSegment="explore" />
-
-        {/* Popular Creators Section */}
-        <View className="mx-6 mb-6">
-          <Text className="text-black text-xl font-geist-semibold mb-4">
-            Popular creators
-          </Text>
-          
-          <View className="flex-row gap-2.5">
-            {popularCreators.map((creator) => (
-              <TouchableOpacity 
-                key={creator.id}
-                className="bg-white rounded-3xl h-[120px] flex-1 relative border border-slate-200 overflow-hidden"
-              >
-                {/* Badge */}
-                <View className={`absolute top-2 right-2 ${creator.badge.color} rounded-full px-2 py-1 z-10`}>
-                  {creator.badge.icon ? (
-                    <View className="w-4 h-4 items-center justify-center">
-                      <Icon name={creator.badge.icon as any} size={12} color="white" />
-                    </View>
-                  ) : (
-                    <Text className="text-white text-xs font-geist-bold">
-                      {creator.badge.text}
-                    </Text>
-                  )}
-                </View>
-                
-                {/* Logo */}
-                <View className="flex-1 items-center justify-center">
-                  <Image
-                    source={creator.logo}
-                    className="w-20 h-10"
-                    resizeMode="contain"
-                  />
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
+        <View className="px-4">
+          <SegmentedControl activeSegment="explore" />
         </View>
 
+
         {/* Popular Topics Section */}
-        <View className="mx-6 mb-6">
+        <View className="mx-4 mb-6">
           <Text className="text-black text-xl font-geist-semibold mb-4">
             Popular topics
           </Text>
@@ -172,7 +137,7 @@ export default function ExploreScreen() {
         </View>
 
         {/* Popular Contents Section */}
-        <View className="mx-6">
+        <View className="mx-4">
           <Text className="text-black text-xl font-geist-semibold mb-4">
             Popular contents
           </Text>

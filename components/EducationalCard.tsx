@@ -114,7 +114,7 @@ export const EducationalCard: React.FC<EducationalCardProps> = ({
   return (
     <TouchableOpacity
       onPress={onPress}
-      className={`${content.backgroundColor} rounded-3xl drop-shadow-sm mx-6 mb-4`}
+      className={`${content.backgroundColor} rounded-3xl drop-shadow-sm mb-4`}
       activeOpacity={0.8}
     >
       {/* Header Section */}

@@ -159,7 +159,7 @@ className="absolute inset-0 flex-1"
           </View>
 
           {/* Title Section */}
-          <View className="px-5 mb-8">
+          <View className="px-4 mb-8">
             <View className="bg-purple-200 px-2 py-1 rounded-full self-start mb-2">
               <Text className="text-xs font-semibold text-purple-900">Special Educational Needs</Text>
             </View>
