@@ -1,8 +1,9 @@
 import { Icon } from '@/components/Icon';
+import { ProfileHeader } from '@/components/ProfileHeader';
 import { SegmentedControl } from '@/components/SegmentedControl';
 import { useAudioContext } from '@/contexts/AudioContext';
 import React from 'react';
-import { Image, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 export default function LibraryScreen() {
   const { currentPodcast } = useAudioContext();
@@ -51,21 +52,7 @@ export default function LibraryScreen() {
         contentContainerStyle={{ paddingBottom: bottomPadding }}
       >
         {/* Header */}
-        <View className="flex-row items-center justify-between mx-4 mt-6 mb-4">
-          <Text className="text-black text-2xl font-geist-semibold">
-            Onward
-          </Text>
-          
-          <TouchableOpacity className="w-10 h-10 bg-slate-100 rounded-full overflow-hidden items-center justify-center">
-            <View className="w-8 h-8">
-              <Image
-                source={{ uri: 'https://picsum.photos/32/32?random=profile' }}
-                className="w-full h-full rounded-full"
-                resizeMode="cover"
-              />
-            </View>
-          </TouchableOpacity>
-        </View>
+        <ProfileHeader />
 
         {/* Navigation Bar */}
         <View className="px-4">
