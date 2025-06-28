@@ -10,14 +10,14 @@ import { Note } from '@/types/notes';
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-    ActivityIndicator,
-    Dimensions,
-    Image,
-    ScrollView,
-    StatusBar,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Dimensions,
+  Image,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
@@ -139,7 +139,10 @@ export default function PodcastDetailsScreen() {
     if (!content) return;
     const quiz = mockQuizzes.find(q => q.podcastId === content.id);
     if (quiz) {
-      router.push(`/quiz/${quiz.id}`);
+      router.push({
+        pathname: `/quiz/${quiz.id}` as any,
+        params: { podcastId: content.id }
+      });
     }
   };
 
@@ -266,11 +269,7 @@ export default function PodcastDetailsScreen() {
         <View className="absolute top-0 left-0 right-0 z-10 flex-row items-center justify-between px-4 pt-12 pb-4 bg-transparent">
           <TouchableOpacity
             onPress={() => {
-              if (router.canGoBack()) {
-                router.back();
-              } else {
-                router.replace('/');
-              }
+              router.replace('/');
             }}
             className="w-10 h-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm border border-white/30"
           >

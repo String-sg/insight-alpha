@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Animated } from 'react-native';
-import { QuizQuestion as QuizQuestionType, QuizOption, Quiz } from '@/types/quiz';
-import { mockPodcasts } from '@/data/podcasts';
+import { educationalContent } from '@/data/educational-content';
+import { Quiz, QuizOption, QuizQuestion as QuizQuestionType } from '@/types/quiz';
+import React, { useEffect, useState } from 'react';
+import { Animated, Text, TouchableOpacity, View } from 'react-native';
 
 interface QuizQuestionProps {
   question: QuizQuestionType;
@@ -77,7 +77,7 @@ export function QuizQuestion({
   };
 
 
-  const podcast = quiz ? mockPodcasts.find(p => p.id === quiz.podcastId) : null;
+  const podcast = quiz ? educationalContent.find(content => content.id === quiz.podcastId) : null;
 
   return (
     <Animated.View

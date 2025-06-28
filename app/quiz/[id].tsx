@@ -29,7 +29,7 @@ const QUIZ_STORAGE_KEY = 'quiz_attempts';
 const QUIZ_PROGRESS_KEY = 'quiz_progress';
 
 export default function QuizScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, podcastId } = useLocalSearchParams<{ id: string; podcastId?: string }>();
   const { currentPodcast } = useAudioContext();
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -111,7 +111,7 @@ export default function QuizScreen() {
     
     // Move to next question or finish quiz
     setTimeout(() => {
-      if (currentQuestionIndex < quiz.questions.length - 1) {
+      if (quiz && currentQuestionIndex < quiz.questions.length - 1) {
         setCurrentQuestionIndex(prev => prev + 1);
         setQuestionStartTime(Date.now());
       } else {
@@ -160,7 +160,8 @@ export default function QuizScreen() {
       router.push({
         pathname: '/quiz/result',
         params: { 
-          resultData: JSON.stringify(result)
+          resultData: JSON.stringify(result),
+          podcastId: quiz?.podcastId || ''
         }
       });
     } catch (error) {
@@ -223,11 +224,27 @@ export default function QuizScreen() {
   const handleExitQuiz = () => {
     try {
       console.log('Exit quiz button pressed');
-      router.back();
+      
+      // If not on first question, go to previous question
+      if (currentQuestionIndex > 0) {
+        setCurrentQuestionIndex(prev => prev - 1);
+        setQuestionStartTime(Date.now());
+        // Clear any shown answer feedback when going back
+        setShowAnswerSheet(false);
+        return;
+      }
+      
+      // On first question, go back to podcast if we have podcastId
+      if (podcastId) {
+        router.replace(`/podcast/${podcastId}` as any);
+      } else {
+        // Fallback: always go to home for better UX
+        router.replace('/');
+      }
     } catch (error) {
       console.error('Error navigating back:', error);
-      // Fallback: try to navigate to home
-      router.push('/(tabs)/');
+      // Final fallback: try to navigate to home
+      router.push('/');
     }
   };
 

@@ -16,7 +16,7 @@ import ConfettiCannon from 'react-native-confetti-cannon';
 const { width } = Dimensions.get('window');
 
 export default function QuizResultScreen() {
-  const { resultData } = useLocalSearchParams<{ resultData: string }>();
+  const { resultData, podcastId } = useLocalSearchParams<{ resultData: string; podcastId?: string }>();
   const [result, setResult] = useState<QuizResult | null>(null);
   const confettiRef = useRef<any>(null);
 

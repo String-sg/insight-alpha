@@ -9,9 +9,10 @@ import {
     ActivityIndicator,
     Image,
     ScrollView,
+    Share,
     Text,
     TouchableOpacity,
-    View,
+    View
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -58,6 +59,22 @@ export default function PlayerScreen() {
     const currentIndex = rates.indexOf(playbackRate || 1.0);
     const nextIndex = (currentIndex + 1) % rates.length;
     await setPlaybackRate(rates[nextIndex]);
+  };
+
+  const handleShare = async () => {
+    try {
+      const contentInfo = getCurrentInfo();
+      if (!contentInfo) return;
+
+      const shareOptions = {
+        message: `Check out this podcast: ${contentInfo.title}${contentInfo.subtitle ? ` by ${contentInfo.subtitle}` : ''}`,
+        title: contentInfo.title,
+      };
+
+      await Share.share(shareOptions);
+    } catch (error) {
+      console.error('Error sharing:', error);
+    }
   };
 
   const formatTime = (milliseconds: number) => {
@@ -143,7 +160,10 @@ className="absolute inset-0 flex-1"
               <Icon name="close" size={24} color="white" />
             </TouchableOpacity>
             
-            <TouchableOpacity className="w-10 h-10 items-center justify-center rounded-full bg-white/20">
+            <TouchableOpacity
+              onPress={handleShare}
+              className="w-10 h-10 items-center justify-center rounded-full bg-white/20"
+            >
               <Icon name="share-outline" size={20} color="white" />
             </TouchableOpacity>
           </View>
@@ -185,9 +205,6 @@ className="absolute inset-0 flex-1"
               minimumValue={0}
               maximumValue={100}
               value={progress}
-              onSlidingStart={() => {
-                // Indicate we're seeking to prevent progress updates
-              }}
               onSlidingComplete={(value: number) => handleSeek(value)}
               minimumTrackTintColor="#792AEF"
               maximumTrackTintColor="#F5EFF7"

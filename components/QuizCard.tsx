@@ -1,9 +1,9 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, ImageBackground } from 'react-native';
-import { router } from 'expo-router';
-import { Quiz, QuizProgress, QuizStatus } from '@/types/quiz';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { Quiz, QuizProgress, QuizStatus } from '@/types/quiz';
+import { router } from 'expo-router';
+import React from 'react';
+import { ImageBackground, Text, TouchableOpacity, View } from 'react-native';
 
 interface QuizCardProps {
   quiz: Quiz;
@@ -51,7 +51,10 @@ export function QuizCard({ quiz, progress, status, onPress }: QuizCardProps) {
     if (onPress) {
       onPress();
     } else {
-      router.push(`/quiz/${quiz.id}`);
+      router.push({
+        pathname: `/quiz/${quiz.id}` as any,
+        params: { podcastId: quiz.podcastId }
+      });
     }
   };
 
