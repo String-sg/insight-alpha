@@ -1,5 +1,4 @@
 import { BottomSheet } from '@/components/BottomSheet';
-import { Icon } from '@/components/Icon';
 import { NoteEditor } from '@/components/NoteEditor';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { useNotes } from '@/contexts/NotesContext';
@@ -8,6 +7,7 @@ import { mockQuizzes } from '@/data/quizzes';
 import { useAudio } from '@/hooks/useAudio';
 import { Note } from '@/types/notes';
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
+import { ChevronLeft, Upload, Play, Pause, Lightbulb, Plus } from 'lucide-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -80,10 +80,9 @@ export default function PodcastDetailsScreen() {
   
   // Get screen dimensions for responsive layout
   const { width: screenWidth } = Dimensions.get('window');
-  const isTablet = screenWidth >= 768;
-  const notesContainerPadding = 32; // 16px padding on each side
+  const notesContainerPadding = 48; // 24px padding on each side (px-6)
   const noteGap = 16;
-  const notesPerRow = isTablet ? 4 : 2;
+  const notesPerRow = 2; // Always 2 columns for both mobile and tablet
   const totalGaps = (notesPerRow - 1) * noteGap;
   const noteCardWidth = (screenWidth - notesContainerPadding - totalGaps) / notesPerRow;
 
@@ -219,7 +218,7 @@ export default function PodcastDetailsScreen() {
 
   if (!content) {
     return (
-      <View className="flex-1 justify-center items-center" style={{ backgroundColor: '#ffffff', backgroundImage: 'linear-gradient(to bottom, #f5f5f5 90%, #ddd0ff 100%)' }}>
+      <View className="flex-1 justify-center items-center bg-purple-100">
         <StatusBar barStyle="dark-content" />
         <Text className="text-lg text-gray-600">
           Content not found
@@ -262,39 +261,39 @@ export default function PodcastDetailsScreen() {
           headerShown: false,
         }}
       />
-      <View className="flex-1" style={{ backgroundColor: '#ffffff', backgroundImage: 'linear-gradient(to bottom, #f5f5f5 90%, #ddd0ff 100%)' }}>
+      <View className="flex-1 bg-purple-100">
         <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
         
         {/* Custom Header */}
-        <View className="absolute top-0 left-0 right-0 z-10 flex-row items-center justify-between px-4 pt-12 pb-4 bg-transparent">
+        <View className="absolute top-0 left-0 right-0 z-10 flex-row items-center justify-between px-6 pt-12 pb-4 bg-transparent">
           <TouchableOpacity
             onPress={() => {
               router.replace('/');
             }}
-            className="w-10 h-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm border border-white/30"
+            className="w-10 h-10 items-center justify-center rounded-full bg-white"
           >
-            <Icon name="chevron-back" size={24} color="#000" />
+            <ChevronLeft size={24} color="#000" strokeWidth={2} />
           </TouchableOpacity>
           
           <TouchableOpacity
-            className="w-10 h-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm border border-white/30"
+            className="w-10 h-10 items-center justify-center rounded-full bg-white"
           >
-            <Icon name="share-outline" size={20} color="#000" />
+            <Upload size={20} color="#000" strokeWidth={2} />
           </TouchableOpacity>
         </View>
 
         <ScrollView 
           className="flex-1"
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingTop: 120, paddingBottom: scrollPaddingBottom }}
+          contentContainerStyle={{ paddingTop: 80, paddingBottom: scrollPaddingBottom }}
           onScroll={handleScroll}
           scrollEventThrottle={16}
         >
           {/* Main Content Card */}
-          <View className="mx-4 mt-8 relative">
-            {/* Glassmorphism Card */}
+          <View className="mx-6 mt-6 relative">
+            {/* Main Card */}
             <View 
-              className="bg-white/70 backdrop-blur-xl rounded-3xl border border-black/10 drop-shadow-sm"
+              className="bg-white rounded-3xl border border-gray-100 drop-shadow-sm"
               style={{
                 shadowColor: '#000',
                 shadowOffset: { width: 0, height: 2 },
@@ -303,17 +302,16 @@ export default function PodcastDetailsScreen() {
                 elevation: 4,
               }}
             >
-              {/* Content Cover - Overlapping */}
-              <View className="absolute -top-6 left-4 w-24 h-24 rounded-2xl overflow-hidden bg-purple-500 drop-shadow-md">
-                <Image
-                  source={require('@/assets/images/podcast-cover-1.png')}
-                  style={{ width: 96, height: 96 }}
-                  resizeMode="cover"
-                />
-              </View>
-
               {/* Card Content */}
-              <View className="pt-20 pb-4 px-4">
+              <View className="p-6">
+                {/* Podcast Image */}
+                <View className="w-24 h-24 rounded-full overflow-hidden bg-purple-500 mb-4">
+                  <Image
+                    source={require('@/assets/images/cover-album.png')}
+                    style={{ width: 96, height: 96 }}
+                    resizeMode="cover"
+                  />
+                </View>
                 {/* Category Tag */}
                 <View className="self-start mb-2">
                   <View className="bg-purple-200 rounded-full px-2 py-1">
@@ -343,12 +341,11 @@ export default function PodcastDetailsScreen() {
                       <ActivityIndicator size="small" color="white" />
                     ) : (
                       <>
-                        <Icon
-                          name={isThisPodcastPlaying ? "pause" : "play"}
-                          size={16}
-                          color="white"
-                          style={{ marginRight: 4 }}
-                        />
+                        {isThisPodcastPlaying ? (
+                          <Pause size={16} color="white" strokeWidth={2} style={{ marginRight: 4 }} />
+                        ) : (
+                          <Play size={16} color="white" strokeWidth={2} style={{ marginRight: 4 }} />
+                        )}
                         <Text className="text-white text-sm font-medium">
                           {isThisPodcastCurrent
                             ? (isThisPodcastPlaying ? 'Pause' : 'Resume')
@@ -363,13 +360,13 @@ export default function PodcastDetailsScreen() {
                   {hasQuiz && (
                     <TouchableOpacity
                       onPress={handleQuizPress}
-                      className="w-full bg-white/50 backdrop-blur-sm rounded-full py-3 flex-row items-center justify-center border border-black/10"
+                      className="w-full bg-white rounded-full py-3 flex-row items-center justify-center border border-gray-200"
                       activeOpacity={0.8}
                     >
-                      <Icon
-                        name="bulb-outline"
+                      <Lightbulb
                         size={16}
                         color="#000"
+                        strokeWidth={2}
                         style={{ marginRight: 4 }}
                       />
                       <Text className="text-black text-sm font-medium">
@@ -383,7 +380,7 @@ export default function PodcastDetailsScreen() {
           </View>
 
           {/* Description Section */}
-          <View className="px-4 mt-6">
+          <View className="px-6 mt-6">
             <Text
               className="text-gray-600 text-sm leading-6 px-1"
               numberOfLines={isDescriptionExpanded ? undefined : 3}
@@ -407,7 +404,7 @@ export default function PodcastDetailsScreen() {
           </View>
 
           {/* Your Notes Section */}
-          <View className="px-4 mt-8 mb-8">
+          <View className="px-6 mt-8 mb-8">
             <Text className="text-black text-base font-medium mb-4 px-1">
               Your notes
             </Text>
@@ -429,7 +426,7 @@ export default function PodcastDetailsScreen() {
                     onPress={() => handleNotePress(note.id)}
                   >
                     <Animated.View 
-                      className="bg-purple-100 rounded-3xl border border-black/10 p-4 w-full h-full justify-between"
+                      className="bg-purple-200 rounded-3xl p-4 w-full h-full justify-between"
                       style={[animatedStyle]}
                     >
                       <Text className="text-gray-600 text-xs">{formatNoteDate(note.createdAt)}</Text>
@@ -457,7 +454,7 @@ export default function PodcastDetailsScreen() {
                     onPress={handleNewNotePress}
                   >
                     <Animated.View 
-                      className="bg-white/30 backdrop-blur-sm rounded-3xl border border-dashed border-black/10 p-4 w-full h-full justify-center items-center"
+                      className="bg-gray-50 rounded-3xl p-4 w-full h-full justify-center items-center"
                       style={[animatedStyle]}
                     >
                       <Text className="text-gray-400 text-sm">No note yet</Text>
@@ -474,11 +471,11 @@ export default function PodcastDetailsScreen() {
                 onPress={handleNewNotePress}
               >
                 <Animated.View 
-                  className="bg-white/50 backdrop-blur-sm rounded-3xl border-2 border-dashed border-black/20 p-4 w-full h-full justify-between"
+                  className="bg-white rounded-3xl p-4 w-full h-full justify-between"
                   style={[note4AnimatedStyle]}
                 >
                   <View className="bg-gray-200 rounded-full p-2 self-start">
-                    <Icon name="add" size={16} color="#000" />
+                    <Plus size={16} color="#000" strokeWidth={2} />
                   </View>
                   <Text className="text-gray-600 text-base font-medium">
                     New note

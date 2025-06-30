@@ -1,4 +1,3 @@
-import { Icon } from '@/components/Icon';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { SegmentedControl } from '@/components/SegmentedControl';
 import { useAudioContext } from '@/contexts/AudioContext';
@@ -11,28 +10,6 @@ export default function ExploreScreen() {
   
   // Calculate bottom padding based on mini player visibility
   const bottomPadding = currentPodcast ? 120 : 40;
-
-  // Popular creators data
-  const popularCreators = [
-    {
-      id: 'ast',
-      name: 'Academy of Singapore Teachers',
-      badge: { text: 'MOE', color: 'bg-red-500' },
-      logo: require('@/assets/images/astlogo1 1.png')
-    },
-    {
-      id: 'ted',
-      name: 'TED',
-      badge: { text: 'Spotify', icon: 'musical-note', color: 'bg-emerald-400' },
-      logo: require('@/assets/images/TED_three_letter_logo.svg 1.png')
-    },
-    {
-      id: 'harvard',
-      name: 'Harvard Business School',
-      badge: { text: 'Spotify', icon: 'musical-note', color: 'bg-emerald-400' },
-      logo: require('@/assets/images/Harvard_Business_School_shield_logo.svg 1.png')
-    }
-  ];
 
   // Popular topics data
   const popularTopics = [

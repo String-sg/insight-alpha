@@ -25,8 +25,8 @@ function AppContent() {
   const pathname = usePathname();
   const { isChatVisible, hideChat } = useChatContext();
 
-  // Hide mini player when fullscreen player is active or on quiz result page
-  const shouldShowMiniPlayer = pathname !== '/player' && pathname !== '/quiz/result';
+  // Hide mini player when fullscreen player is active or on quiz pages
+  const shouldShowMiniPlayer = pathname !== '/player' && !pathname.startsWith('/quiz');
 
   return (
     <ThemeProvider value={DefaultTheme}>

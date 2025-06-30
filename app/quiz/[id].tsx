@@ -330,7 +330,7 @@ export default function QuizScreen() {
         </ScrollView>
 
         {/* Check Answer Button */}
-        <View className="px-4" style={{ paddingBottom: currentPodcast ? 120 : 40 }}>
+        <View className="px-4" style={{ paddingBottom: 40 }}>
           <TouchableOpacity
             className="bg-black rounded-full py-4 items-center justify-center"
             disabled={!hasSelectedAnswer || showAnswerSheet}

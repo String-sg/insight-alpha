@@ -14,16 +14,14 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ onProfilePress }) 
       
       <TouchableOpacity
         onPress={onProfilePress}
-        className="w-10 h-10 bg-slate-100 rounded-full overflow-hidden items-center justify-center"
+        className="w-10 h-10 rounded-full overflow-hidden"
         activeOpacity={0.8}
       >
-        <View className="w-8 h-8">
-          <Image
-            source={{ uri: 'https://picsum.photos/32/32?random=profile' }}
-            className="w-full h-full rounded-full"
-            resizeMode="cover"
-          />
-        </View>
+        <Image
+          source={require('@/assets/images/cover-album.png')}
+          style={{ width: 40, height: 40 }}
+          resizeMode="cover"
+        />
       </TouchableOpacity>
     </View>
   );

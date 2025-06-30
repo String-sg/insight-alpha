@@ -1,25 +1,189 @@
-import { Icon } from '@/components/Icon';
 import { useAudioContext } from '@/contexts/AudioContext';
 import Slider from '@react-native-community/slider';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import { X, Upload, FileText, RotateCcw, RotateCw, Play, Pause, ThumbsUp, ThumbsDown, MoreHorizontal } from 'lucide-react-native';
+import React, { useEffect, useRef } from 'react';
 import {
     ActivityIndicator,
-    Image,
-    ScrollView,
+    Dimensions,
+    Platform,
     Share,
     Text,
     TouchableOpacity,
-    View
+    View,
+    Animated
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+// Conditionally import MeshGradientView only for native platforms
+let MeshGradientView: any = null;
+if (Platform.OS !== 'web') {
+  MeshGradientView = require('expo-mesh-gradient').MeshGradientView;
+}
+
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
+
+// Web mesh gradient component using CSS approach
+const WebMeshGradient = () => {
+  const animation1 = useRef(new Animated.Value(0)).current;
+  const animation2 = useRef(new Animated.Value(0)).current;
+  const animation3 = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    // Create smooth animations for the gradients to match Figma design
+    Animated.loop(
+      Animated.parallel([
+        Animated.sequence([
+          Animated.timing(animation1, {
+            toValue: 1,
+            duration: 8000,
+            useNativeDriver: false,
+          }),
+          Animated.timing(animation1, {
+            toValue: 0,
+            duration: 8000,
+            useNativeDriver: false,
+          }),
+        ]),
+        Animated.sequence([
+          Animated.timing(animation2, {
+            toValue: 1,
+            duration: 12000,
+            useNativeDriver: false,
+          }),
+          Animated.timing(animation2, {
+            toValue: 0,
+            duration: 12000,
+            useNativeDriver: false,
+          }),
+        ]),
+        Animated.sequence([
+          Animated.timing(animation3, {
+            toValue: 1,
+            duration: 10000,
+            useNativeDriver: false,
+          }),
+          Animated.timing(animation3, {
+            toValue: 0,
+            duration: 10000,
+            useNativeDriver: false,
+          }),
+        ]),
+      ])
+    ).start();
+  }, []);
+
+  const translateX1 = animation1.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 50],
+  });
+
+  const translateY1 = animation1.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, -30],
+  });
+
+  const scale2 = animation2.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 1.2],
+  });
+
+  const opacity3 = animation3.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.6, 0.9],
+  });
+
+  return (
+    <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden' }}>
+      {/* Base smooth gradient */}
+      <LinearGradient
+        colors={['#FBBF24', '#F59E0B', '#EF4444', '#8B5CF6', '#3B82F6']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+      />
+      
+      {/* Large smooth blob 1 - Yellow/Orange */}
+      <Animated.View
+        style={{
+          position: 'absolute',
+          width: '200%',
+          height: '150%',
+          left: '-50%',
+          top: '-25%',
+          transform: [
+            { translateX: translateX1 },
+            { translateY: translateY1 },
+          ],
+        }}
+      >
+        <LinearGradient
+          colors={['rgba(251, 191, 36, 0.8)', 'rgba(245, 158, 11, 0.6)', 'rgba(239, 68, 68, 0.4)', 'transparent']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{ flex: 1, borderRadius: 1000 }}
+        />
+      </Animated.View>
+      
+      {/* Large smooth blob 2 - Pink/Purple */}
+      <Animated.View
+        style={{
+          position: 'absolute',
+          width: '180%',
+          height: '180%',
+          right: '-40%',
+          top: '20%',
+          transform: [
+            { scale: scale2 },
+            { rotate: animation2.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '45deg'] }) },
+          ],
+          opacity: opacity3,
+        }}
+      >
+        <LinearGradient
+          colors={['transparent', 'rgba(139, 92, 246, 0.6)', 'rgba(236, 72, 153, 0.5)', 'rgba(239, 68, 68, 0.4)']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{ flex: 1, borderRadius: 1200 }}
+        />
+      </Animated.View>
+      
+      {/* Large smooth blob 3 - Blue base */}
+      <Animated.View
+        style={{
+          position: 'absolute',
+          width: '160%',
+          height: '120%',
+          left: '20%',
+          bottom: '-20%',
+          transform: [
+            { translateX: animation3.interpolate({ inputRange: [0, 1], outputRange: [-30, 30] }) },
+            { translateY: animation1.interpolate({ inputRange: [0, 1], outputRange: [0, -20] }) },
+          ],
+        }}
+      >
+        <LinearGradient
+          colors={['rgba(59, 130, 246, 0.7)', 'rgba(99, 102, 241, 0.5)', 'transparent']}
+          start={{ x: 0.3, y: 0 }}
+          end={{ x: 0.7, y: 1 }}
+          style={{ flex: 1, borderRadius: 800 }}
+        />
+      </Animated.View>
+      
+      {/* Overlay for extra smoothness */}
+      <LinearGradient
+        colors={['rgba(251, 191, 36, 0.1)', 'transparent', 'rgba(59, 130, 246, 0.1)']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+      />
+    </View>
+  );
+};
 
 export default function PlayerScreen() {
   const router = useRouter();
-  const insets = useSafeAreaInsets();
   
   const {
     isPlaying,
@@ -94,11 +258,6 @@ export default function PlayerScreen() {
     return (currentTime / duration) * 100;
   };
 
-
-
-
-
-
   const getCurrentInfo = () => {
     if (currentEpisode) {
       return {
@@ -132,21 +291,43 @@ export default function PlayerScreen() {
   const progress = getProgress();
 
   return (
-    <>
+    <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, height: SCREEN_HEIGHT }}>
       <StatusBar style="light" />
-      <LinearGradient
-        colors={['#4CB7FF', '#B875FF']}
-        locations={[0, 0.865]}
-className="absolute inset-0 flex-1"
-        style={{ paddingTop: insets.top }}
-      >
-        <ScrollView 
-          className="flex-1"
-          contentContainerStyle={{ paddingBottom: insets.bottom + 20 }}
-          showsVerticalScrollIndicator={false}
-        >
+      <View style={{ flex: 1, backgroundColor: '#E9D5FF', overflow: 'hidden' }}>
+        {/* Gradient Background */}
+        {Platform.OS === 'web' ? (
+          // Web animated mesh gradient
+          <WebMeshGradient />
+        ) : MeshGradientView ? (
+          // Native smooth mesh gradient
+          <MeshGradientView
+            style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+            columns={3}
+            rows={3}
+            colors={[
+              '#FBBF24', '#F59E0B', '#EF4444',
+              '#F59E0B', '#EF4444', '#EC4899',
+              '#3B82F6', '#8B5CF6', '#6366F1'
+            ]}
+            points={[
+              [0.0, 0.0], [0.5, 0.0], [1.0, 0.0],
+              [0.0, 0.5], [0.5, 0.5], [1.0, 0.5],
+              [0.0, 1.0], [0.5, 1.0], [1.0, 1.0]
+            ]}
+          />
+        ) : (
+          // Fallback gradient if MeshGradientView is not available
+          <LinearGradient
+            colors={['#E9D5FF', '#FBCFE8', '#FDE2E4']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+          />
+        )}
+
+        <View className="flex-1">
           {/* Header */}
-          <View className="flex-row items-center justify-between px-4 py-3">
+          <View className="flex-row items-center justify-between px-6 pt-12 pb-2">
             <TouchableOpacity
               onPress={() => {
                 if (router.canGoBack()) {
@@ -155,90 +336,68 @@ className="absolute inset-0 flex-1"
                   router.replace('/');
                 }
               }}
-              className="w-10 h-10 items-center justify-center rounded-full bg-white/20"
+              className="w-10 h-10 items-center justify-center bg-black/20 rounded-full"
             >
-              <Icon name="close" size={24} color="white" />
+              <X size={20} color="white" strokeWidth={2} />
             </TouchableOpacity>
             
             <TouchableOpacity
               onPress={handleShare}
-              className="w-10 h-10 items-center justify-center rounded-full bg-white/20"
+              className="w-10 h-10 items-center justify-center bg-black/20 rounded-full"
             >
-              <Icon name="share-outline" size={20} color="white" />
+              <Upload size={18} color="white" strokeWidth={2} />
             </TouchableOpacity>
           </View>
 
           {/* Error Display */}
           {error && (
-            <View className="mx-6 mb-4 bg-red-500/20 border border-red-500/30 rounded-xl p-4">
-              <Text className="text-red-200 text-sm text-center">{error}</Text>
+            <View className="absolute top-20 left-6 right-6 bg-red-500/20 border border-red-500/30 rounded-xl p-3 z-20">
+              <Text className="text-red-700 text-xs text-center">{error}</Text>
             </View>
           )}
 
-          {/* Album Art */}
-          <View className="items-center mb-8 mt-8">
-            <View className="drop-shadow-2xl">
-              <View className="w-76 h-76 rounded-[32px] overflow-hidden">
-                <Image
-                  source={require('@/assets/images/podcast-cover-1.png')}
-                  className="w-76 h-76"
-                  resizeMode="cover"
-                />
-              </View>
-            </View>
-          </View>
+          {/* Spacer for layout */}
+          <View className="flex-1" />
 
           {/* Title Section */}
-          <View className="px-4 mb-8">
-            <View className="bg-purple-200 px-2 py-1 rounded-full self-start mb-2">
-              <Text className="text-xs font-semibold text-purple-900">Special Educational Needs</Text>
+          <View className="px-6 mb-4">
+            <View className="bg-purple-600 px-3 py-1.5 rounded-full self-start mb-3">
+              <Text className="text-xs font-semibold text-white">Special Educational Needs</Text>
             </View>
-            <Text className="text-lg font-semibold text-[#F5EFF7] leading-7">
-              {contentInfo?.title || 'Unknown Title'}
+            <Text className="text-2xl font-semibold text-white leading-8" numberOfLines={2}>
+              {contentInfo?.title || 'Navigating Special Educational Needs in Singapore: A Path to Inclusion'}
             </Text>
           </View>
 
           {/* Progress Section */}
-          <View className="px-4 mb-8">
+          <View className="px-6 mb-3">
             <Slider
-              style={{ height: 20, width: '100%' }}
+              style={{ height: 30, width: '100%' }}
               minimumValue={0}
               maximumValue={100}
               value={progress}
-              onSlidingComplete={(value: number) => handleSeek(value)}
-              minimumTrackTintColor="#792AEF"
-              maximumTrackTintColor="#F5EFF7"
-              thumbStyle={{ 
-                backgroundColor: '#FFFFFF', 
-                width: 18, 
-                height: 18,
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.25,
-                shadowRadius: 4,
-              }}
-              trackStyle={{
-                height: 8,
-                borderRadius: 4,
-              }}
+              onSlidingComplete={handleSeek}
+              minimumTrackTintColor="#7C3AED"
+              maximumTrackTintColor="#E9D5FF"
+              thumbTintColor="#FFFFFF"
             />
             
             {/* Time Display */}
-            <View className="flex-row justify-between">
-              <Text className="text-xs font-normal text-[#F5EFF7]">
+            <View className="flex-row justify-between mt-2">
+              <Text className="text-sm font-medium text-white">
                 {formatTime(currentTime)}
               </Text>
-              <Text className="text-xs font-normal text-[#F5EFF7]">
+              <Text className="text-sm font-medium text-white">
                 -{formatTime(duration - currentTime)}
               </Text>
             </View>
           </View>
 
           {/* Main Controls */}
-          <View className="flex-row items-center justify-center px-4 mb-8 gap-8">
-            {/* Subtitles */}
+          <View className="flex-row items-center justify-center px-6 mb-6 gap-6">
+            {/* More Options */}
             <TouchableOpacity className="p-2">
-              <Icon name="text" size={24} color="white" />
+              <MoreHorizontal size={20} color="white" strokeWidth={2} />
             </TouchableOpacity>
 
             {/* Skip Backward */}
@@ -246,23 +405,29 @@ className="absolute inset-0 flex-1"
               onPress={() => skipBackward(15)}
               className="p-2"
             >
-              <Icon name="rotate-ccw" size={24} color="white" />
+              <RotateCcw size={28} color="white" strokeWidth={2} />
             </TouchableOpacity>
 
             {/* Play/Pause */}
             <TouchableOpacity
               onPress={handlePlayPause}
-              className="w-14 h-14 rounded-full bg-white/20 border border-white/30 items-center justify-center"
+              className="w-20 h-20 rounded-full bg-white items-center justify-center shadow-lg"
+              style={{
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.15,
+                shadowRadius: 8,
+                elevation: 8,
+              }}
             >
               {isLoading ? (
-                <ActivityIndicator size="large" color="white" />
+                <ActivityIndicator size="large" color="#000" />
               ) : (
-                <Icon
-                  name={isPlaying ? "pause" : "play"}
-                  size={24}
-                  color="white"
-                  style={isPlaying ? {} : { marginLeft: 2 }}
-                />
+                isPlaying ? (
+                  <Pause size={24} color="#000" strokeWidth={2.5} />
+                ) : (
+                  <Play size={24} color="#000" strokeWidth={2.5} style={{ marginLeft: 2 }} />
+                )
               )}
             </TouchableOpacity>
 
@@ -271,40 +436,39 @@ className="absolute inset-0 flex-1"
               onPress={() => skipForward(15)}
               className="p-2"
             >
-              <Icon name="rotate-cw" size={24} color="white" />
+              <RotateCw size={28} color="white" strokeWidth={2} />
             </TouchableOpacity>
 
             {/* Playback Rate */}
             <TouchableOpacity
               onPress={handlePlaybackRatePress}
-              className="bg-[#EADDFF]/10 px-3 py-1.5 rounded-xl"
+              className="bg-white/20 px-3 py-2 rounded-xl"
             >
-              <Text className="text-sm font-medium text-white">
+              <Text className="text-sm font-semibold text-white">
                 {playbackRate}x
               </Text>
             </TouchableOpacity>
           </View>
 
           {/* Bottom Actions */}
-          <View className="flex-row items-center justify-between px-4">
-            <View className="flex-row gap-3">
-              <TouchableOpacity className="bg-[#EADDFF]/50 px-3 py-3 rounded-full">
-                <Icon name="thumbs-up-outline" size={20} color="#F5EFF7" />
+          <View className="flex-row items-center justify-between px-6 pb-8">
+            <View className="flex-row gap-4">
+              <TouchableOpacity className="p-3">
+                <ThumbsUp size={20} color="white" strokeWidth={2} />
               </TouchableOpacity>
-              <TouchableOpacity className="bg-[#EADDFF]/10 w-7 h-12 rounded-full items-center justify-center">
-                <Icon name="thumbs-down-outline" size={20} color="#F5EFF7" />
+              <TouchableOpacity className="p-3">
+                <ThumbsDown size={20} color="white" strokeWidth={2} />
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity className="bg-[#EADDFF]/10 px-3 py-3 rounded-full flex-row items-center gap-1">
-              <Icon name="document-text-outline" size={20} color="#FFFFFF" />
-              <Text className="text-sm font-medium text-white">Sources</Text>
+            <TouchableOpacity className="bg-white/20 px-4 py-3 rounded-full flex-row items-center gap-2">
+              <FileText size={16} color="white" strokeWidth={2} />
+              <Text className="text-sm font-semibold text-white">Sources</Text>
             </TouchableOpacity>
           </View>
 
-        </ScrollView>
-      </LinearGradient>
-    </>
+        </View>
+      </View>
+    </View>
   );
 }
-
