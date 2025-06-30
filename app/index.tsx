@@ -8,7 +8,7 @@ import { EducationalContent, educationalContent, weeklyProgress } from '@/data/e
 import { useAudio } from '@/hooks/useAudio';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -51,12 +51,15 @@ export default function HomeScreen() {
   // Get daily recommendation (newest content - the AI one)
   const dailyRecommendation = educationalContent[educationalContent.length - 1]; // Latest added content
 
+  const safeAreaStyle = Platform.OS === 'web' 
+    ? "bg-slate-100" 
+    : "flex-1 bg-slate-100";
+
   return (
-    <SafeAreaView className="flex-1 bg-slate-100">
+    <SafeAreaView className={safeAreaStyle}>
       <StatusBar barStyle="dark-content" />
       
       <WebScrollView 
-        className="flex-1"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: bottomPadding }}
       >

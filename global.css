@@ -3,33 +3,36 @@
 @tailwind utilities;
 
 /* Web-specific styles for natural scrolling */
-@media (max-width: 768px) {
-  @supports (-webkit-touch-callout: none) {
-    /* iOS Safari specific styles */
-    html, body {
-      height: 100%;
-      overflow: visible !important;
-      -webkit-overflow-scrolling: touch !important;
-      overscroll-behavior-y: none;
-    }
-    
-    /* Enable smooth scrolling */
-    html {
-      scroll-behavior: smooth;
-    }
-    
-    /* Remove any fixed heights that might interfere with scrolling */
-    #root, #__expo-root {
-      min-height: 100vh !important;
-      height: auto !important;
-      overflow: visible !important;
-    }
-    
-    /* Ensure the viewport is properly sized */
-    body {
-      min-height: 100vh;
-      min-height: -webkit-fill-available;
-    }
+@media screen {
+  /* Ensure body can scroll naturally on all web browsers */
+  html {
+    height: 100%;
+    overflow-y: auto !important;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    min-height: 100%;
+    height: auto !important;
+    overflow-y: auto !important;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Remove any fixed heights that might interfere with scrolling */
+  #root, #__expo-root {
+    min-height: 100vh !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) and (hover: none) {
+  body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    position: relative;
   }
 }
 

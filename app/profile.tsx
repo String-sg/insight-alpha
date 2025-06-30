@@ -1,12 +1,16 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Platform } from 'react-native';
 import { router, Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeft, CheckSquare, BookOpenCheck, Lightbulb, ChevronRight } from 'lucide-react-native';
 import { WebScrollView } from '@/components/WebScrollView';
 
 export default function ProfileScreen() {
+  const safeAreaStyle = Platform.OS === 'web' 
+    ? "bg-slate-100" 
+    : "flex-1 bg-slate-100";
+
   return (
-    <SafeAreaView className="flex-1 bg-slate-100">
+    <SafeAreaView className={safeAreaStyle}>
       <Stack.Screen 
         options={{
           headerShown: false,
@@ -22,7 +26,10 @@ export default function ProfileScreen() {
         </TouchableOpacity>
       </View>
 
-      <WebScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+      <WebScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 40 }}
+      >
         {/* Profile Card */}
         <View className="mx-6 mb-6 bg-white rounded-3xl">
           <View className="flex-row items-start p-4 gap-6">
@@ -103,8 +110,8 @@ export default function ProfileScreen() {
           </View>
         </View>
 
-        {/* My Learnings - Hidden for now */}
-        {/* <View className="px-6 pb-6">
+        {/* My Learnings */}
+        <View className="px-6 pb-6">
           <Text className="text-xl font-semibold text-black mb-4">My learnings</Text>
           
           <View className="gap-3">
@@ -129,7 +136,7 @@ export default function ProfileScreen() {
               </View>
             </TouchableOpacity>
           </View>
-        </View> */}
+        </View>
       </WebScrollView>
     </SafeAreaView>
   );

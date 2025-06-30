@@ -29,9 +29,8 @@ function AppContent() {
   const shouldShowMiniPlayer = pathname !== '/player' && !pathname.startsWith('/quiz');
 
   const webContainerStyle = Platform.OS === 'web' ? {
-    height: '100vh' as any,
     minHeight: '100vh' as any,
-    overflow: 'visible' as any,
+    width: '100%' as any,
   } : {
     flex: 1,
   };
@@ -39,7 +38,7 @@ function AppContent() {
   const webRootStyle = Platform.OS === 'web' ? {
     backgroundColor: '#f5f5f5',
     minHeight: '100vh' as any,
-    overflow: 'visible' as any,
+    width: '100%' as any,
   } : {
     flex: 1,
     backgroundColor: '#f5f5f5'
@@ -90,7 +89,7 @@ export default function RootLayout() {
   const safeAreaStyle = Platform.OS === 'web' ? {
     backgroundColor: '#f5f5f5',
     minHeight: '100vh' as any,
-    overflow: 'visible' as any,
+    width: '100%' as any,
   } : {
     backgroundColor: '#f5f5f5'
   };

@@ -19,22 +19,21 @@ export function WebScrollView({
   ...props 
 }: WebScrollViewProps) {
   if (Platform.OS === 'web') {
-    // On web, use a regular div with native browser scrolling
+    // On web, create a container that allows content to flow naturally
+    // The body will handle the scrolling
     return (
       <View 
         style={[
           {
-            flex: 1,
-            overflow: 'auto' as any,
-            WebkitOverflowScrolling: 'touch' as any,
-            // Enable momentum scrolling on iOS Safari
-            scrollBehavior: 'smooth' as any,
+            // Allow content to flow naturally without constraining height
+            minHeight: '100%',
+            width: '100%',
           },
           style,
           webStyle,
         ]}
       >
-        <View style={contentContainerStyle}>
+        <View style={[{ width: '100%' }, contentContainerStyle]}>
           {children}
         </View>
       </View>

@@ -4,7 +4,7 @@ import { WebScrollView } from '@/components/WebScrollView';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { Stack, useRouter } from 'expo-router';
 import React from 'react';
-import { SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 export default function ExploreScreen() {
   const router = useRouter();
@@ -55,8 +55,12 @@ export default function ExploreScreen() {
     }
   ];
 
+  const safeAreaStyle = Platform.OS === 'web' 
+    ? "bg-slate-100" 
+    : "flex-1 bg-slate-100";
+
   return (
-    <SafeAreaView className="flex-1 bg-slate-100">
+    <SafeAreaView className={safeAreaStyle}>
       <Stack.Screen 
         options={{
           headerShown: false,
@@ -65,7 +69,6 @@ export default function ExploreScreen() {
       <StatusBar barStyle="dark-content" />
       
       <WebScrollView 
-        className="flex-1"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: bottomPadding }}
       >
