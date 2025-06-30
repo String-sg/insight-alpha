@@ -45,7 +45,7 @@ export default function LibraryScreen() {
   ];
 
   return (
-    <SafeAreaView className="flex-1 bg-[#f4f4f4]">
+    <SafeAreaView className="flex-1 bg-gray-100">
       <ScrollView 
         className="flex-1"
         showsVerticalScrollIndicator={false}
@@ -55,12 +55,12 @@ export default function LibraryScreen() {
         <ProfileHeader />
 
         {/* Navigation Bar */}
-        <View className="px-4">
+        <View className="px-6">
           <SegmentedControl activeSegment="learning" />
         </View>
 
         {/* Your learnings section */}
-        <View className="flex-row items-center justify-between mx-4 mb-6">
+        <View className="flex-row items-center justify-between mx-6 mb-6">
           <Text className="text-black text-xl font-geist-semibold">
             Your learnings
           </Text>
@@ -76,7 +76,7 @@ export default function LibraryScreen() {
         </View>
 
         {/* Learning Subject Cards */}
-        <View className="mx-4">
+        <View className="mx-6">
           {/* Full width card - SEN */}
           <TouchableOpacity 
             className={`${learningSubjects[0].color} rounded-3xl p-4 mb-4 h-[200px] justify-center`}

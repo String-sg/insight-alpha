@@ -1,7 +1,6 @@
 import { AnswerFeedback } from '@/components/AnswerFeedback';
 import { BottomSheet } from '@/components/BottomSheet';
 import { Icon } from '@/components/Icon';
-import { MiniPlayer } from '@/components/MiniPlayer';
 import { QuizQuestion } from '@/components/QuizQuestion';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { mockQuizzes } from '@/data/quizzes';
@@ -343,9 +342,6 @@ export default function QuizScreen() {
             </Text>
           </TouchableOpacity>
         </View>
-      
-        {/* Mini Player */}
-        {currentPodcast && <MiniPlayer />}
 
         {/* Answer Feedback Bottom Sheet */}
         <BottomSheet

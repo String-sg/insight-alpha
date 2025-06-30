@@ -26,7 +26,7 @@ export const educationalContent: EducationalContent[] = [
     duration: 2400000, // 40 minutes
     imageUrl: 'https://picsum.photos/400/400?random=5',
     audioUrl: require('../assets/audio/building-safe-school-environments.mp3'),
-    backgroundColor: 'bg-purple-100',
+    backgroundColor: 'bg-white',
     badgeColor: 'bg-purple-200',
     textColor: 'text-purple-900',
     timeLeft: '40m left',
@@ -42,7 +42,7 @@ export const educationalContent: EducationalContent[] = [
     duration: 2100000, // 35 minutes
     imageUrl: 'https://picsum.photos/400/400?random=6',
     audioUrl: require('../assets/audio/ais-role-in-singapores-education-transformation.wav'),
-    backgroundColor: 'bg-yellow-100',
+    backgroundColor: 'bg-white',
     badgeColor: 'bg-yellow-200',
     textColor: 'text-yellow-900',
     timeLeft: '35m left',

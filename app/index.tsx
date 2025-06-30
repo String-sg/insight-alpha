@@ -50,7 +50,7 @@ export default function HomeScreen() {
   const dailyRecommendation = educationalContent[educationalContent.length - 1]; // Latest added content
 
   return (
-    <SafeAreaView className="flex-1 bg-[#f4f4f4]">
+    <SafeAreaView className="flex-1 bg-gray-100">
       <StatusBar barStyle="dark-content" />
       
       <ScrollView 
@@ -62,18 +62,18 @@ export default function HomeScreen() {
         <ProfileHeader />
         
         {/* Navigation Bar */}
-        <View className="px-4">
+        <View className="px-6">
           <SegmentedControl activeSegment="home" />
         </View>
         
         {/* Week Calendar */}
-        <View className="px-4">
+        <View className="px-6">
           <WeekCalendar weekData={weeklyProgress} />
         </View>
         
         {/* Recently Learned Section */}
         <View className="mt-8 mb-4">
-          <View className="flex-row items-center justify-between mx-4 mb-4">
+          <View className="flex-row items-center justify-between mx-6 mb-4">
             <Text className="text-black text-xl font-semibold">
               Recently learned
             </Text>
@@ -87,7 +87,7 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
           
-          <View className="px-4">
+          <View className="px-6">
             {recentlyLearned.map((content) => (
               <EducationalCard
                 key={content.id}
@@ -101,7 +101,7 @@ export default function HomeScreen() {
 
         {/* Daily Recommendation Section */}
         <View className="mt-4 mb-8">
-          <View className="flex-row items-center mx-4 mb-4">
+          <View className="flex-row items-center mx-6 mb-4">
             <View className="flex-row items-center gap-1 flex-1">
               <Text className="text-black text-xl font-semibold">
                 Daily recommendation
@@ -112,11 +112,11 @@ export default function HomeScreen() {
               className="w-8 h-8 bg-white rounded-full items-center justify-center"
               activeOpacity={0.8}
             >
-              <Icon name="refresh" size={16} color="#09090b" />
+              <Icon name="refresh" size={16} color="#000000" />
             </TouchableOpacity>
           </View>
           
-          <View className="px-4">
+          <View className="px-6">
             <EducationalCard
               content={dailyRecommendation}
               onPress={() => handleContentPress(dailyRecommendation)}

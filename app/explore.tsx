@@ -77,7 +77,7 @@ export default function ExploreScreen() {
   ];
 
   return (
-    <SafeAreaView className="flex-1 bg-[#f4f4f4]">
+    <SafeAreaView className="flex-1 bg-gray-100">
       <Stack.Screen 
         options={{
           headerShown: false,
@@ -94,13 +94,13 @@ export default function ExploreScreen() {
         <ProfileHeader />
 
         {/* Navigation Bar */}
-        <View className="px-4">
+        <View className="px-6">
           <SegmentedControl activeSegment="explore" />
         </View>
 
 
         {/* Popular Topics Section */}
-        <View className="mx-4 mb-6">
+        <View className="mx-6 mb-6">
           <Text className="text-black text-xl font-geist-semibold mb-4">
             Popular topics
           </Text>
@@ -124,7 +124,7 @@ export default function ExploreScreen() {
         </View>
 
         {/* Popular Contents Section */}
-        <View className="mx-4">
+        <View className="mx-6">
           <Text className="text-black text-xl font-geist-semibold mb-4">
             Popular contents
           </Text>

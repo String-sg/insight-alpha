@@ -30,7 +30,7 @@ function AppContent() {
 
   return (
     <ThemeProvider value={DefaultTheme}>
-      <View style={{ flex: 1, backgroundColor: '#f4f4f4' }}>
+      <View style={{ flex: 1, backgroundColor: '#f5f5f5' }}>
         <View className="flex-1 max-w-3xl mx-auto w-full">
           <Stack>
             <Stack.Screen name="index" options={{ headerShown: false }} />
@@ -71,7 +71,7 @@ export default function RootLayout() {
   }
 
   return (
-    <SafeAreaProvider style={{ backgroundColor: '#f4f4f4' }}>
+    <SafeAreaProvider style={{ backgroundColor: '#f5f5f5' }}>
       <AudioProvider>
         <NotesProvider>
           <ChatProvider>
