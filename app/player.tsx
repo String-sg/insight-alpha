@@ -278,17 +278,28 @@ export default function PlayerScreen() {
   };
 
   // Redirect if no audio is loaded
-  if (!currentPodcast) {
-    if (router.canGoBack()) {
-      router.back();
-    } else {
-      router.replace('/');
+  useEffect(() => {
+    if (!currentPodcast) {
+      if (router.canGoBack()) {
+        router.back();
+      } else {
+        router.replace('/');
+      }
     }
-    return null;
-  }
+  }, [currentPodcast, router]);
 
   const contentInfo = getCurrentInfo();
   const progress = getProgress();
+
+  // Show loading if no podcast is available
+  if (!currentPodcast) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#E9D5FF' }}>
+        <ActivityIndicator size="large" color="#7C3AED" />
+        <Text style={{ marginTop: 16, color: '#7C3AED' }}>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, height: SCREEN_HEIGHT }}>
@@ -411,14 +422,7 @@ export default function PlayerScreen() {
             {/* Play/Pause */}
             <TouchableOpacity
               onPress={handlePlayPause}
-              className="w-20 h-20 rounded-full bg-white items-center justify-center shadow-lg"
-              style={{
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.15,
-                shadowRadius: 8,
-                elevation: 8,
-              }}
+              className="w-20 h-20 rounded-full bg-white items-center justify-center"
             >
               {isLoading ? (
                 <ActivityIndicator size="large" color="#000" />

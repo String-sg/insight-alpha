@@ -1,24 +1,23 @@
 import { mockQuizzes } from '@/data/quizzes';
-import { AudioPlayer, AudioPlayerStatus } from '@/types/audio';
 import { Episode, PlaybackState, Podcast } from '@/types/podcast';
 import { QuizProgress } from '@/types/quiz';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createAudioPlayer } from 'expo-audio';
+import { Audio } from 'expo-av';
+import { Platform } from 'react-native';
 import React, { createContext, ReactNode, useContext, useEffect, useReducer, useRef } from 'react';
 
 // Audio context state interface
 interface AudioContextState extends PlaybackState {
   error: string | null;
-  player: AudioPlayer | null;
+  sound: Audio.Sound | null;
   isBuffering: boolean;
-  playerStatus: AudioPlayerStatus | null;
 }
 
 // Audio context actions
 type AudioAction =
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'SET_PLAYER'; payload: AudioPlayer | null }
+  | { type: 'SET_SOUND'; payload: Audio.Sound | null }
   | { type: 'SET_PLAYING'; payload: boolean }
   | { type: 'SET_CURRENT_TIME'; payload: number }
   | { type: 'SET_DURATION'; payload: number }
@@ -27,7 +26,6 @@ type AudioAction =
   | { type: 'SET_PLAYBACK_RATE'; payload: number }
   | { type: 'SET_VOLUME'; payload: number }
   | { type: 'SET_BUFFERING'; payload: boolean }
-  | { type: 'SET_PLAYER_STATUS'; payload: AudioPlayerStatus | null }
   | { type: 'RESET_PLAYBACK' };
 
 // Audio context functions interface
@@ -59,9 +57,8 @@ const initialState: AudioContextState = {
   playbackRate: 1.0,
   volume: 1.0,
   error: null,
-  player: null,
+  sound: null,
   isBuffering: false,
-  playerStatus: null,
 };
 
 // Reducer function
@@ -71,8 +68,8 @@ function audioReducer(state: AudioContextState, action: AudioAction): AudioConte
       return { ...state, isLoading: action.payload };
     case 'SET_ERROR':
       return { ...state, error: action.payload, isLoading: false };
-    case 'SET_PLAYER':
-      return { ...state, player: action.payload };
+    case 'SET_SOUND':
+      return { ...state, sound: action.payload };
     case 'SET_PLAYING':
       return { ...state, isPlaying: action.payload };
     case 'SET_CURRENT_TIME':
@@ -89,8 +86,6 @@ function audioReducer(state: AudioContextState, action: AudioAction): AudioConte
       return { ...state, volume: action.payload };
     case 'SET_BUFFERING':
       return { ...state, isBuffering: action.payload };
-    case 'SET_PLAYER_STATUS':
-      return { ...state, playerStatus: action.payload };
     case 'RESET_PLAYBACK':
       return {
         ...initialState,
@@ -123,42 +118,36 @@ interface AudioProviderProps {
 export function AudioProvider({ children }: AudioProviderProps) {
   const [state, dispatch] = useReducer(audioReducer, initialState);
   const isSeekingRef = useRef(false);
-  const playerRef = useRef<AudioPlayer | null>(null);
-  const progressIntervalRef = useRef<number | null>(null);
+  const soundRef = useRef<Audio.Sound | null>(null);
+  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
   
-  // Update player status from expo-audio player
-  const updatePlayerStatus = () => {
-    if (!playerRef.current) return;
-    
-    const player = playerRef.current;
-    const currentTime = (player.currentTime || 0) * 1000; // Convert to milliseconds
-    const duration = (player.duration || 0) * 1000; // Convert to milliseconds
-    
-    if (!isSeekingRef.current) {
-      dispatch({ type: 'SET_CURRENT_TIME', payload: currentTime });
+  // Update progress from sound status
+  const updateProgress = (status: any) => {
+    if (status.isLoaded && !isSeekingRef.current) {
+      dispatch({ type: 'SET_CURRENT_TIME', payload: status.positionMillis || 0 });
+      dispatch({ type: 'SET_DURATION', payload: status.durationMillis || 0 });
+      dispatch({ type: 'SET_PLAYING', payload: status.isPlaying || false });
+      dispatch({ type: 'SET_BUFFERING', payload: status.isBuffering || false });
     }
-    
-    dispatch({ type: 'SET_DURATION', payload: duration });
-    dispatch({ type: 'SET_PLAYING', payload: player.playing || false });
-    dispatch({ type: 'SET_PLAYBACK_RATE', payload: player.playbackRate || 1.0 });
   };
 
   // Start progress tracking
   const startProgressTracking = () => {
-    // Clear existing interval if any
     if (progressIntervalRef.current) {
       clearInterval(progressIntervalRef.current);
     }
     
-    // Only start if player exists
-    if (!playerRef.current) return;
+    if (!soundRef.current) return;
     
-    progressIntervalRef.current = setInterval(() => {
-      if (playerRef.current && playerRef.current.playing) {
-        updatePlayerStatus();
-        saveCurrentState();
+    progressIntervalRef.current = setInterval(async () => {
+      if (soundRef.current) {
+        const status = await soundRef.current.getStatusAsync();
+        updateProgress(status);
+        if (status.isLoaded && status.isPlaying) {
+          saveCurrentState();
+        }
       }
-    }, 1000); // Update every second
+    }, 1000);
   };
 
   // Stop progress tracking
@@ -173,6 +162,24 @@ export function AudioProvider({ children }: AudioProviderProps) {
   useEffect(() => {
     const initializeAudio = async () => {
       try {
+        // Set audio mode - platform specific configuration
+        if (Platform.OS !== 'web') {
+          await Audio.setAudioModeAsync({
+            allowsRecordingIOS: false,
+            staysActiveInBackground: true,
+            interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+            playsInSilentModeIOS: true,
+            shouldDuckAndroid: true,
+            interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+            playThroughEarpieceAndroid: false,
+          });
+        } else {
+          // Web-specific audio mode (simpler configuration)
+          await Audio.setAudioModeAsync({
+            staysActiveInBackground: false, // Web doesn't support background audio
+          });
+        }
+
         // Load saved settings
         const savedRate = await AsyncStorage.getItem(STORAGE_KEYS.PLAYBACK_RATE);
         const savedVolume = await AsyncStorage.getItem(STORAGE_KEYS.VOLUME);
@@ -197,11 +204,11 @@ export function AudioProvider({ children }: AudioProviderProps) {
     return () => {
       // Cleanup on unmount
       stopProgressTracking();
-      if (playerRef.current) {
+      if (soundRef.current) {
         try {
-          playerRef.current.remove();
+          soundRef.current.unloadAsync();
         } catch (error) {
-          console.error('Error removing player:', error);
+          console.error('Error unloading sound:', error);
         }
       }
     };
@@ -244,57 +251,54 @@ export function AudioProvider({ children }: AudioProviderProps) {
     }
   };
 
-
   // Play podcast function
   const playPodcast = async (podcast: Podcast, episode?: Episode) => {
     try {
-      console.log('Starting playPodcast for:', podcast.title, 'audioUrl type:', typeof (episode?.audioUrl || podcast.audioUrl));
+      console.log('Starting playPodcast for:', podcast.title);
       dispatch({ type: 'SET_LOADING', payload: true });
       dispatch({ type: 'SET_ERROR', payload: null });
 
-      // Stop current player if playing
-      if (playerRef.current) {
-        playerRef.current.remove();
-        playerRef.current = null;
-        dispatch({ type: 'SET_PLAYER', payload: null });
+      // Stop current sound if playing
+      if (soundRef.current) {
+        await soundRef.current.unloadAsync();
+        soundRef.current = null;
+        dispatch({ type: 'SET_SOUND', payload: null });
       }
 
-      // Create new audio player using createAudioPlayer
+      // Create new audio sound
       const audioUrl = episode?.audioUrl || podcast.audioUrl;
-      console.log('Creating audio player with audioUrl:', audioUrl);
+      console.log('Creating audio sound with audioUrl:', audioUrl);
       
-      // createAudioPlayer accepts string | number | AudioSource directly
-      // No need to wrap in an object - expo-audio handles this internally
-      const player = createAudioPlayer(audioUrl);
-      console.log('Audio player created successfully:', player.id);
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: audioUrl },
+        {
+          shouldPlay: true,
+          rate: state.playbackRate || 1.0,
+          shouldCorrectPitch: true, // Enable pitch correction
+          volume: state.volume || 1.0,
+          isLooping: false,
+        }
+      );
       
-      playerRef.current = player;
-      dispatch({ type: 'SET_PLAYER', payload: player });
+      soundRef.current = sound;
+      dispatch({ type: 'SET_SOUND', payload: sound });
       dispatch({ type: 'SET_CURRENT_PODCAST', payload: podcast });
       dispatch({ type: 'SET_CURRENT_EPISODE', payload: episode || null });
-
-      // Set initial playback rate
-      player.setPlaybackRate(state.playbackRate || 1.0);
 
       // Try to restore previous position if same content
       const savedPosition = await AsyncStorage.getItem(STORAGE_KEYS.CURRENT_POSITION);
       if (savedPosition && parseInt(savedPosition) > 0) {
-        const positionInSeconds = parseInt(savedPosition) / 1000;
-        await player.seekTo(positionInSeconds);
+        await sound.setPositionAsync(parseInt(savedPosition));
       }
 
-      // Initialize quiz as always available (no unlock logic)
+      // Initialize quiz as always available
       await initializeQuizAvailability(podcast.id);
-      
-      // Start playing
-      console.log('Calling player.play()');
-      player.play();
-      console.log('Player.play() called successfully');
       
       // Start progress tracking
       startProgressTracking();
       
       dispatch({ type: 'SET_LOADING', payload: false });
+      console.log('Podcast started successfully with pitch correction enabled');
     } catch (error) {
       console.error('Failed to play podcast:', error);
       dispatch({ type: 'SET_ERROR', payload: 'Failed to load audio. Please try again.' });
@@ -305,8 +309,8 @@ export function AudioProvider({ children }: AudioProviderProps) {
   // Pause podcast function
   const pausePodcast = async () => {
     try {
-      if (playerRef.current) {
-        playerRef.current.pause();
+      if (soundRef.current) {
+        await soundRef.current.pauseAsync();
         dispatch({ type: 'SET_PLAYING', payload: false });
         stopProgressTracking();
         await saveCurrentState();
@@ -320,16 +324,16 @@ export function AudioProvider({ children }: AudioProviderProps) {
   // Resume podcast function
   const resumePodcast = async () => {
     try {
-      if (playerRef.current) {
-        playerRef.current.play();
+      if (soundRef.current) {
+        await soundRef.current.playAsync();
         dispatch({ type: 'SET_PLAYING', payload: true });
         startProgressTracking();
       } else if (state.currentPodcast) {
-        // Player doesn't exist, recreate it with the saved podcast
-        console.log('Player not found, recreating with saved podcast:', state.currentPodcast.title);
+        // Sound doesn't exist, recreate it with the saved podcast
+        console.log('Sound not found, recreating with saved podcast:', state.currentPodcast.title);
         await playPodcast(state.currentPodcast, state.currentEpisode || undefined);
       } else {
-        console.warn('No player and no current podcast to resume');
+        console.warn('No sound and no current podcast to resume');
         dispatch({ type: 'SET_ERROR', payload: 'No audio to resume' });
       }
     } catch (error) {
@@ -341,15 +345,14 @@ export function AudioProvider({ children }: AudioProviderProps) {
   // Seek to position function
   const seekTo = async (positionMillis: number) => {
     try {
-      if (playerRef.current && positionMillis >= 0) {
+      if (soundRef.current && positionMillis >= 0) {
         isSeekingRef.current = true;
-        const positionInSeconds = positionMillis / 1000;
-        await playerRef.current.seekTo(positionInSeconds);
+        await soundRef.current.setPositionAsync(positionMillis);
         
         // Update state immediately for responsive UI
         dispatch({ type: 'SET_CURRENT_TIME', payload: positionMillis });
         
-        // Reset seeking flag after a brief delay to allow status updates
+        // Reset seeking flag after a brief delay
         setTimeout(() => {
           isSeekingRef.current = false;
         }, 100);
@@ -363,11 +366,17 @@ export function AudioProvider({ children }: AudioProviderProps) {
     }
   };
 
-  // Set playback rate function
+  // Set playback rate function with pitch correction
   const setPlaybackRate = async (rate: number) => {
     try {
-      if (playerRef.current) {
-        playerRef.current.setPlaybackRate(rate);
+      if (soundRef.current) {
+        console.log(`Setting playback rate to ${rate}x with pitch correction enabled`);
+        // Use setStatusAsync with shouldCorrectPitch for reliable pitch correction
+        await soundRef.current.setStatusAsync({
+          rate: rate,
+          shouldCorrectPitch: true, // This ensures pitch correction works properly
+        });
+        console.log(`Playback rate set successfully to ${rate}x`);
       }
       dispatch({ type: 'SET_PLAYBACK_RATE', payload: rate });
       await AsyncStorage.setItem(STORAGE_KEYS.PLAYBACK_RATE, rate.toString());
@@ -377,11 +386,12 @@ export function AudioProvider({ children }: AudioProviderProps) {
     }
   };
 
-  // Set volume function (system volume control)
+  // Set volume function
   const setVolume = async (volume: number) => {
     try {
-      // Volume control in expo-audio is handled at system level
-      // The player's volume property is read-only
+      if (soundRef.current) {
+        await soundRef.current.setStatusAsync({ volume });
+      }
       dispatch({ type: 'SET_VOLUME', payload: volume });
       await AsyncStorage.setItem(STORAGE_KEYS.VOLUME, volume.toString());
     } catch (error) {
@@ -406,10 +416,10 @@ export function AudioProvider({ children }: AudioProviderProps) {
   const stopPodcast = async () => {
     try {
       stopProgressTracking();
-      if (playerRef.current) {
-        playerRef.current.remove();
-        playerRef.current = null;
-        dispatch({ type: 'SET_PLAYER', payload: null });
+      if (soundRef.current) {
+        await soundRef.current.unloadAsync();
+        soundRef.current = null;
+        dispatch({ type: 'SET_SOUND', payload: null });
       }
       dispatch({ type: 'RESET_PLAYBACK' });
       await AsyncStorage.removeItem(STORAGE_KEYS.CURRENT_POSITION);

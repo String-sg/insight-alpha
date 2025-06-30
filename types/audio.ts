@@ -23,7 +23,7 @@ export interface AudioPlayer {
   pause(): void;
   seekTo(seconds: number): Promise<void>;
   replace(source: AudioSource): void;
-  setPlaybackRate(rate: number): void;
+  setPlaybackRate(rate: number, options?: { shouldCorrectPitch?: boolean }): void;
   remove(): void;
   // Properties
   id: number;
