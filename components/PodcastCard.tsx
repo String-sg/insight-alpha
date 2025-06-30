@@ -49,12 +49,12 @@ export const PodcastCard: React.FC<PodcastCardProps> = ({
   return (
     <TouchableOpacity
       onPress={handleCardPress}
-      className="bg-white rounded-lg border border-gray-200 p-4 mb-3 mx-4 active:opacity-80"
+      className="bg-white rounded-lg border border-slate-200 p-4 mb-3 mx-4 active:opacity-80"
       activeOpacity={0.8}
     >
       <View className="flex-row items-start space-x-3">
         {/* Podcast Image with Play Button Overlay */}
-        <View className="w-16 h-16 rounded-lg overflow-hidden bg-gray-200 relative">
+        <View className="w-16 h-16 rounded-lg overflow-hidden bg-slate-200 relative">
           <Image
             source={{ uri: podcast.imageUrl }}
             className="w-full h-full"
@@ -94,7 +94,7 @@ export const PodcastCard: React.FC<PodcastCardProps> = ({
             className={`text-lg font-geist-semibold leading-tight ${
               isThisPodcastCurrent 
                 ? 'text-blue-600' 
-                : 'text-gray-900'
+                : 'text-slate-900'
             }`}
             numberOfLines={2}
           >
@@ -102,14 +102,14 @@ export const PodcastCard: React.FC<PodcastCardProps> = ({
           </Text>
           
           <Text 
-            className="text-sm text-gray-600 font-geist-medium"
+            className="text-sm text-slate-600 font-geist-medium"
             numberOfLines={1}
           >
             {podcast.author}
           </Text>
           
           <Text 
-            className="text-sm text-gray-500 leading-relaxed"
+            className="text-sm text-slate-500 leading-relaxed"
             numberOfLines={2}
           >
             {podcast.description}
@@ -128,9 +128,9 @@ export const PodcastCard: React.FC<PodcastCardProps> = ({
               {isThisPodcastCurrent && (
                 <View className="flex-row items-center space-x-1">
                   <View className={`w-2 h-2 rounded-full ${
-                    isThisPodcastPlaying ? 'bg-green-500' : 'bg-gray-400'
+                    isThisPodcastPlaying ? 'bg-green-500' : 'bg-slate-400'
                   }`} />
-                  <Text className="text-xs text-gray-500">
+                  <Text className="text-xs text-slate-500">
                     {isThisPodcastLoading ? 'Loading...' : 
                      isThisPodcastPlaying ? 'Playing' : 'Paused'}
                   </Text>

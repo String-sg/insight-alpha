@@ -129,7 +129,8 @@ export default function PodcastDetailsScreen() {
       imageUrl: content.imageUrl,
       audioUrl: content.audioUrl,
       duration: content.duration,
-      author: content.author
+      author: content.author,
+      sources: content.sources
     };
     await playContent(podcastFormat);
   };
@@ -220,7 +221,7 @@ export default function PodcastDetailsScreen() {
     return (
       <View className="flex-1 justify-center items-center bg-purple-100">
         <StatusBar barStyle="dark-content" />
-        <Text className="text-lg text-gray-600">
+        <Text className="text-lg text-slate-600">
           Content not found
         </Text>
       </View>
@@ -293,7 +294,7 @@ export default function PodcastDetailsScreen() {
           <View className="mx-6 mt-6 relative">
             {/* Main Card */}
             <View 
-              className="bg-white rounded-3xl border border-gray-100 drop-shadow-sm"
+              className="bg-white rounded-3xl border border-slate-100 drop-shadow-sm"
               style={{
                 shadowColor: '#000',
                 shadowOffset: { width: 0, height: 2 },
@@ -322,10 +323,10 @@ export default function PodcastDetailsScreen() {
                 </View>
 
                 {/* Title and Meta */}
-                <Text className="text-gray-900 text-lg font-semibold mb-2 leading-7">
+                <Text className="text-slate-900 text-lg font-semibold mb-2 leading-7">
                   {content.title}
                 </Text>
-                <Text className="text-gray-600 text-sm mb-6">
+                <Text className="text-slate-600 text-sm mb-6">
                   By {content.author} · 2 days ago
                 </Text>
 
@@ -360,7 +361,7 @@ export default function PodcastDetailsScreen() {
                   {hasQuiz && (
                     <TouchableOpacity
                       onPress={handleQuizPress}
-                      className="w-full bg-white rounded-full py-3 flex-row items-center justify-center border border-gray-200"
+                      className="w-full bg-white rounded-full py-3 flex-row items-center justify-center border border-slate-200"
                       activeOpacity={0.8}
                     >
                       <Lightbulb
@@ -382,7 +383,7 @@ export default function PodcastDetailsScreen() {
           {/* Description Section */}
           <View className="px-6 mt-6">
             <Text
-              className="text-gray-600 text-sm leading-6 px-1"
+              className="text-slate-600 text-sm leading-6 px-1"
               numberOfLines={isDescriptionExpanded ? undefined : 3}
               onTextLayout={handleDescriptionTextLayout}
             >
@@ -429,8 +430,8 @@ export default function PodcastDetailsScreen() {
                       className="bg-purple-200 rounded-3xl p-4 w-full h-full justify-between"
                       style={[animatedStyle]}
                     >
-                      <Text className="text-gray-600 text-xs">{formatNoteDate(note.createdAt)}</Text>
-                      <Text className="text-gray-900 text-base font-medium leading-6" numberOfLines={2}>
+                      <Text className="text-slate-600 text-xs">{formatNoteDate(note.createdAt)}</Text>
+                      <Text className="text-slate-900 text-base font-medium leading-6" numberOfLines={2}>
                         {note.title}
                       </Text>
                     </Animated.View>
@@ -454,10 +455,10 @@ export default function PodcastDetailsScreen() {
                     onPress={handleNewNotePress}
                   >
                     <Animated.View 
-                      className="bg-gray-50 rounded-3xl p-4 w-full h-full justify-center items-center"
+                      className="bg-slate-50 rounded-3xl p-4 w-full h-full justify-center items-center"
                       style={[animatedStyle]}
                     >
-                      <Text className="text-gray-400 text-sm">No note yet</Text>
+                      <Text className="text-slate-400 text-sm">No note yet</Text>
                     </Animated.View>
                   </TouchableOpacity>
                 );
@@ -474,10 +475,10 @@ export default function PodcastDetailsScreen() {
                   className="bg-white rounded-3xl p-4 w-full h-full justify-between"
                   style={[note4AnimatedStyle]}
                 >
-                  <View className="bg-gray-200 rounded-full p-2 self-start">
+                  <View className="bg-slate-200 rounded-full p-2 self-start">
                     <Plus size={16} color="#000" strokeWidth={2} />
                   </View>
-                  <Text className="text-gray-600 text-base font-medium">
+                  <Text className="text-slate-600 text-base font-medium">
                     New note
                   </Text>
                 </Animated.View>

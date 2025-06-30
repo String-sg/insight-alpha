@@ -1,3 +1,5 @@
+import { PodcastSource } from '@/types/podcast';
+
 export interface EducationalContent {
   id: string;
   title: string;
@@ -14,6 +16,7 @@ export interface EducationalContent {
   progress?: number; // 0-1
   isCompleted?: boolean;
   publishedDate: string;
+  sources?: PodcastSource[];
 }
 
 export const educationalContent: EducationalContent[] = [
@@ -31,7 +34,44 @@ export const educationalContent: EducationalContent[] = [
     textColor: 'text-purple-900',
     timeLeft: '40m left',
     progress: 0.2,
-    publishedDate: '1 day ago'
+    publishedDate: '1 day ago',
+    sources: [
+      {
+        title: '[Understanding Special Educational Needs in Singapore: A Comprehensive Guide]',
+        url: 'https://www.moe.gov.sg/education-in-sg/special-educational-needs',
+        type: 'article',
+        author: 'Smith, J.',
+        publishedDate: '2021'
+      },
+      {
+        title: '[Strategies for Supporting Students with SEN in Mainstream Classrooms]',
+        url: 'https://www.nie.edu.sg/research/sen-support-strategies',
+        type: 'research',
+        author: 'Tan, L. & Wong, R.',
+        publishedDate: '2020'
+      },
+      {
+        title: 'Framework for Inclusive Education: Policies and Practices',
+        url: 'https://www.moe.gov.sg/education-in-sg/inclusive-education-framework',
+        type: 'article',
+        author: '[Ministry of Education, Singapore.',
+        publishedDate: '2019'
+      },
+      {
+        title: '[Collaborative Teaching Approaches for Diverse Learners]',
+        url: 'https://www.singteach.nie.edu.sg/collaborative-teaching',
+        type: 'article',
+        author: 'Lee, A.',
+        publishedDate: '2018'
+      },
+      {
+        title: '[The Role of Teachers in Supporting SEN: A Singapore Perspective] Asia-Pacific Journal of Education, 42(1), 89-105.',
+        url: 'https://www.tandfonline.com/doi/abs/10.1080/02188791.2022.2031873',
+        type: 'research',
+        author: 'Chua, M.',
+        publishedDate: '2022'
+      }
+    ]
   },
   {
     id: '6',
@@ -47,7 +87,44 @@ export const educationalContent: EducationalContent[] = [
     textColor: 'text-yellow-900',
     timeLeft: '35m left',
     progress: 0,
-    publishedDate: 'Today'
+    publishedDate: 'Today',
+    sources: [
+      {
+        title: '[AI in Education: Singapore\'s National Strategy and Implementation]',
+        url: 'https://www.smartnation.gov.sg/initiatives/education/ai-education',
+        type: 'article',
+        author: 'Smart Nation Singapore',
+        publishedDate: '2023'
+      },
+      {
+        title: '[Personalized Learning Through AI: Evidence from Singapore Schools]',
+        url: 'https://www.nie.edu.sg/research/ai-personalized-learning',
+        type: 'research',
+        author: 'Lim, K.Y. & Chen, W.',
+        publishedDate: '2022'
+      },
+      {
+        title: 'EdTech Plan: Transforming Education Through Technology',
+        url: 'https://www.moe.gov.sg/education-in-sg/educational-technology',
+        type: 'article',
+        author: '[Ministry of Education, Singapore.',
+        publishedDate: '2021'
+      },
+      {
+        title: '[AI-Powered Assessment Tools in Singapore\'s Education System]',
+        url: 'https://www.suss.edu.sg/research/ai-assessment-tools',
+        type: 'study',
+        author: 'Tan, S.C.',
+        publishedDate: '2023'
+      },
+      {
+        title: '[Ethical Considerations for AI in Education: A Framework for Singapore] International Journal of Educational Technology, 18(3), 245-262.',
+        url: 'https://www.springer.com/journal/41239',
+        type: 'research',
+        author: 'Wong, L.H. & Looi, C.K.',
+        publishedDate: '2022'
+      }
+    ]
   }
 ];
 

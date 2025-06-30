@@ -253,7 +253,7 @@ export default function QuizScreen() {
         <SafeAreaView className="flex-1">
           <StatusBar barStyle="dark-content" />
           <View className="flex-1 justify-center items-center">
-            <Text className="text-lg text-gray-900 font-geist-medium">Loading quiz...</Text>
+            <Text className="text-lg text-slate-900 font-geist-medium">Loading quiz...</Text>
           </View>
         </SafeAreaView>
       </View>
@@ -266,7 +266,7 @@ export default function QuizScreen() {
         <SafeAreaView className="flex-1">
           <StatusBar barStyle="dark-content" />
           <View className="flex-1 justify-center items-center">
-            <Text className="text-lg text-gray-900 font-geist-medium">Quiz not found</Text>
+            <Text className="text-lg text-slate-900 font-geist-medium">Quiz not found</Text>
           </View>
         </SafeAreaView>
       </View>

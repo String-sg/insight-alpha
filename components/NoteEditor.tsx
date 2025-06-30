@@ -127,7 +127,7 @@ export function NoteEditor({
             )}
             <TouchableOpacity
               onPress={handleClose}
-              className="w-8 h-8 rounded-full bg-gray-100 items-center justify-center"
+              className="w-8 h-8 rounded-full bg-slate-100 items-center justify-center"
               disabled={isLoading}
             >
               <Icon name="close" size={16} color="#000" />
@@ -150,7 +150,7 @@ export function NoteEditor({
               onChangeText={handleTitleChange}
               placeholder="Note title"
               placeholderTextColor="#9ca3af"
-              className="text-lg font-semibold text-gray-900 mb-2"
+              className="text-lg font-semibold text-slate-900 mb-2"
               multiline
               numberOfLines={2}
               editable={!isLoading}
@@ -170,7 +170,7 @@ export function NoteEditor({
               onChangeText={handleContentChange}
               placeholder="Start writing..."
               placeholderTextColor="#9ca3af"
-              className="text-base text-gray-700 leading-6"
+              className="text-base text-slate-700 leading-6"
               multiline
               textAlignVertical="top"
               style={{ 
@@ -186,7 +186,7 @@ export function NoteEditor({
         {/* Optional: Show loading state */}
         {isLoading && (
           <View className="absolute inset-0 bg-white/50 items-center justify-center">
-            <Text className="text-gray-600">Saving...</Text>
+            <Text className="text-slate-600">Saving...</Text>
           </View>
         )}
       </View>

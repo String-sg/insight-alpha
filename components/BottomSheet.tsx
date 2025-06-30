@@ -101,12 +101,11 @@ export function BottomSheet({ visible, onClose, children, height = 490 }: Bottom
             style={{
               height,
               transform: [{ translateY }],
-              backgroundColor: 'rgba(255, 255, 255, 0.7)',
-              backdropFilter: 'blur(20px)',
+              backgroundColor: 'rgb(255, 255, 255)',
               borderTopLeftRadius: 20,
               borderTopRightRadius: 20,
               borderWidth: 1,
-              borderColor: 'rgba(221, 221, 221, 0.7)',
+              borderColor: 'rgb(226, 232, 240)',
               shadowColor: '#000',
               shadowOffset: {
                 width: 0,
@@ -118,30 +117,11 @@ export function BottomSheet({ visible, onClose, children, height = 490 }: Bottom
             }}
             {...panResponder.panHandlers}
           >
-            {/* Inner shadow overlay */}
-            <View 
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                borderTopLeftRadius: 20,
-                borderTopRightRadius: 20,
-                shadowColor: 'rgba(255, 255, 255, 0.25)',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 1,
-                shadowRadius: 2,
-                elevation: 1,
-              }}
-              pointerEvents="none"
-            />
-            
             {/* Drag handle */}
             <View style={{
               width: 48,
               height: 4,
-              backgroundColor: '#D1D5DB',
+              backgroundColor: 'rgb(226, 232, 240)',
               borderRadius: 2,
               alignSelf: 'center',
               marginTop: 8,

@@ -80,7 +80,7 @@ export function ChatMessage({ message, isLastMessage = false }: ChatMessageProps
           <View
             className={`px-4 py-3 rounded-2xl ${
               isAI
-                ? 'bg-gray-100 rounded-bl-md'
+                ? 'bg-slate-100 rounded-bl-md'
                 : 'bg-blue-500 rounded-br-md'
             }`}
             style={{
@@ -98,7 +98,7 @@ export function ChatMessage({ message, isLastMessage = false }: ChatMessageProps
                   {[0, 1, 2].map((index) => (
                     <Animated.View
                       key={index}
-                      className="w-2 h-2 bg-gray-400 rounded-full"
+                      className="w-2 h-2 bg-slate-400 rounded-full"
                       style={{
                         opacity: fadeAnim.interpolate({
                           inputRange: [0, 1],
@@ -108,7 +108,7 @@ export function ChatMessage({ message, isLastMessage = false }: ChatMessageProps
                     />
                   ))}
                 </View>
-                <ThemedText className="text-sm text-gray-500 italic">
+                <ThemedText className="text-sm text-slate-500 italic">
                   AI is typing...
                 </ThemedText>
               </View>
@@ -116,7 +116,7 @@ export function ChatMessage({ message, isLastMessage = false }: ChatMessageProps
               // Regular message
               <ThemedText
                 className={`text-base leading-5 ${
-                  isAI ? 'text-gray-900' : 'text-white'
+                  isAI ? 'text-slate-900' : 'text-white'
                 }`}
               >
                 {message.content}
@@ -131,7 +131,7 @@ export function ChatMessage({ message, isLastMessage = false }: ChatMessageProps
                 isAI ? 'justify-start' : 'justify-end'
               }`}
             >
-              <ThemedText className="text-xs text-gray-500 mr-1">
+              <ThemedText className="text-xs text-slate-500 mr-1">
                 {formatTime(message.timestamp)}
               </ThemedText>
               

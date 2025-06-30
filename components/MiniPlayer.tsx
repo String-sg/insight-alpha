@@ -142,16 +142,9 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
           >
             <View style={{
               borderRadius: 1000,
-              backgroundColor: 'rgba(255, 255, 255, 0.7)',
-              ...Platform.select({
-                web: {
-                  backdropFilter: 'blur(20px)',
-                  WebkitBackdropFilter: 'blur(20px)', // Safari support
-                },
-                default: {},
-              }),
+              backgroundColor: 'rgb(255, 255, 255)',
               borderWidth: 1,
-              borderColor: 'rgba(221, 221, 221, 0.7)',
+              borderColor: 'rgb(226, 232, 240)',
               shadowColor: '#000',
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.05,
@@ -162,24 +155,6 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
               alignItems: 'center',
             }}
           >
-            {/* Inner shadow overlay for glass effect */}
-            <View 
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                borderRadius: 1000,
-                shadowColor: 'rgba(255, 255, 255, 0.25)',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 1,
-                shadowRadius: 2,
-                elevation: 1,
-              }}
-              pointerEvents="none"
-            />
-            
             {/* Podcast Image */}
             <View className="w-12 h-12 rounded-full overflow-hidden mr-3 bg-purple-500">
               <Image
@@ -192,7 +167,7 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
             {/* Content Info */}
             <View className="flex-1 mr-3">
               <Text 
-                className="text-sm text-gray-900 font-geist-medium"
+                className="text-sm text-slate-900 font-geist-medium"
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
@@ -203,7 +178,7 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
             {/* Play/Pause Button */}
             <TouchableOpacity
               onPress={handlePlayPause}
-              className="bg-gray-200 rounded-full p-3"
+              className="bg-slate-200 rounded-full p-3"
             >
               {isLoading ? (
                 <ActivityIndicator size="small" color="#666" />
@@ -229,16 +204,9 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
               width: 72,
               height: 72,
               borderRadius: 36,
-              backgroundColor: 'rgba(255, 255, 255, 0.7)',
-              ...Platform.select({
-                web: {
-                  backdropFilter: 'blur(20px)',
-                  WebkitBackdropFilter: 'blur(20px)', // Safari support
-                },
-                default: {},
-              }),
+              backgroundColor: 'rgb(255, 255, 255)',
               borderWidth: 1,
-              borderColor: 'rgba(221, 221, 221, 0.7)',
+              borderColor: 'rgb(226, 232, 240)',
               shadowColor: '#000',
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.05,
@@ -248,24 +216,6 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
               justifyContent: 'center',
             }}
           >
-            {/* Inner shadow overlay for glass effect */}
-            <View 
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                borderRadius: 36,
-                shadowColor: 'rgba(255, 255, 255, 0.25)',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 1,
-                shadowRadius: 2,
-                elevation: 1,
-              }}
-              pointerEvents="none"
-            />
-            
             <Icon
               name="sparkles"
               size={24}

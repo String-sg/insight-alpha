@@ -52,7 +52,7 @@ export function QuizQuestion({
     if (isSelected) {
       return 'bg-[#dfd3ff]';
     } else {
-      return 'bg-white/80 border border-gray-200';
+      return 'bg-white/80 border border-slate-200';
     }
   };
 
@@ -62,7 +62,7 @@ export function QuizQuestion({
     if (isSelected) {
       return 'bg-[#a583ff]';
     } else {
-      return 'bg-gray-200';
+      return 'bg-slate-200';
     }
   };
 

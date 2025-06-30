@@ -54,7 +54,7 @@ export default function ExploreScreen() {
   ];
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-100">
+    <SafeAreaView className="flex-1 bg-slate-100">
       <Stack.Screen 
         options={{
           headerShown: false,

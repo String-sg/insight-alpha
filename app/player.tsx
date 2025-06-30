@@ -1,10 +1,13 @@
 import { useAudioContext } from '@/contexts/AudioContext';
+import { BottomSheet } from '@/components/BottomSheet';
+import { SourceSheet } from '@/components/SourceSheet';
+import { educationalContent } from '@/data/educational-content';
 import Slider from '@react-native-community/slider';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { X, Upload, FileText, RotateCcw, RotateCw, Play, Pause, ThumbsUp, ThumbsDown, MoreHorizontal } from 'lucide-react-native';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     ActivityIndicator,
     Dimensions,
@@ -184,6 +187,7 @@ const WebMeshGradient = () => {
 
 export default function PlayerScreen() {
   const router = useRouter();
+  const [showSourceSheet, setShowSourceSheet] = useState(false);
   
   const {
     isPlaying,
@@ -290,6 +294,11 @@ export default function PlayerScreen() {
 
   const contentInfo = getCurrentInfo();
   const progress = getProgress();
+
+  // Get sources from current podcast or educational content
+  const sources = currentPodcast?.sources || 
+    educationalContent.find(c => c.id === currentPodcast?.id)?.sources || 
+    [];
 
   // Show loading if no podcast is available
   if (!currentPodcast) {
@@ -465,7 +474,10 @@ export default function PlayerScreen() {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity className="bg-white/20 px-4 py-3 rounded-full flex-row items-center gap-2">
+            <TouchableOpacity 
+              onPress={() => setShowSourceSheet(true)}
+              className="bg-white/20 px-4 py-3 rounded-full flex-row items-center gap-2"
+            >
               <FileText size={16} color="white" strokeWidth={2} />
               <Text className="text-sm font-semibold text-white">Sources</Text>
             </TouchableOpacity>
@@ -473,6 +485,18 @@ export default function PlayerScreen() {
 
         </View>
       </View>
+
+      {/* Source Bottom Sheet */}
+      <BottomSheet
+        visible={showSourceSheet}
+        onClose={() => setShowSourceSheet(false)}
+        height={490}
+      >
+        <SourceSheet 
+          sources={sources} 
+          onClose={() => setShowSourceSheet(false)}
+        />
+      </BottomSheet>
     </View>
   );
 }

@@ -94,7 +94,7 @@ export function ChatInput({
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      className="border-t border-gray-200"
+      className="border-t border-slate-200"
     >
       <View className="flex-row items-end px-4 py-3 space-x-3">
         {/* Text Input Container */}
@@ -117,7 +117,7 @@ export function ChatInput({
             placeholderTextColor="#9CA3AF"
             multiline
             maxLength={maxLength}
-            className="px-4 py-3 text-base text-gray-900 leading-5"
+            className="px-4 py-3 text-base text-slate-900 leading-5"
             style={{
               fontFamily: 'Geist_400Regular',
               minHeight: 44,
@@ -134,12 +134,12 @@ export function ChatInput({
             <View className="absolute bottom-1 right-2">
               <View 
                 className={`px-2 py-1 rounded-full ${
-                  message.length >= maxLength ? 'bg-red-100' : 'bg-gray-100'
+                  message.length >= maxLength ? 'bg-red-100' : 'bg-slate-100'
                 }`}
               >
                 <Text 
                   className={`text-xs ${
-                    message.length >= maxLength ? 'text-red-600' : 'text-gray-500'
+                    message.length >= maxLength ? 'text-red-600' : 'text-slate-500'
                   }`}
                 >
                   {message.length}/{maxLength}
@@ -157,7 +157,7 @@ export function ChatInput({
             className={`w-11 h-11 rounded-full items-center justify-center ${
               canSend 
                 ? 'bg-blue-500 shadow-lg' 
-                : 'bg-gray-300'
+                : 'bg-slate-300'
             }`}
             style={{
               shadowColor: canSend ? '#3B82F6' : 'transparent',
@@ -189,9 +189,9 @@ export function ChatInput({
               <TouchableOpacity
                 key={index}
                 onPress={() => setMessage(hint)}
-                className="bg-gray-100 px-3 py-1.5 rounded-full mr-2 mb-2"
+                className="bg-slate-100 px-3 py-1.5 rounded-full mr-2 mb-2"
               >
-                <Text className="text-sm text-gray-600">{hint}</Text>
+                <Text className="text-sm text-slate-600">{hint}</Text>
               </TouchableOpacity>
             ))}
           </View>

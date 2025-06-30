@@ -41,10 +41,10 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
     return (
       <View className="flex-1 items-center justify-center p-6">
         <Icon name="MessageCircle" size={48} color="#9CA3AF" />
-        <ThemedText className="text-lg font-medium text-gray-600 mt-4 text-center">
+        <ThemedText className="text-lg font-medium text-slate-600 mt-4 text-center">
           No active chat session
         </ThemedText>
-        <ThemedText className="text-sm text-gray-500 mt-2 text-center">
+        <ThemedText className="text-sm text-slate-500 mt-2 text-center">
           Start a conversation with the AI assistant
         </ThemedText>
       </View>
@@ -67,7 +67,7 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
           }],
         }}
       >
-        <View className="flex-row items-center justify-between px-4 py-3 border-b border-gray-100">
+        <View className="flex-row items-center justify-between px-4 py-3 border-b border-slate-100">
           <View className="flex-row items-center flex-1">
             {/* AI Avatar */}
             <View className="w-10 h-10 bg-blue-100 rounded-full items-center justify-center mr-3">
@@ -75,10 +75,10 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
             </View>
             
             <View className="flex-1">
-              <ThemedText className="text-lg font-semibold text-gray-900">
+              <ThemedText className="text-lg font-semibold text-slate-900">
                 AI Assistant
               </ThemedText>
-              <ThemedText className="text-sm text-gray-500">
+              <ThemedText className="text-sm text-slate-500">
                 {isTyping ? 'Typing...' : 'Online'}
               </ThemedText>
             </View>
@@ -87,7 +87,7 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
           {/* Close Button */}
           <TouchableOpacity
             onPress={onClose}
-            className="w-8 h-8 items-center justify-center rounded-full bg-gray-100"
+            className="w-8 h-8 items-center justify-center rounded-full bg-slate-100"
             activeOpacity={0.7}
           >
             <Icon name="X" size={18} color="#6B7280" />
@@ -108,10 +108,10 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
             <View className="w-16 h-16 bg-blue-50 rounded-full items-center justify-center mb-4">
               <Icon name="Sparkles" size={24} color="#3B82F6" />
             </View>
-            <ThemedText className="text-lg font-medium text-gray-700 text-center mb-2">
+            <ThemedText className="text-lg font-medium text-slate-700 text-center mb-2">
               Start a conversation
             </ThemedText>
-            <ThemedText className="text-sm text-gray-500 text-center max-w-xs">
+            <ThemedText className="text-sm text-slate-500 text-center max-w-xs">
               Ask me anything about podcasts, learning, or how to use this app!
             </ThemedText>
           </View>

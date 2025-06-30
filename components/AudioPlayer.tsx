@@ -43,7 +43,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
 
   if (compact) {
     return (
-      <View className={`bg-white bg-gray-800 border-t border-gray-200 border-gray-700 px-4 py-2 ${className}`}>
+      <View className={`bg-white bg-slate-800 border-t border-slate-200 border-slate-700 px-4 py-2 ${className}`}>
         <View className="flex-row items-center space-x-3">
           {/* Play/Pause Button */}
           <TouchableOpacity
@@ -65,13 +65,13 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
           {/* Content Info */}
           <View className="flex-1">
             <Text 
-              className="text-sm font-medium text-gray-900 text-white"
+              className="text-sm font-medium text-slate-900 text-white"
               numberOfLines={1}
             >
               {contentInfo?.title}
             </Text>
             <Text 
-              className="text-xs text-gray-500 text-gray-400"
+              className="text-xs text-slate-500 text-slate-400"
               numberOfLines={1}
             >
               {contentInfo?.subtitle}
@@ -94,7 +94,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
           </View>
 
           {/* Time */}
-          <Text className="text-xs text-gray-500 text-gray-400 min-w-[40px] text-right">
+          <Text className="text-xs text-slate-500 text-slate-400 min-w-[40px] text-right">
             {getFormattedCurrentTime()}
           </Text>
         </View>
@@ -103,7 +103,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
   }
 
   return (
-    <View className={`bg-white bg-gray-800 border-t border-gray-200 border-gray-700 px-4 py-4 ${className}`}>
+    <View className={`bg-white bg-slate-800 border-t border-slate-200 border-slate-700 px-4 py-4 ${className}`}>
       {/* Error Display */}
       {error && (
         <View className="bg-red-100 bg-red-900 px-3 py-2 rounded-lg mb-3">
@@ -114,13 +114,13 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
       {/* Content Info */}
       <View className="mb-4">
         <Text 
-          className="text-lg font-semibold text-gray-900 text-white"
+          className="text-lg font-semibold text-slate-900 text-white"
           numberOfLines={1}
         >
           {contentInfo?.title}
         </Text>
         <Text 
-          className="text-sm text-gray-600 text-gray-400"
+          className="text-sm text-slate-600 text-slate-400"
           numberOfLines={1}
         >
           {contentInfo?.subtitle}
@@ -143,10 +143,10 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
         
         {/* Time Display */}
         <View className="flex-row justify-between mt-1">
-          <Text className="text-xs text-gray-500 text-gray-400">
+          <Text className="text-xs text-slate-500 text-slate-400">
             {getFormattedCurrentTime()}
           </Text>
-          <Text className="text-xs text-gray-500 text-gray-400">
+          <Text className="text-xs text-slate-500 text-slate-400">
             {getFormattedDuration()}
           </Text>
         </View>
@@ -204,9 +204,9 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
         <TouchableOpacity
           onPress={cyclePlaybackRate}
           disabled={!canControl}
-          className="px-3 py-2 bg-gray-100 bg-gray-700 rounded-lg disabled:opacity-50"
+          className="px-3 py-2 bg-slate-100 bg-slate-700 rounded-lg disabled:opacity-50"
         >
-          <Text className="text-sm font-medium text-gray-700 text-gray-300">
+          <Text className="text-sm font-medium text-slate-700 text-slate-300">
             {playbackRate}x
           </Text>
         </TouchableOpacity>

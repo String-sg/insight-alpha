@@ -26,7 +26,8 @@ export default function HomeScreen() {
       imageUrl: content.imageUrl,
       audioUrl: content.audioUrl,
       duration: content.duration,
-      author: content.author
+      author: content.author,
+      sources: content.sources
     };
     
     // Use the existing audio system
@@ -50,7 +51,7 @@ export default function HomeScreen() {
   const dailyRecommendation = educationalContent[educationalContent.length - 1]; // Latest added content
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-100">
+    <SafeAreaView className="flex-1 bg-slate-100">
       <StatusBar barStyle="dark-content" />
       
       <ScrollView 

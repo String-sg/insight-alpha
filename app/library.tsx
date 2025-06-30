@@ -45,7 +45,7 @@ export default function LibraryScreen() {
   ];
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-100">
+    <SafeAreaView className="flex-1 bg-slate-100">
       <ScrollView 
         className="flex-1"
         showsVerticalScrollIndicator={false}

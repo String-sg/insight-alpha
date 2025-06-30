@@ -2,6 +2,15 @@
  * Core podcast data structures for the podcast player app
  */
 
+export interface PodcastSource {
+  title: string;
+  url: string;
+  type: 'research' | 'article' | 'study' | 'website' | 'book' | 'video' | 'other';
+  author?: string;
+  publishedDate?: string;
+  description?: string;
+}
+
 export interface Podcast {
   id: string;
   title: string;
@@ -10,6 +19,7 @@ export interface Podcast {
   audioUrl: string | number;
   duration: number; // Duration in milliseconds
   author: string;
+  sources?: PodcastSource[];
 }
 
 export interface Episode {
