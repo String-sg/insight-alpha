@@ -1,7 +1,8 @@
-import { ScrollView, View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { router, Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeft, CheckSquare, BookOpenCheck, Lightbulb, ChevronRight } from 'lucide-react-native';
+import { WebScrollView } from '@/components/WebScrollView';
 
 export default function ProfileScreen() {
   return (
@@ -21,7 +22,7 @@ export default function ProfileScreen() {
         </TouchableOpacity>
       </View>
 
-      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+      <WebScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Profile Card */}
         <View className="mx-6 mb-6 bg-white rounded-3xl">
           <View className="flex-row items-start p-4 gap-6">
@@ -129,7 +130,7 @@ export default function ProfileScreen() {
             </TouchableOpacity>
           </View>
         </View> */}
-      </ScrollView>
+      </WebScrollView>
     </SafeAreaView>
   );
 }

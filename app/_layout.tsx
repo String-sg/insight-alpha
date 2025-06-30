@@ -8,7 +8,7 @@ import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { View } from 'react-native';
+import { View, Platform } from 'react-native';
 import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import '../global.css';
@@ -28,10 +28,27 @@ function AppContent() {
   // Hide mini player when fullscreen player is active or on quiz pages
   const shouldShowMiniPlayer = pathname !== '/player' && !pathname.startsWith('/quiz');
 
+  const webContainerStyle = Platform.OS === 'web' ? {
+    height: '100vh' as any,
+    minHeight: '100vh' as any,
+    overflow: 'visible' as any,
+  } : {
+    flex: 1,
+  };
+
+  const webRootStyle = Platform.OS === 'web' ? {
+    backgroundColor: '#f5f5f5',
+    minHeight: '100vh' as any,
+    overflow: 'visible' as any,
+  } : {
+    flex: 1,
+    backgroundColor: '#f5f5f5'
+  };
+
   return (
     <ThemeProvider value={DefaultTheme}>
-      <View style={{ flex: 1, backgroundColor: '#f5f5f5' }}>
-        <View className="flex-1 max-w-3xl mx-auto w-full">
+      <View style={webRootStyle}>
+        <View className="flex-1 max-w-3xl mx-auto w-full" style={webContainerStyle}>
           <Stack>
             <Stack.Screen name="index" options={{ headerShown: false }} />
             <Stack.Screen name="library" options={{ headerShown: false }} />
@@ -70,8 +87,16 @@ export default function RootLayout() {
     return null;
   }
 
+  const safeAreaStyle = Platform.OS === 'web' ? {
+    backgroundColor: '#f5f5f5',
+    minHeight: '100vh' as any,
+    overflow: 'visible' as any,
+  } : {
+    backgroundColor: '#f5f5f5'
+  };
+
   return (
-    <SafeAreaProvider style={{ backgroundColor: '#f5f5f5' }}>
+    <SafeAreaProvider style={safeAreaStyle}>
       <AudioProvider>
         <NotesProvider>
           <ChatProvider>

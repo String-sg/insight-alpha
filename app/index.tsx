@@ -3,11 +3,12 @@ import { Icon } from '@/components/Icon';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { SegmentedControl } from '@/components/SegmentedControl';
 import { WeekCalendar } from '@/components/WeekCalendar';
+import { WebScrollView } from '@/components/WebScrollView';
 import { EducationalContent, educationalContent, weeklyProgress } from '@/data/educational-content';
 import { useAudio } from '@/hooks/useAudio';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -54,7 +55,7 @@ export default function HomeScreen() {
     <SafeAreaView className="flex-1 bg-slate-100">
       <StatusBar barStyle="dark-content" />
       
-      <ScrollView 
+      <WebScrollView 
         className="flex-1"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: bottomPadding }}
@@ -125,7 +126,7 @@ export default function HomeScreen() {
             />
           </View>
         </View>
-      </ScrollView>
+      </WebScrollView>
     </SafeAreaView>
   );
 }

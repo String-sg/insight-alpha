@@ -1,9 +1,10 @@
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { SegmentedControl } from '@/components/SegmentedControl';
+import { WebScrollView } from '@/components/WebScrollView';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { Stack, useRouter } from 'expo-router';
 import React from 'react';
-import { SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 export default function ExploreScreen() {
   const router = useRouter();
@@ -63,7 +64,7 @@ export default function ExploreScreen() {
       />
       <StatusBar barStyle="dark-content" />
       
-      <ScrollView 
+      <WebScrollView 
         className="flex-1"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: bottomPadding }}
@@ -140,7 +141,7 @@ export default function ExploreScreen() {
             ))}
           </View>
         </View>
-      </ScrollView>
+      </WebScrollView>
     </SafeAreaView>
   );
 }

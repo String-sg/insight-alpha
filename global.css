@@ -1,3 +1,59 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Web-specific styles for natural scrolling */
+@media (max-width: 768px) {
+  @supports (-webkit-touch-callout: none) {
+    /* iOS Safari specific styles */
+    html, body {
+      height: 100%;
+      overflow: visible !important;
+      -webkit-overflow-scrolling: touch !important;
+      overscroll-behavior-y: none;
+    }
+    
+    /* Enable smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* Remove any fixed heights that might interfere with scrolling */
+    #root, #__expo-root {
+      min-height: 100vh !important;
+      height: auto !important;
+      overflow: visible !important;
+    }
+    
+    /* Ensure the viewport is properly sized */
+    body {
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+    }
+  }
+}
+
+/* General web scrolling improvements */
+@media screen and (hover: none) and (pointer: coarse) {
+  /* Touch devices */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Improve scroll performance */
+  .scroll-container {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+  }
+}
+
+/* Ensure mini player stays fixed on web */
+@media screen {
+  .mini-player-web {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+  }
+}

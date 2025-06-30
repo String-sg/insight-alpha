@@ -121,17 +121,28 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
 
   const contentInfo = getCurrentInfo();
 
+  const containerStyle = Platform.OS === 'web' ? {
+    position: 'fixed' as any,
+    bottom: insets.bottom + 20,
+    left: 0,
+    right: 0,
+    transform: [{ translateY: slideAnim }],
+    opacity: opacityAnim,
+    zIndex: 1000,
+  } : {
+    position: 'absolute' as any,
+    bottom: insets.bottom + 20,
+    left: 0,
+    right: 0,
+    transform: [{ translateY: slideAnim }],
+    opacity: opacityAnim,
+    zIndex: 1000,
+  };
+
   return (
     <Animated.View
-      style={{
-        position: 'absolute',
-        bottom: insets.bottom + 20,
-        left: 0,
-        right: 0,
-        transform: [{ translateY: slideAnim }],
-        opacity: opacityAnim,
-        zIndex: 1000,
-      }}
+      style={containerStyle}
+      className={Platform.OS === 'web' ? 'mini-player-web' : ''}
     >
       <View className="max-w-3xl mx-auto w-full px-6">
         <View className="flex-row items-center">

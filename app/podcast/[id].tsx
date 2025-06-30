@@ -1,5 +1,6 @@
 import { BottomSheet } from '@/components/BottomSheet';
 import { NoteEditor } from '@/components/NoteEditor';
+import { WebScrollView } from '@/components/WebScrollView';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { useNotes } from '@/contexts/NotesContext';
 import { educationalContent, EducationalContent } from '@/data/educational-content';
@@ -13,7 +14,6 @@ import {
   ActivityIndicator,
   Dimensions,
   Image,
-  ScrollView,
   StatusBar,
   Text,
   TouchableOpacity,
@@ -283,7 +283,7 @@ export default function PodcastDetailsScreen() {
           </TouchableOpacity>
         </View>
 
-        <ScrollView 
+        <WebScrollView 
           className="flex-1"
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingTop: 80, paddingBottom: scrollPaddingBottom }}
@@ -485,7 +485,7 @@ export default function PodcastDetailsScreen() {
               </TouchableOpacity>
             </View>
           </View>
-        </ScrollView>
+        </WebScrollView>
         
         {/* Note Editor Bottom Sheet */}
         <BottomSheet
