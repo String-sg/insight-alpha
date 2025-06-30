@@ -3,10 +3,12 @@ import { ProfileHeader } from '@/components/ProfileHeader';
 import { SegmentedControl } from '@/components/SegmentedControl';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 import React, { useRef } from 'react';
 import { FlatList, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 
 export default function LibraryScreen() {
+  const router = useRouter();
   const { currentPodcast } = useAudioContext();
   const flatListRef = useRef<FlatList>(null);
   
@@ -118,7 +120,7 @@ export default function LibraryScreen() {
   const renderHeader = () => (
     <>
       {/* Header */}
-      <ProfileHeader />
+      <ProfileHeader onProfilePress={() => router.push('/profile')} />
 
       {/* Navigation Bar */}
       <View className="px-6">
