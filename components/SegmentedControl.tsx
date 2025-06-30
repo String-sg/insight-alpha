@@ -53,7 +53,7 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
 
   return (
     <View className="bg-white rounded-[80px] mb-4">
-      <View className="flex-row items-center justify-center px-2 py-0 h-20">
+      <View className="flex-row items-center justify-center px-2 py-0">
         {segments.map((segment) => {
           const isActive = currentSegment === segment.key;
           
@@ -65,15 +65,17 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
               activeOpacity={0.7}
             >
               <View className={`w-16 h-8 items-center justify-center rounded-full ${
-                isActive ? 'bg-slate-950' : ''
+                isActive 
+                  ? 'bg-slate-950' 
+                  : 'bg-transparent'
               }`}>
                 <Icon
                   name={segment.icon}
                   size={24}
-                  color={isActive ? '#f8fafc' : '#64748b'}
+                  color={isActive ? '#f8fafc' : '#334155'}
                 />
               </View>
-              <Text className={`font-semibold text-xs text-center ${
+              <Text className={`font-geist-semibold text-xs text-center ${
                 isActive 
                   ? 'text-slate-950' 
                   : 'text-slate-700'
