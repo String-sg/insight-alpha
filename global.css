@@ -2,38 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Web-specific styles for natural scrolling */
+/* Web-specific styles */
 @media screen {
-  /* Reset html and body to prevent double scrolling */
+  /* Reset html and body */
   html, body {
-    height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden;
     background-color: #f1f5f9; /* bg-slate-100 */
-  }
-  
-  /* Ensure root containers fill the viewport */
-  #root, #__expo-root {
-    height: 100%;
-    overflow: hidden;
-  }
-  
-  /* Ensure SafeAreaProvider fills its container */
-  [data-testid="safe-area-provider"],
-  [data-testid="safe-area-provider"] > div {
-    height: 100%;
   }
 }
 
-/* Mobile-specific adjustments */
-@media (max-width: 768px) and (hover: none) {
-  body {
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
-    position: relative;
-  }
-}
 
 /* General web scrolling improvements */
 @media screen and (hover: none) and (pointer: coarse) {

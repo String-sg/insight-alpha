@@ -19,26 +19,18 @@ export function WebScrollView({
   ...props 
 }: WebScrollViewProps) {
   if (Platform.OS === 'web') {
-    // On web, use a container div with proper overflow handling
+    // On web, use NativeWind classes for styling
     return (
       <div 
+        className="h-full overflow-y-auto overflow-x-hidden"
         style={{
-          flex: 1,
-          overflowY: 'auto',
-          overflowX: 'hidden',
           WebkitOverflowScrolling: 'touch',
-          height: '100%',
           ...(style as any)
         }}
       >
         <div 
-          style={{
-            maxWidth: '48rem', // max-w-3xl
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            width: '100%',
-            ...(contentContainerStyle as any)
-          }}
+          className="max-w-3xl mx-auto w-full"
+          style={contentContainerStyle as any}
         >
           {children}
         </div>

@@ -8,7 +8,7 @@ import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import '../global.css';
@@ -30,7 +30,7 @@ function AppContent() {
 
   return (
     <ThemeProvider value={DefaultTheme}>
-      <View className="flex-1">
+      <View className={Platform.OS === 'web' ? "h-dvh" : "flex-1"}>
         <Stack>
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="library" options={{ headerShown: false }} />
@@ -70,7 +70,7 @@ export default function RootLayout() {
   }
 
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider className={Platform.OS === 'web' ? "h-dvh" : undefined}>
       <AudioProvider>
         <NotesProvider>
           <ChatProvider>
