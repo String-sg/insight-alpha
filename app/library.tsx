@@ -144,38 +144,44 @@ export default function LibraryScreen() {
     </>
   );
 
-  if (Platform.OS === 'web') {
-    return (
-      <WebScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={{ paddingBottom: bottomPadding }}
-        showsVerticalScrollIndicator={false}
-      >
-        {renderHeader()}
+  // Use WebScrollView for web, FlatList for native to maintain scroll snap behavior
+  const content = Platform.OS === 'web' ? (
+    <WebScrollView
+      style={{ flex: 1 }}
+      showsVerticalScrollIndicator={false}
+    >
+      {renderHeader()}
+      <View style={{ marginBottom: bottomPadding }}>
         {learningSubjects.map((subject) => (
           <React.Fragment key={subject.id}>
             {renderCard({ item: subject })}
           </React.Fragment>
         ))}
-      </WebScrollView>
-    );
+      </View>
+    </WebScrollView>
+  ) : (
+    <FlatList
+      ref={flatListRef}
+      data={learningSubjects}
+      renderItem={renderCard}
+      keyExtractor={(item) => item.id}
+      ListHeaderComponent={renderHeader}
+      showsVerticalScrollIndicator={false}
+      snapToInterval={cardHeight}
+      decelerationRate="fast"
+      contentContainerStyle={{ paddingBottom: bottomPadding }}
+      pagingEnabled={false}
+      snapToAlignment="start"
+    />
+  );
+
+  if (Platform.OS === 'web') {
+    return content;
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-slate-100">
-      <FlatList
-        ref={flatListRef}
-        data={learningSubjects}
-        renderItem={renderCard}
-        keyExtractor={(item) => item.id}
-        ListHeaderComponent={renderHeader}
-        showsVerticalScrollIndicator={false}
-        snapToInterval={cardHeight}
-        decelerationRate="fast"
-        contentContainerStyle={{ paddingBottom: bottomPadding }}
-        pagingEnabled={false}
-        snapToAlignment="start"
-      />
+    <SafeAreaView className="flex-1">
+      {content}
     </SafeAreaView>
   );
 }

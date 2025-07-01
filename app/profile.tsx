@@ -1,21 +1,27 @@
-import { View, Text, TouchableOpacity, Image, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Platform, SafeAreaView, StatusBar } from 'react-native';
 import { router, Stack } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeft, CheckSquare, BookOpenCheck, Lightbulb, ChevronRight } from 'lucide-react-native';
 import { WebScrollView } from '@/components/WebScrollView';
+import { useAudioContext } from '@/contexts/AudioContext';
 
 export default function ProfileScreen() {
-  const safeAreaStyle = Platform.OS === 'web' 
-    ? "bg-slate-100" 
-    : "flex-1 bg-slate-100";
+  const { currentPodcast } = useAudioContext();
+  
+  // Calculate bottom padding based on mini player visibility
+  const bottomPadding = currentPodcast ? 120 : 40;
 
-  return (
-    <SafeAreaView className={safeAreaStyle}>
+  const content = (
+    <WebScrollView 
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: bottomPadding }}
+    >
+      <StatusBar barStyle="dark-content" />
       <Stack.Screen 
         options={{
           headerShown: false,
         }}
       />
+      
       {/* Header */}
       <View className="px-6 py-4">
         <TouchableOpacity
@@ -25,11 +31,6 @@ export default function ProfileScreen() {
           <ChevronLeft size={24} color="#000" strokeWidth={2} />
         </TouchableOpacity>
       </View>
-
-      <WebScrollView 
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 40 }}
-      >
         {/* Profile Card */}
         <View className="mx-6 mb-6 bg-white rounded-3xl">
           <View className="flex-row items-start p-4 gap-6">
@@ -137,7 +138,16 @@ export default function ProfileScreen() {
             </TouchableOpacity>
           </View>
         </View>
-      </WebScrollView>
+    </WebScrollView>
+  );
+
+  if (Platform.OS === 'web') {
+    return content;
+  }
+
+  return (
+    <SafeAreaView className="flex-1">
+      {content}
     </SafeAreaView>
   );
 }

@@ -4,23 +4,25 @@
 
 /* Web-specific styles for natural scrolling */
 @media screen {
-  /* Reset html and body to allow natural scrolling */
+  /* Reset html and body to prevent double scrolling */
   html, body {
-    height: auto !important;
-    min-height: 100% !important;
+    height: 100%;
     margin: 0;
     padding: 0;
-    overflow-y: visible !important;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
+    overflow: hidden;
+    background-color: #f1f5f9; /* bg-slate-100 */
   }
   
-  /* Remove any fixed heights from root containers */
+  /* Ensure root containers fill the viewport */
   #root, #__expo-root {
-    height: auto !important;
-    min-height: 100% !important;
-    overflow: visible !important;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  /* Ensure SafeAreaProvider fills its container */
+  [data-testid="safe-area-provider"],
+  [data-testid="safe-area-provider"] > div {
+    height: 100%;
   }
 }
 

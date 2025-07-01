@@ -19,9 +19,31 @@ export function WebScrollView({
   ...props 
 }: WebScrollViewProps) {
   if (Platform.OS === 'web') {
-    // On web, return children directly without any wrapper
-    // The body will handle the scrolling naturally
-    return <>{children}</>;
+    // On web, use a container div with proper overflow handling
+    return (
+      <div 
+        style={{
+          flex: 1,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          WebkitOverflowScrolling: 'touch',
+          height: '100%',
+          ...(style as any)
+        }}
+      >
+        <div 
+          style={{
+            maxWidth: '48rem', // max-w-3xl
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            width: '100%',
+            ...(contentContainerStyle as any)
+          }}
+        >
+          {children}
+        </div>
+      </div>
+    );
   }
 
   // On native platforms, use React Native's ScrollView

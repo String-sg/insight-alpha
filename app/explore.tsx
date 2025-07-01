@@ -54,96 +54,99 @@ export default function ExploreScreen() {
     }
   ];
 
-  const safeAreaStyle = Platform.OS === 'web' 
-    ? "bg-slate-100" 
-    : "flex-1 bg-slate-100";
-
-  return (
-    <SafeAreaView className={safeAreaStyle}>
+  const content = (
+    <WebScrollView 
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: bottomPadding }}
+    >
+      <StatusBar barStyle="dark-content" />
       <Stack.Screen 
         options={{
           headerShown: false,
         }}
       />
-      <StatusBar barStyle="dark-content" />
       
-      <WebScrollView 
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: bottomPadding }}
-      >
-        {/* Header */}
-        <ProfileHeader />
+      {/* Header */}
+      <ProfileHeader />
 
-        {/* Navigation Bar */}
-        <View className="px-6">
-          <SegmentedControl activeSegment="explore" />
+      {/* Navigation Bar */}
+      <View className="px-6">
+        <SegmentedControl activeSegment="explore" />
+      </View>
+
+      {/* Popular Topics Section */}
+      <View className="mx-6 mb-6">
+        <Text className="text-black text-xl font-geist-semibold mb-4">
+          Popular topics
+        </Text>
+        
+        <View className="flex-row gap-4">
+          {popularTopics.map((topic) => (
+            <TouchableOpacity 
+              key={topic.id}
+              className={`flex-1 h-[182px] rounded-3xl p-4 justify-center bg-gradient-to-br ${topic.gradient}`}
+            >
+              <Text className="text-white text-xl font-geist-semibold mb-2">
+                {topic.title}
+              </Text>
+              
+              <Text className="text-white text-sm font-geist-regular">
+                {topic.podcasts} podcasts{'\n'}{topic.notes} notes
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
+      </View>
 
-
-        {/* Popular Topics Section */}
-        <View className="mx-6 mb-6">
-          <Text className="text-black text-xl font-geist-semibold mb-4">
-            Popular topics
-          </Text>
-          
-          <View className="flex-row gap-4">
-            {popularTopics.map((topic) => (
-              <TouchableOpacity 
-                key={topic.id}
-                className={`flex-1 h-[182px] rounded-3xl p-4 justify-center bg-gradient-to-br ${topic.gradient}`}
-              >
-                <Text className="text-white text-xl font-geist-semibold mb-2">
-                  {topic.title}
-                </Text>
-                
-                <Text className="text-white text-sm font-geist-regular">
-                  {topic.podcasts} podcasts{'\n'}{topic.notes} notes
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+      {/* Popular Contents Section */}
+      <View className="mx-6">
+        <Text className="text-black text-xl font-geist-semibold mb-4">
+          Popular contents
+        </Text>
+        
+        <View className="gap-3">
+          {popularContents.map((content) => (
+            <TouchableOpacity 
+              key={content.id}
+              className="bg-pink-100 rounded-3xl p-6 shadow-sm"
+            >
+              {/* Badges */}
+              <View className="flex-row gap-1 mb-1">
+                {content.badges.map((badge, index) => (
+                  <View 
+                    key={index}
+                    className={`${badge.color} rounded-md px-2.5 py-0.5`}
+                  >
+                    <Text className={`${badge.textColor} text-xs font-geist-semibold`}>
+                      {badge.text}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+              
+              {/* Title */}
+              <Text className="text-slate-950 text-xl font-geist-medium leading-7 mb-1">
+                {content.title}
+              </Text>
+              
+              {/* Metadata */}
+              <Text className="text-slate-600 text-sm font-geist-regular">
+                {content.source} • {content.timeAgo}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
+      </View>
+    </WebScrollView>
+  );
 
-        {/* Popular Contents Section */}
-        <View className="mx-6">
-          <Text className="text-black text-xl font-geist-semibold mb-4">
-            Popular contents
-          </Text>
-          
-          <View className="gap-3">
-            {popularContents.map((content) => (
-              <TouchableOpacity 
-                key={content.id}
-                className="bg-pink-100 rounded-3xl p-6 shadow-sm"
-              >
-                {/* Badges */}
-                <View className="flex-row gap-1 mb-1">
-                  {content.badges.map((badge, index) => (
-                    <View 
-                      key={index}
-                      className={`${badge.color} rounded-md px-2.5 py-0.5`}
-                    >
-                      <Text className={`${badge.textColor} text-xs font-geist-semibold`}>
-                        {badge.text}
-                      </Text>
-                    </View>
-                  ))}
-                </View>
-                
-                {/* Title */}
-                <Text className="text-slate-950 text-xl font-geist-medium leading-7 mb-1">
-                  {content.title}
-                </Text>
-                
-                {/* Metadata */}
-                <Text className="text-slate-600 text-sm font-geist-regular">
-                  {content.source} • {content.timeAgo}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-      </WebScrollView>
+  if (Platform.OS === 'web') {
+    return content;
+  }
+
+  return (
+    <SafeAreaView className="flex-1">
+      {content}
     </SafeAreaView>
   );
 }
