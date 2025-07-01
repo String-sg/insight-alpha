@@ -2,6 +2,7 @@ import { educationalContent } from '@/data/educational-content';
 import { Quiz, QuizOption, QuizQuestion as QuizQuestionType } from '@/types/quiz';
 import React, { useEffect, useState } from 'react';
 import { Animated, Text, TouchableOpacity, View } from 'react-native';
+import { Video, ResizeMode } from 'expo-av';
 
 interface QuizQuestionProps {
   question: QuizQuestionType;
@@ -50,9 +51,9 @@ export function QuizQuestion({
     const isSelected = selectedOptionId === option.id;
     
     if (isSelected) {
-      return 'bg-[#dfd3ff]';
+      return 'bg-white/80 border border-black';
     } else {
-      return 'bg-white/80 border border-slate-200';
+      return 'bg-white/80';
     }
   };
 
@@ -60,9 +61,9 @@ export function QuizQuestion({
     const isSelected = selectedOptionId === option.id;
     
     if (isSelected) {
-      return 'bg-[#a583ff]';
+      return 'bg-black';
     } else {
-      return 'bg-slate-200';
+      return 'bg-[#ededed]';
     }
   };
 
@@ -70,9 +71,19 @@ export function QuizQuestion({
     const isSelected = selectedOptionId === option.id;
     
     if (isSelected) {
-      return 'text-[#251e37]';
+      return 'text-white';
     } else {
       return 'text-[#3c3256]';
+    }
+  };
+
+  const getOptionLabelTextColor = (option: QuizOption) => {
+    const isSelected = selectedOptionId === option.id;
+    
+    if (isSelected) {
+      return 'text-black';
+    } else {
+      return 'text-black';
     }
   };
 
@@ -87,48 +98,53 @@ export function QuizQuestion({
       }}
       className=""
     >
-      {/* Quiz Badge and Podcast Info */}
-      <View className="bg-white rounded-full mb-6" style={{ width: 269 }}>
-        <View className="flex-row items-center p-1">
-          <View className="bg-[#d4c3ff] rounded-full px-2 py-1">
-            <Text className="text-[#3c3256] text-xs font-geist-semibold">
-              Quiz
-            </Text>
-          </View>
-          <Text className="flex-1 text-black text-xs ml-3 mr-2 font-geist-medium" numberOfLines={1}>
-            {podcast?.title || 'Quiz'}
-          </Text>
+      {/* Central Gradient Badge with Video Background */}
+      <View className="items-center mb-8">
+        <View className="w-[120px] h-[120px] rounded-full overflow-hidden">
+          <Video
+            source={require('@/assets/video/bg-mesh-gradient.mp4')}
+            style={{
+              width: 120,
+              height: 120,
+            }}
+            useNativeControls={false}
+            resizeMode={ResizeMode.COVER}
+            shouldPlay
+            isLooping
+            isMuted
+            volume={0}
+          />
         </View>
       </View>
 
       {/* Question Text */}
-      <Text className="text-black text-xl mb-6 leading-7 px-0 font-geist-medium">
+      <Text className="text-black text-xl mb-8 leading-7 font-geist-medium">
         {question.question}
       </Text>
 
       {/* Options */}
-      <View className="space-y-4 mb-6">
+      <View className="space-y-2">
         {question.options.map((option, index) => {
           const isSelected = selectedOptionId === option.id;
           return (
-            <View key={option.id} className="relative">
-              <TouchableOpacity
-                onPress={() => !disabled && onOptionSelect(option.id)}
-                disabled={disabled}
-                className={`p-3 rounded-2xl ${getOptionStyle(option)} ${isSelected ? 'outline outline-2 outline-[#a583ff] outline-offset-2' : ''}`}
-              >
-                <View className="flex-row items-center">
-                  <View className={`rounded-lg px-2 py-1 mr-3 ${getOptionBadgeStyle(option)}`}>
-                    <Text className={`text-xs font-geist-semibold ${getOptionTextColor(option)}`}>
-                      {String.fromCharCode(65 + index)}
-                    </Text>
-                  </View>
-                  <Text className="flex-1 text-black text-sm font-geist">
-                    {option.text}
+            <TouchableOpacity
+              key={option.id}
+              onPress={() => !disabled && onOptionSelect(option.id)}
+              disabled={disabled}
+              className={`p-3 rounded-2xl h-16 justify-center ${getOptionStyle(option)}`}
+              activeOpacity={0.7}
+            >
+              <View className="flex-row items-center gap-3">
+                <View className={`rounded-lg px-2 py-1 ${getOptionBadgeStyle(option)}`}>
+                  <Text className={`text-xs font-geist-semibold ${getOptionTextColor(option)}`}>
+                    {String.fromCharCode(65 + index)}
                   </Text>
                 </View>
-              </TouchableOpacity>
-            </View>
+                <Text className={`flex-1 text-sm font-geist ${getOptionLabelTextColor(option)}`}>
+                  {option.text}
+                </Text>
+              </View>
+            </TouchableOpacity>
           );
         })}
       </View>

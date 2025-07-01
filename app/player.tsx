@@ -14,15 +14,14 @@ import {
     Text,
     TouchableOpacity,
     View,
-    useWindowDimensions,
-    Platform
+    useWindowDimensions
 } from 'react-native';
 
 
 export default function PlayerScreen() {
   const router = useRouter();
   const [showSourceSheet, setShowSourceSheet] = useState(false);
-  const { height, width } = useWindowDimensions(); // Dynamic dimensions
+  const { height } = useWindowDimensions(); // Dynamic dimensions
   
   const {
     isPlaying,

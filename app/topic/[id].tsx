@@ -102,12 +102,12 @@ export default function TopicPodcastsScreen() {
       
       <WebScrollView 
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingTop: 80, paddingBottom: bottomPadding }}
+        contentContainerStyle={{ paddingTop: 76, paddingBottom: bottomPadding }}
         className="flex-1"
       >
 
         {/* About This Topic Card */}
-        <View className="px-6 mt-6 mb-4">
+        <View className="px-6 mb-4">
           <View className="bg-slate-200 rounded-3xl p-4">
             <Text className="text-base font-semibold text-black mb-2">
               About this topic

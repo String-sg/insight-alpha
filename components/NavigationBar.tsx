@@ -33,7 +33,7 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
       className="absolute top-0 left-0 right-0 z-10"
       style={[{ backgroundColor }, style]}
     >
-      <View className="max-w-3xl mx-auto w-full flex-row items-center justify-between px-6 pt-12 pb-4">
+      <View className="max-w-3xl mx-auto w-full flex-row items-center justify-between px-6 pt-4 pb-4">
         <TouchableOpacity
           onPress={handleBackPress}
           className="w-10 h-10 items-center justify-center rounded-full bg-white"

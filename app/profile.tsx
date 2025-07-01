@@ -28,11 +28,11 @@ export default function ProfileScreen() {
 
       <WebScrollView 
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingTop: 80, paddingBottom: bottomPadding }}
+        contentContainerStyle={{ paddingTop: 76, paddingBottom: bottomPadding }}
         className="flex-1"
       >
         {/* Profile Card */}
-        <View className="mx-6 mt-6 mb-6 bg-white rounded-3xl">
+        <View className="mx-6 mb-6 bg-white rounded-3xl">
           <View className="flex-row items-start p-4 gap-6">
             <View className="w-[66px] h-[66px] bg-white rounded-full overflow-hidden">
               <Image 
@@ -111,33 +111,6 @@ export default function ProfileScreen() {
           </View>
         </View>
 
-        {/* My Learnings */}
-        <View className="px-6 pb-6">
-          <Text className="text-xl font-semibold text-black mb-4">My learnings</Text>
-          
-          <View className="gap-3">
-            <TouchableOpacity className="bg-white rounded-3xl p-4">
-              <View className="flex-row items-center justify-between">
-                <Text className="text-base text-slate-950">Learning goal (EPMS)</Text>
-                <ChevronRight size={24} color="#1e293b" />
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity className="bg-white rounded-3xl p-4">
-              <View className="flex-row items-center justify-between">
-                <Text className="text-base text-slate-950">My Collections</Text>
-                <ChevronRight size={24} color="#1e293b" />
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity className="bg-white rounded-3xl p-4">
-              <View className="flex-row items-center justify-between">
-                <Text className="text-base text-slate-950">Recently played</Text>
-                <ChevronRight size={24} color="#1e293b" />
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
       </WebScrollView>
     </View>
   );

@@ -249,7 +249,7 @@ export default function QuizScreen() {
 
   if (isLoading) {
     return (
-      <View className="flex-1" style={{ backgroundColor: '#ffffff', backgroundImage: 'linear-gradient(to bottom, #f5f5f5 90%, #ddd0ff 100%)' }}>
+      <View className="flex-1 bg-slate-100">
         <SafeAreaView className="flex-1">
           <StatusBar barStyle="dark-content" />
           <View className="flex-1 justify-center items-center">
@@ -262,7 +262,7 @@ export default function QuizScreen() {
 
   if (!quiz) {
     return (
-      <View className="flex-1" style={{ backgroundColor: '#ffffff', backgroundImage: 'linear-gradient(to bottom, #f5f5f5 90%, #ddd0ff 100%)' }}>
+      <View className="flex-1 bg-slate-100">
         <SafeAreaView className="flex-1">
           <StatusBar barStyle="dark-content" />
           <View className="flex-1 justify-center items-center">
@@ -277,7 +277,7 @@ export default function QuizScreen() {
   const hasSelectedAnswer = answers.some(answer => answer.questionId === currentQuestion.id);
 
   return (
-    <View className="flex-1" style={{ backgroundColor: '#ffffff', backgroundImage: 'linear-gradient(to bottom, #f5f5f5 90%, #ddd0ff 100%)' }}>
+    <View className="flex-1 bg-slate-100">
       <SafeAreaView className="flex-1">
         <Stack.Screen 
           options={{
@@ -286,34 +286,34 @@ export default function QuizScreen() {
         />
         <StatusBar barStyle="dark-content" />
 
-        {/* Custom Header - Figma Design */}
-        <View className="flex-row items-center justify-between px-4 py-3">
+        {/* Custom Header */}
+        <View className="flex-row items-center px-6 pt-4 pb-4">
           <TouchableOpacity
             onPress={handleExitQuiz}
-            className="w-10 h-10 items-center justify-center rounded-full bg-[#e4e4e4]"
+            className="w-10 h-10 items-center justify-center rounded-full"
+            style={{ backgroundColor: 'rgba(74, 68, 89, 0.08)' }}
             activeOpacity={0.7}
           >
-            <Icon name="arrow-back" size={24} color="#000" />
+            <Icon name="chevron-back" size={24} color="#000" />
           </TouchableOpacity>
           
-          {/* Progress Bar */}
-          <View className="bg-white h-3 rounded-full overflow-hidden" style={{ width: 180 }}>
-            <View 
-              className="h-full bg-[#a583ff] rounded-full"
-              style={{ width: `${(currentQuestionIndex + 1) / quiz.questions.length * 100}%` }}
-            />
+          {/* Progress Bar and Counter */}
+          <View className="flex-1 flex-row items-center gap-8 ml-8">
+            <View className="flex-1 bg-white h-3 rounded-full overflow-hidden">
+              <View 
+                className="h-full bg-slate-900 rounded-full"
+                style={{ width: `${((currentQuestionIndex + 1) / quiz.questions.length * 100)}%` }}
+              />
+            </View>
+            
+            <Text className="text-black text-sm font-geist">
+              {currentQuestionIndex + 1}/{quiz.questions.length}
+            </Text>
           </View>
-          
-          <TouchableOpacity
-            className="w-10 h-10 items-center justify-center rounded-full bg-[#e4e4e4]"
-            activeOpacity={0.7}
-          >
-            <Icon name="ellipsis-horizontal" size={24} color="#000" />
-          </TouchableOpacity>
         </View>
 
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-          <View className="py-6 px-4">
+          <View className="px-6 pt-8">
             <QuizQuestion
               question={currentQuestion}
               questionNumber={currentQuestionIndex + 1}
@@ -327,21 +327,23 @@ export default function QuizScreen() {
               quiz={quiz}
             />
           </View>
+          {/* Check Answer Button */}
+          <View className="px-6 pb-4 mt-8">
+            <TouchableOpacity
+              className="rounded-full py-4 items-center justify-center"
+              disabled={!hasSelectedAnswer || showAnswerSheet}
+              style={{ 
+                backgroundColor: hasSelectedAnswer && !showAnswerSheet ? '#020617' : '#0f172a',
+                opacity: hasSelectedAnswer && !showAnswerSheet ? 1 : 0.5 
+              }}
+              onPress={handleCheckAnswer}
+            >
+              <Text className="text-white text-base font-geist-medium">
+                Check answer
+              </Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
-
-        {/* Check Answer Button */}
-        <View className="px-4" style={{ paddingBottom: 40 }}>
-          <TouchableOpacity
-            className="bg-black rounded-full py-4 items-center justify-center"
-            disabled={!hasSelectedAnswer || showAnswerSheet}
-            style={{ opacity: hasSelectedAnswer && !showAnswerSheet ? 1 : 0.5 }}
-            onPress={handleCheckAnswer}
-          >
-            <Text className="text-white text-base font-geist-medium">
-              Check answer
-            </Text>
-          </TouchableOpacity>
-        </View>
 
         {/* Answer Feedback Bottom Sheet */}
         <BottomSheet

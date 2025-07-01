@@ -281,12 +281,12 @@ export default function PodcastDetailsScreen() {
         <WebScrollView 
           className="flex-1"
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingTop: 80, paddingBottom: scrollPaddingBottom }}
+          contentContainerStyle={{ paddingTop: 76, paddingBottom: scrollPaddingBottom }}
           onScroll={handleScroll}
           scrollEventThrottle={16}
         >
           {/* Main Content Card */}
-          <View className="mx-6 mt-6 relative">
+          <View className="mx-6 relative">
             {/* Main Card */}
             <View 
               className="bg-white rounded-3xl border border-slate-100 drop-shadow-sm"
