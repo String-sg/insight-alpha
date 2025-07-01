@@ -19,25 +19,9 @@ export function WebScrollView({
   ...props 
 }: WebScrollViewProps) {
   if (Platform.OS === 'web') {
-    // On web, create a container that allows content to flow naturally
-    // The body will handle the scrolling
-    return (
-      <View 
-        style={[
-          {
-            // Allow content to flow naturally without constraining height
-            minHeight: '100%',
-            width: '100%',
-          },
-          style,
-          webStyle,
-        ]}
-      >
-        <View style={[{ width: '100%' }, contentContainerStyle]}>
-          {children}
-        </View>
-      </View>
-    );
+    // On web, return children directly without any wrapper
+    // The body will handle the scrolling naturally
+    return <>{children}</>;
   }
 
   // On native platforms, use React Native's ScrollView

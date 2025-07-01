@@ -4,25 +4,22 @@
 
 /* Web-specific styles for natural scrolling */
 @media screen {
-  /* Ensure body can scroll naturally on all web browsers */
-  html {
-    height: 100%;
-    overflow-y: auto !important;
+  /* Reset html and body to allow natural scrolling */
+  html, body {
+    height: auto !important;
+    min-height: 100% !important;
+    margin: 0;
+    padding: 0;
+    overflow-y: visible !important;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
   }
   
-  body {
-    min-height: 100%;
-    height: auto !important;
-    overflow-y: auto !important;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  /* Remove any fixed heights that might interfere with scrolling */
+  /* Remove any fixed heights from root containers */
   #root, #__expo-root {
-    min-height: 100vh !important;
     height: auto !important;
+    min-height: 100% !important;
     overflow: visible !important;
   }
 }
