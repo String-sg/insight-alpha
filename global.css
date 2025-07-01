@@ -30,6 +30,21 @@
     min-height: 100vh;
     min-height: -webkit-fill-available;
     position: relative;
+    /* Enable momentum scrolling for iOS Safari */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent bounce scrolling at the top/bottom */
+    overscroll-behavior-y: contain;
+  }
+  
+  /* Ensure proper viewport height handling for mobile browsers */
+  html {
+    height: -webkit-fill-available;
+  }
+  
+  /* Fix for mobile browser address bar hiding */
+  #root, #__expo-root {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
   }
 }
 
@@ -45,6 +60,26 @@
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: contain;
   }
+  
+  /* Ensure smooth scrolling on mobile browsers */
+  body, html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Prevent horizontal scrolling on mobile */
+  body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+  
+  /* Address bar handling for mobile browsers */
+  @supports (-webkit-touch-callout: none) {
+    /* iOS Safari specific */
+    .mobile-scroll-container {
+      min-height: -webkit-fill-available;
+    }
+  }
 }
 
 /* Ensure mini player stays fixed on web */
@@ -55,5 +90,23 @@
     left: 0;
     right: 0;
     z-index: 50;
+  }
+  
+  /* Mobile-friendly container for natural scrolling */
+  .mobile-friendly-container {
+    width: 100%;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    background-color: #f5f5f5;
+  }
+  
+  /* Ensure proper scrolling behavior on mobile web */
+  @media (hover: none) and (pointer: coarse) {
+    .mobile-friendly-container {
+      position: relative;
+      overflow-y: visible;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-y: contain;
+    }
   }
 }

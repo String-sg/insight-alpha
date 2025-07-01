@@ -1,14 +1,13 @@
 import {
-    Geist_400Regular,
-    Geist_500Medium,
-    Geist_600SemiBold,
-    useFonts
+  Geist_400Regular,
+  Geist_500Medium,
+  Geist_600SemiBold,
+  useFonts
 } from '@expo-google-fonts/geist';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { View, Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import '../global.css';
@@ -31,6 +30,7 @@ function AppContent() {
   const webContainerStyle = Platform.OS === 'web' ? {
     width: '100%' as any,
     minHeight: '100vh' as any,
+    minHeight: '-webkit-fill-available' as any,
   } : {
     flex: 1,
   };
@@ -39,6 +39,7 @@ function AppContent() {
     backgroundColor: '#f5f5f5',
     width: '100%' as any,
     minHeight: '100vh' as any,
+    minHeight: '-webkit-fill-available' as any,
   } : {
     flex: 1,
     backgroundColor: '#f5f5f5'
