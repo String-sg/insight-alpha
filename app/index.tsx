@@ -61,7 +61,7 @@ export default function HomeScreen() {
         <StatusBar barStyle="dark-content" />
         
         {/* Header */}
-        <ProfileHeader onProfilePress={() => router.push('/profile')} />
+        <ProfileHeader />
         
         {/* Navigation Bar */}
         <View className="px-6">
