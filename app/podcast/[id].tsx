@@ -27,8 +27,6 @@ export default function PodcastDetailsScreen() {
   const router = useRouter();
   const { id, from, topicId } = useLocalSearchParams<{ id: string; from?: string; topicId?: string }>();
   const [content, setContent] = useState<EducationalContent | null>(null);
-  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [descriptionLines, setDescriptionLines] = useState(0);
   const [notesInView, setNotesInView] = useState(false);
   const [notes, setNotes] = useState<Note[]>([]);
   const [showNoteEditor, setShowNoteEditor] = useState(false);
@@ -163,13 +161,6 @@ export default function PodcastDetailsScreen() {
     }
   };
 
-  const handleDescriptionTextLayout = (event: any) => {
-    setDescriptionLines(event.nativeEvent.lines.length);
-  };
-
-  const toggleDescription = () => {
-    setIsDescriptionExpanded(!isDescriptionExpanded);
-  };
 
   const formatNoteDate = (timestamp: number) => {
     const now = new Date();
@@ -249,7 +240,6 @@ export default function PodcastDetailsScreen() {
   const isThisPodcastPlaying = isContentPlaying(content.id);
   const isThisPodcastLoading = isThisPodcastCurrent && (isLoading || isContentBuffering);
   const hasQuiz = mockQuizzes.some(q => q.podcastId === content.id);
-  const shouldShowSeeMore = descriptionLines > 3 && !isDescriptionExpanded;
   
   // Check if mini player is visible (any podcast is currently loaded)
   const isMiniPlayerVisible = currentlyPlayingPodcast !== null;
@@ -394,26 +384,9 @@ export default function PodcastDetailsScreen() {
 
           {/* Description Section */}
           <View className="px-6 mt-6">
-            <Text
-              className="text-slate-600 text-sm leading-6 px-1"
-              numberOfLines={isDescriptionExpanded ? undefined : 3}
-              onTextLayout={handleDescriptionTextLayout}
-            >
+            <Text className="text-slate-600 text-sm leading-6 px-1">
               {content.description}
             </Text>
-
-            {/* See More/Less Button */}
-            {(shouldShowSeeMore || isDescriptionExpanded) && (
-              <TouchableOpacity
-                onPress={toggleDescription}
-                className="mt-1 self-start px-1"
-                activeOpacity={0.7}
-              >
-                <Text className="text-black text-sm font-medium">
-                  {isDescriptionExpanded ? 'See less' : 'See more'}
-                </Text>
-              </TouchableOpacity>
-            )}
           </View>
 
           {/* Your Notes Section */}
