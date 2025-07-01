@@ -102,7 +102,7 @@ export function BottomSheet({ visible, onClose, children, height = 490 }: Bottom
             style={{
               height: height || '100%',
               transform: [{ translateY }],
-              backgroundColor: 'rgb(241, 245, 249)',
+              backgroundColor: 'white',
               borderTopLeftRadius: height ? 20 : 0,
               borderTopRightRadius: height ? 20 : 0,
               borderWidth: height ? 1 : 0,

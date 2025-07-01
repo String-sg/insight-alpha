@@ -314,7 +314,7 @@ export default function QuizScreen() {
             </View>
           </View>
 
-          <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+          <ScrollView className="flex-1" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
             <View className="px-6 pt-8">
               <QuizQuestion
                 question={currentQuestion}
@@ -329,30 +329,35 @@ export default function QuizScreen() {
                 quiz={quiz}
               />
             </View>
-            {/* Check Answer Button */}
-            <View className="px-6 pb-4 mt-8">
-              <TouchableOpacity
-                className="rounded-full py-4 items-center justify-center"
-                disabled={!hasSelectedAnswer || showAnswerSheet}
-                style={{ 
-                  backgroundColor: hasSelectedAnswer && !showAnswerSheet ? '#020617' : '#0f172a',
-                  opacity: hasSelectedAnswer && !showAnswerSheet ? 1 : 0.5 
-                }}
-                onPress={handleCheckAnswer}
-              >
-                <Text className="text-white text-base font-geist-medium">
-                  Check answer
-                </Text>
-              </TouchableOpacity>
-            </View>
           </ScrollView>
+
+          {/* Fixed Check Answer Button */}
+          <View className="absolute bottom-0 left-0 right-0 px-6 py-4">
+            <TouchableOpacity
+              className="rounded-full py-4 items-center justify-center"
+              disabled={!hasSelectedAnswer || showAnswerSheet}
+              style={{ 
+                backgroundColor: hasSelectedAnswer && !showAnswerSheet ? '#020617' : '#64748b'
+              }}
+              onPress={handleCheckAnswer}
+            >
+              <Text 
+                className="text-base font-geist-medium"
+                style={{
+                  color: hasSelectedAnswer && !showAnswerSheet ? 'white' : '#94a3b8'
+                }}
+              >
+                Check answer
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Answer Feedback Bottom Sheet */}
         <BottomSheet
           visible={showAnswerSheet}
           onClose={() => setShowAnswerSheet(false)}
-          height={490}
+          height={600}
         >
           <AnswerFeedback
             isCorrect={answers.find(a => a.questionId === currentQuestion.id)?.isCorrect || false}

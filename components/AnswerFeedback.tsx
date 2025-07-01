@@ -53,10 +53,10 @@ export function AnswerFeedback({
           <Text className="text-black text-sm font-geist-medium mb-2">
             Your answer
           </Text>
-          <View className="bg-white/80 border border-slate-200 rounded-2xl p-3">
+          <View className={`${isCorrect ? 'bg-[#d5ff88]' : 'bg-white/80 border border-slate-200'} rounded-2xl p-3`}>
             <View className="flex-row items-center">
-              <View className="bg-[#ededed] rounded-lg px-2 py-1 mr-3">
-                <Text className="text-[#572830] text-xs font-geist-semibold">
+              <View className={`${isCorrect ? 'bg-[#b5ee4b]' : 'bg-[#ededed]'} rounded-lg px-2 py-1 mr-3`}>
+                <Text className={`${isCorrect ? 'text-[#251e37]' : 'text-[#572830]'} text-xs font-geist-semibold`}>
                   {getOptionLetter(selectedOption)}
                 </Text>
               </View>

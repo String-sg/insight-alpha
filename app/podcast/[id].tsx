@@ -1,6 +1,6 @@
 import { BottomSheet } from '@/components/BottomSheet';
-import { NoteEditor } from '@/components/NoteEditor';
 import { NavigationBar } from '@/components/NavigationBar';
+import { NoteEditor } from '@/components/NoteEditor';
 import { WebScrollView } from '@/components/WebScrollView';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { useNotes } from '@/contexts/NotesContext';
@@ -9,17 +9,17 @@ import { mockQuizzes } from '@/data/quizzes';
 import { useAudio } from '@/hooks/useAudio';
 import { Note } from '@/types/notes';
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { Play, Pause, Lightbulb, Plus, Share2 } from 'lucide-react-native';
+import { Lightbulb, Pause, Play, Plus } from 'lucide-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
-  Dimensions,
-  Image,
-  StatusBar,
-  Text,
-  TouchableOpacity,
-  View,
-  Share,
+    ActivityIndicator,
+    Dimensions,
+    Image,
+    Share,
+    StatusBar,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
