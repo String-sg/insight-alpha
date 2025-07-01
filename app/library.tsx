@@ -1,10 +1,11 @@
 import { Icon } from '@/components/Icon';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { SegmentedControl } from '@/components/SegmentedControl';
+import { WebScrollView } from '@/components/WebScrollView';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useRef } from 'react';
-import { FlatList, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Platform, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 
 export default function LibraryScreen() {
   const { currentPodcast } = useAudioContext();
@@ -142,6 +143,23 @@ export default function LibraryScreen() {
       </View>
     </>
   );
+
+  if (Platform.OS === 'web') {
+    return (
+      <WebScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ paddingBottom: bottomPadding }}
+        showsVerticalScrollIndicator={false}
+      >
+        {renderHeader()}
+        {learningSubjects.map((subject) => (
+          <React.Fragment key={subject.id}>
+            {renderCard({ item: subject })}
+          </React.Fragment>
+        ))}
+      </WebScrollView>
+    );
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-slate-100">

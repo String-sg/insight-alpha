@@ -2,8 +2,8 @@ import { EducationalCard } from '@/components/EducationalCard';
 import { Icon } from '@/components/Icon';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { SegmentedControl } from '@/components/SegmentedControl';
-import { WeekCalendar } from '@/components/WeekCalendar';
 import { WebScrollView } from '@/components/WebScrollView';
+import { WeekCalendar } from '@/components/WeekCalendar';
 import { EducationalContent, educationalContent, weeklyProgress } from '@/data/educational-content';
 import { useAudio } from '@/hooks/useAudio';
 import { useRouter } from 'expo-router';
@@ -54,7 +54,10 @@ export default function HomeScreen() {
   if (Platform.OS === 'web') {
     // On web, use a simple container without scroll wrapper
     return (
-      <View className="bg-slate-100 min-h-screen" style={{ paddingBottom: bottomPadding }}>
+      <WebScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ paddingBottom: bottomPadding }}
+      >
         <StatusBar barStyle="dark-content" />
         
         {/* Header */}
@@ -123,7 +126,7 @@ export default function HomeScreen() {
             />
           </View>
         </View>
-      </View>
+      </WebScrollView>
     );
   }
 
