@@ -3,20 +3,22 @@ import { BottomSheet } from '@/components/BottomSheet';
 import { SourceSheet } from '@/components/SourceSheet';
 import { Confetti } from '@/components/Confetti';
 import { educationalContent } from '@/data/educational-content';
+import { getScriptByPodcastId } from '@/data/scripts';
 import Slider from '@react-native-community/slider';
 import { Video, ResizeMode } from 'expo-av';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { X, Upload, FileText, RotateCcw, RotateCw, Play, Pause, ThumbsUp, ThumbsDown, MoreHorizontal } from 'lucide-react-native';
+import { X, Upload, FileText, RotateCcw, RotateCw, Play, Pause, ThumbsUp, ThumbsDown, MoreHorizontal, ScrollText } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withSequence } from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withSequence, withTiming, FadeIn } from 'react-native-reanimated';
 import {
     ActivityIndicator,
     Share,
     Text,
     TouchableOpacity,
     View,
-    useWindowDimensions
+    useWindowDimensions,
+    ScrollView
 } from 'react-native';
 
 
@@ -25,6 +27,7 @@ const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpaci
 export default function PlayerScreen() {
   const router = useRouter();
   const [showSourceSheet, setShowSourceSheet] = useState(false);
+  const [showScriptSheet, setShowScriptSheet] = useState(false);
   const [likeStatus, setLikeStatus] = useState<'liked' | 'disliked' | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const { height } = useWindowDimensions(); // Dynamic dimensions
@@ -183,7 +186,7 @@ export default function PlayerScreen() {
   // Show loading if no podcast is available
   if (!currentPodcast) {
     return (
-      <View className="flex-1 justify-center items-center bg-purple-900">
+      <View className="flex-1 justify-center items-center bg-black">
         <ActivityIndicator size="large" color="#FFFFFF" />
         <Text className="mt-4 text-white">Loading...</Text>
       </View>
@@ -191,10 +194,13 @@ export default function PlayerScreen() {
   }
 
   return (
-    <View className="flex-1 bg-purple-900 relative">
+    <View className="flex-1 bg-black relative">
       <StatusBar style="light" />
       {/* Full screen video background - at container level */}
-      <View className="absolute inset-0 bg-purple-900 overflow-hidden">
+      <Animated.View 
+        className="absolute inset-0 bg-black overflow-hidden"
+        entering={FadeIn.duration(1500)}
+      >
         <View style={{
           position: 'absolute',
           top: 0,
@@ -219,7 +225,7 @@ export default function PlayerScreen() {
             volume={0}
           />
         </View>
-      </View>
+      </Animated.View>
       
       {/* Content wrapper with max width */}
       <View className="flex-1 relative z-10 mx-auto w-full px-4" style={{ maxWidth: 768 }}>
@@ -344,49 +350,61 @@ export default function PlayerScreen() {
           </View>
 
           {/* Bottom Actions */}
-          <View className="flex-row items-center justify-between px-6 pb-8">
-            <View className="flex-row gap-3">
-              <View style={{ position: 'relative' }}>
-                <AnimatedTouchableOpacity 
-                  onPress={handleLike}
+          <View className="px-6 pb-8">
+            <View className="flex-row items-center justify-between">
+              <View className="flex-row gap-3">
+                <View style={{ position: 'relative' }}>
+                  <AnimatedTouchableOpacity 
+                    onPress={handleLike}
+                    className="px-4 py-3 rounded-full flex-row items-center gap-2"
+                    style={[
+                      {
+                        backgroundColor: likeStatus === 'liked' ? '#7C3AED' : 'rgba(255, 255, 255, 0.2)',
+                      },
+                      likeButtonAnimatedStyle
+                    ]}
+                  >
+                    <ThumbsUp 
+                      size={16} 
+                      color="white" 
+                      strokeWidth={2}
+                    />
+                  </AnimatedTouchableOpacity>
+                  <Confetti isVisible={showConfetti} />
+                </View>
+                <TouchableOpacity 
+                  onPress={handleDislike}
                   className="px-4 py-3 rounded-full flex-row items-center gap-2"
-                  style={[
-                    {
-                      backgroundColor: likeStatus === 'liked' ? '#7C3AED' : 'rgba(255, 255, 255, 0.2)',
-                    },
-                    likeButtonAnimatedStyle
-                  ]}
+                  style={{
+                    backgroundColor: likeStatus === 'disliked' ? '#7C3AED' : 'rgba(255, 255, 255, 0.2)',
+                  }}
                 >
-                  <ThumbsUp 
+                  <ThumbsDown 
                     size={16} 
                     color="white" 
                     strokeWidth={2}
                   />
-                </AnimatedTouchableOpacity>
-                <Confetti isVisible={showConfetti} />
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity 
-                onPress={handleDislike}
-                className="px-4 py-3 rounded-full flex-row items-center gap-2"
-                style={{
-                  backgroundColor: likeStatus === 'disliked' ? '#7C3AED' : 'rgba(255, 255, 255, 0.2)',
-                }}
-              >
-                <ThumbsDown 
-                  size={16} 
-                  color="white" 
-                  strokeWidth={2}
-                />
-              </TouchableOpacity>
-            </View>
 
-            <TouchableOpacity 
-              onPress={() => setShowSourceSheet(true)}
-              className="bg-white/20 px-4 py-3 rounded-full flex-row items-center gap-2"
-            >
-              <FileText size={16} color="white" strokeWidth={2} />
-              <Text className="text-sm font-semibold text-white">Sources</Text>
-            </TouchableOpacity>
+              <View className="flex-row gap-3">
+                <TouchableOpacity 
+                  onPress={() => setShowScriptSheet(true)}
+                  className="bg-white/20 px-4 py-3 rounded-full flex-row items-center gap-2"
+                >
+                  <ScrollText size={16} color="white" strokeWidth={2} />
+                  <Text className="text-sm font-semibold text-white">Script</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity 
+                  onPress={() => setShowSourceSheet(true)}
+                  className="bg-white/20 px-4 py-3 rounded-full flex-row items-center gap-2"
+                >
+                  <FileText size={16} color="white" strokeWidth={2} />
+                  <Text className="text-sm font-semibold text-white">Sources</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
 
         </View>
@@ -402,6 +420,55 @@ export default function PlayerScreen() {
           sources={sources} 
           onClose={() => setShowSourceSheet(false)}
         />
+      </BottomSheet>
+      
+      {/* Script Bottom Sheet */}
+      <BottomSheet
+        visible={showScriptSheet}
+        onClose={() => setShowScriptSheet(false)}
+        height={600}
+      >
+        <View className="flex-1 p-4">
+          {/* Header */}
+          <View className="flex-row items-center justify-between mb-4 pb-4 border-b border-slate-100">
+            <Text className="text-black text-xl font-geist-medium">
+              Script
+            </Text>
+            <TouchableOpacity
+              onPress={() => setShowScriptSheet(false)}
+              className="w-8 h-8 rounded-full bg-slate-100 items-center justify-center"
+            >
+              <Text className="text-base text-black">×</Text>
+            </TouchableOpacity>
+          </View>
+          
+          {/* Script Content */}
+          {(() => {
+            const script = currentPodcast ? getScriptByPodcastId(currentPodcast.id) : null;
+            
+            if (!script) {
+              return (
+                <View className="flex-1 items-center justify-center">
+                  <Text className="text-slate-500 text-center">
+                    No script available for this podcast
+                  </Text>
+                </View>
+              );
+            }
+            
+            return (
+              <ScrollView 
+                className="flex-1"
+                showsVerticalScrollIndicator={true}
+                contentContainerStyle={{ paddingBottom: 20 }}
+              >
+                <Text className="text-slate-700 text-sm leading-6" selectable>
+                  {script.content}
+                </Text>
+              </ScrollView>
+            );
+          })()}
+        </View>
       </BottomSheet>
     </View>
   );

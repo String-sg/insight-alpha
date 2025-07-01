@@ -8,6 +8,7 @@ import { useAudioContext } from '@/contexts/AudioContext';
 import { useNotes } from '@/contexts/NotesContext';
 import { educationalContent, EducationalContent } from '@/data/educational-content';
 import { mockQuizzes } from '@/data/quizzes';
+import { getScriptByPodcastId } from '@/data/scripts';
 import { useAudio } from '@/hooks/useAudio';
 import { Note } from '@/types/notes';
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
@@ -22,6 +23,7 @@ import {
     Text,
     TouchableOpacity,
     View,
+    ScrollView,
 } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming, withSpring, withSequence } from 'react-native-reanimated';
 
@@ -621,11 +623,11 @@ export default function PodcastDetailsScreen() {
         <BottomSheet
           visible={showScriptSheet}
           onClose={() => setShowScriptSheet(false)}
-          height={300}
+          height={600}
         >
           <View className="flex-1 p-4">
             {/* Header */}
-            <View className="flex-row items-center justify-between mb-6">
+            <View className="flex-row items-center justify-between mb-4 pb-4 border-b border-slate-100">
               <Text className="text-black text-xl font-geist-medium">
                 Script
               </Text>
@@ -637,12 +639,32 @@ export default function PodcastDetailsScreen() {
               </TouchableOpacity>
             </View>
             
-            {/* Empty State */}
-            <View className="flex-1 items-center justify-center">
-              <Text className="text-slate-500 text-center">
-                No script available for this podcast
-              </Text>
-            </View>
+            {/* Script Content */}
+            {(() => {
+              const script = getScriptByPodcastId(content.id);
+              
+              if (!script) {
+                return (
+                  <View className="flex-1 items-center justify-center">
+                    <Text className="text-slate-500 text-center">
+                      No script available for this podcast
+                    </Text>
+                  </View>
+                );
+              }
+              
+              return (
+                <ScrollView 
+                  className="flex-1"
+                  showsVerticalScrollIndicator={true}
+                  contentContainerStyle={{ paddingBottom: 20 }}
+                >
+                  <Text className="text-slate-700 text-sm leading-6" selectable>
+                    {script.content}
+                  </Text>
+                </ScrollView>
+              );
+            })()}
           </View>
         </BottomSheet>
       </View>

@@ -64,3 +64,7 @@ export type {
 } from './chat';
 
 export { AudioFormat, SkipDirection, AudioErrorType } from './audio';
+
+export type {
+  PodcastScript,
+} from './script';
