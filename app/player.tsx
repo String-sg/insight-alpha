@@ -199,7 +199,7 @@ export default function PlayerScreen() {
       {/* Full screen video background - at container level */}
       <Animated.View 
         className="absolute inset-0 bg-black overflow-hidden"
-        entering={FadeIn.duration(1500)}
+        entering={FadeIn.duration(800)}
       >
         <View style={{
           position: 'absolute',
