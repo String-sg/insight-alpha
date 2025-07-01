@@ -4,12 +4,15 @@ import { SegmentedControl } from '@/components/SegmentedControl';
 import { WebScrollView } from '@/components/WebScrollView';
 import { TopicCard } from '@/components/TopicCard';
 import { useAudioContext } from '@/contexts/AudioContext';
-import React, { useRef } from 'react';
+import { educationalContent } from '@/data/educational-content';
+import { useRouter } from 'expo-router';
+import React, { useRef, useMemo } from 'react';
 import { FlatList, Platform, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 
 export default function LibraryScreen() {
   const { currentPodcast } = useAudioContext();
   const flatListRef = useRef<FlatList>(null);
+  const router = useRouter();
   
   // Calculate bottom padding based on mini player visibility
   const bottomPadding = currentPodcast ? 120 : 40;
@@ -17,12 +20,22 @@ export default function LibraryScreen() {
   // Card height for carousel snapping
   const cardHeight = 480 + 8; // Card height plus margin
 
+  // Calculate actual content counts for each topic
+  const contentCounts = useMemo(() => {
+    const counts: Record<string, number> = {
+      'Special Educational Needs': educationalContent.filter(c => c.category === 'Special Educational Needs').length,
+      'Artificial Intelligent': educationalContent.filter(c => c.category === 'Artificial Intelligent').length,
+      'Teacher mental health literacy': educationalContent.filter(c => c.category === 'Teacher mental health literacy').length,
+    };
+    return counts;
+  }, []);
+
   const learningSubjects = [
     {
       id: 'sen',
       title: 'SEN peer support',
       subtitle: 'Special Educational Needs',
-      podcasts: 12,
+      podcasts: contentCounts['Special Educational Needs'] || 0,
       notes: 2,
       gradientFrom: '#6b21a8',
       gradientVia: '#a855f7',
@@ -36,7 +49,7 @@ export default function LibraryScreen() {
       id: 'ai',
       title: 'Learn to use AI',
       subtitle: 'Artificial Intelligence',
-      podcasts: 12,
+      podcasts: contentCounts['Artificial Intelligent'] || 0,
       notes: 2,
       gradientFrom: '#fbbf24',
       gradientTo: '#fde047',
@@ -49,7 +62,7 @@ export default function LibraryScreen() {
       id: 'wellbeing',
       title: 'Understanding Mental Health',
       subtitle: 'Teacher mental health literacy',
-      podcasts: 12,
+      podcasts: contentCounts['Teacher mental health literacy'] || 0,
       notes: 2,
       gradientFrom: '#2dd4bf',
       gradientTo: '#3b82f6',
@@ -62,7 +75,10 @@ export default function LibraryScreen() {
 
   const renderCard = ({ item: subject }: { item: typeof learningSubjects[0] }) => (
     <View style={{ height: cardHeight }} className="mx-6 mb-2">
-      <TopicCard {...subject} />
+      <TopicCard 
+        {...subject} 
+        onPress={() => router.push(`/topic/${subject.id}`)}
+      />
     </View>
   );
 

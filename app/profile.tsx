@@ -1,7 +1,8 @@
 import { View, Text, TouchableOpacity, Image, Platform, SafeAreaView, StatusBar } from 'react-native';
 import { router, Stack } from 'expo-router';
-import { ChevronLeft, CheckSquare, BookOpenCheck, Lightbulb, ChevronRight } from 'lucide-react-native';
+import { CheckSquare, BookOpenCheck, Lightbulb, ChevronRight } from 'lucide-react-native';
 import { WebScrollView } from '@/components/WebScrollView';
+import { NavigationBar } from '@/components/NavigationBar';
 import { useAudioContext } from '@/contexts/AudioContext';
 
 export default function ProfileScreen() {
@@ -11,10 +12,7 @@ export default function ProfileScreen() {
   const bottomPadding = currentPodcast ? 120 : 40;
 
   const content = (
-    <WebScrollView 
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: bottomPadding }}
-    >
+    <View className="flex-1">
       <StatusBar barStyle="dark-content" />
       <Stack.Screen 
         options={{
@@ -22,17 +20,19 @@ export default function ProfileScreen() {
         }}
       />
       
-      {/* Header */}
-      <View className="px-6 py-4">
-        <TouchableOpacity
-          onPress={() => router.back()}
-          className="w-10 h-10 bg-white rounded-full items-center justify-center"
-        >
-          <ChevronLeft size={24} color="#000" strokeWidth={2} />
-        </TouchableOpacity>
-      </View>
+      {/* Navigation Bar */}
+      <NavigationBar 
+        onBackPress={() => router.back()}
+        showUploadButton={false}
+      />
+
+      <WebScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingTop: 80, paddingBottom: bottomPadding }}
+        className="flex-1"
+      >
         {/* Profile Card */}
-        <View className="mx-6 mb-6 bg-white rounded-3xl">
+        <View className="mx-6 mt-6 mb-6 bg-white rounded-3xl">
           <View className="flex-row items-start p-4 gap-6">
             <View className="w-[66px] h-[66px] bg-white rounded-full overflow-hidden">
               <Image 
@@ -138,7 +138,8 @@ export default function ProfileScreen() {
             </TouchableOpacity>
           </View>
         </View>
-    </WebScrollView>
+      </WebScrollView>
+    </View>
   );
 
   if (Platform.OS === 'web') {

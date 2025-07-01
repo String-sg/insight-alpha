@@ -1,5 +1,6 @@
 import { BottomSheet } from '@/components/BottomSheet';
 import { NoteEditor } from '@/components/NoteEditor';
+import { NavigationBar } from '@/components/NavigationBar';
 import { WebScrollView } from '@/components/WebScrollView';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { useNotes } from '@/contexts/NotesContext';
@@ -8,7 +9,7 @@ import { mockQuizzes } from '@/data/quizzes';
 import { useAudio } from '@/hooks/useAudio';
 import { Note } from '@/types/notes';
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { ChevronLeft, Upload, Play, Pause, Lightbulb, Plus } from 'lucide-react-native';
+import { Play, Pause, Lightbulb, Plus } from 'lucide-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -23,7 +24,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 
 export default function PodcastDetailsScreen() {
   const router = useRouter();
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, from, topicId } = useLocalSearchParams<{ id: string; from?: string; topicId?: string }>();
   const [content, setContent] = useState<EducationalContent | null>(null);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [descriptionLines, setDescriptionLines] = useState(0);
@@ -265,23 +266,17 @@ export default function PodcastDetailsScreen() {
       <View className="flex-1 bg-purple-100">
         <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
         
-        {/* Custom Header */}
-        <View className="absolute top-0 left-0 right-0 z-10 flex-row items-center justify-between px-6 pt-12 pb-4 bg-transparent">
-          <TouchableOpacity
-            onPress={() => {
+        {/* Navigation Bar */}
+        <NavigationBar 
+          onBackPress={() => {
+            if (from === 'topic' && topicId) {
+              router.back();
+            } else {
               router.replace('/');
-            }}
-            className="w-10 h-10 items-center justify-center rounded-full bg-white"
-          >
-            <ChevronLeft size={24} color="#000" strokeWidth={2} />
-          </TouchableOpacity>
-          
-          <TouchableOpacity
-            className="w-10 h-10 items-center justify-center rounded-full bg-white"
-          >
-            <Upload size={20} color="#000" strokeWidth={2} />
-          </TouchableOpacity>
-        </View>
+            }
+          }}
+          showUploadButton={true}
+        />
 
         <WebScrollView 
           className="flex-1"
