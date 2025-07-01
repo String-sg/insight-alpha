@@ -28,7 +28,8 @@ export default function HomeScreen() {
       audioUrl: content.audioUrl,
       duration: content.duration,
       author: content.author,
-      sources: content.sources
+      sources: content.sources,
+      category: content.category
     };
     
     // Use the existing audio system

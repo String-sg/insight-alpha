@@ -20,6 +20,7 @@ export interface Podcast {
   duration: number; // Duration in milliseconds
   author: string;
   sources?: PodcastSource[];
+  category?: string; // Optional category for educational content
 }
 
 export interface Episode {

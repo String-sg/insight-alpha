@@ -130,7 +130,8 @@ export default function PodcastDetailsScreen() {
       audioUrl: content.audioUrl,
       duration: content.duration,
       author: content.author,
-      sources: content.sources
+      sources: content.sources,
+      category: content.category
     };
     await playContent(podcastFormat);
   };

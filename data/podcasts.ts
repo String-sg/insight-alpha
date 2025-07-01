@@ -96,7 +96,7 @@ export const mockPodcasts: Podcast[] = [
       }
     ]
   }
-];}
+];
 
 /**
  * Helper function to format duration from milliseconds to readable string
