@@ -2,6 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Force light theme for chat elements */
+:root {
+  --chat-bg-light: #f1f5f9;
+  --chat-text-dark: #0f172a;
+  --chat-text-medium: #475569;
+  --chat-text-light: #64748b;
+  --chat-bubble-bg: #ffffff;
+  --chat-button-bg: #e2e8f0;
+  --chat-primary-bg: #020617;
+  --chat-primary-text: #ffffff;
+}
+
+/* Ensure chat elements always use light theme colors regardless of system theme */
+.chat-container,
+.chat-container * {
+  color: var(--chat-text-dark) !important;
+  background-color: var(--chat-bg-light) !important;
+}
+
+.chat-bubble {
+  background-color: var(--chat-bubble-bg) !important;
+  color: var(--chat-text-dark) !important;
+}
+
+.chat-input {
+  color: var(--chat-text-medium) !important;
+  background-color: var(--chat-bubble-bg) !important;
+}
+
+.chat-button {
+  background-color: var(--chat-button-bg) !important;
+}
+
+.chat-primary-button {
+  background-color: var(--chat-primary-bg) !important;
+  color: var(--chat-primary-text) !important;
+}
+
 /* Web-specific styles */
 @media screen {
   /* Reset html and body */
@@ -9,6 +47,27 @@
     margin: 0;
     padding: 0;
     background-color: #f1f5f9; /* bg-slate-100 */
+  }
+  
+  /* Force light theme for all text inputs and text elements in chat */
+  input, textarea, [contenteditable] {
+    color: #475569 !important;
+  }
+  
+  /* Prevent dark mode from affecting text color */
+  .chat-text-force-dark {
+    color: #0f172a !important;
+    -webkit-text-fill-color: #0f172a !important;
+  }
+  
+  .chat-text-force-medium {
+    color: #475569 !important;
+    -webkit-text-fill-color: #475569 !important;
+  }
+  
+  .chat-text-force-light {
+    color: #64748b !important;
+    -webkit-text-fill-color: #64748b !important;
   }
 }
 

@@ -1,9 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Animated } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
 import { Icon } from '@/components/Icon';
-import { ChatMessage as ChatMessageType } from '@/types/chat';
 import { aiUser } from '@/data/chat';
+import { ChatMessage as ChatMessageType } from '@/types/chat';
+import { useEffect, useRef } from 'react';
+import { Animated, Text, View } from 'react-native';
 
 interface ChatMessageProps {
   message: ChatMessageType;
@@ -73,6 +72,7 @@ export function ChatMessage({ message, isLastMessage = false }: ChatMessageProps
               isAI ? 'rounded-bl-md' : 'rounded-br-md'
             }`}
             style={{
+              backgroundColor: ChatColors.bubbleBackground,
               shadowColor: '#000',
               shadowOffset: { width: 0, height: 1 },
               shadowOpacity: 0.1,
@@ -89,6 +89,7 @@ export function ChatMessage({ message, isLastMessage = false }: ChatMessageProps
                       key={index}
                       className="w-2 h-2 bg-slate-400 rounded-full"
                       style={{
+                        backgroundColor: ChatColors.textMuted,
                         opacity: fadeAnim.interpolate({
                           inputRange: [0, 1],
                           outputRange: [0.3, 1],
@@ -97,17 +98,18 @@ export function ChatMessage({ message, isLastMessage = false }: ChatMessageProps
                     />
                   ))}
                 </View>
-                <ThemedText className="text-sm text-slate-500 italic">
+                <Text className="text-sm italic" style={{ color: ChatColors.textMuted }}>
                   AI is typing...
-                </ThemedText>
+                </Text>
               </View>
             ) : (
-              // Regular message
-              <ThemedText
-                className="text-base leading-5 text-slate-900"
+              // Regular message - Force light theme text color
+              <Text
+                className="text-base leading-5"
+                style={{ color: ChatColors.textPrimary }}
               >
                 {message.content}
-              </ThemedText>
+              </Text>
             )}
           </View>
 
@@ -118,9 +120,9 @@ export function ChatMessage({ message, isLastMessage = false }: ChatMessageProps
                 isAI ? 'justify-start' : 'justify-end'
               }`}
             >
-              <ThemedText className="text-xs text-slate-500 mr-1">
+              <Text className="text-xs mr-1" style={{ color: ChatColors.textMuted }}>
                 {formatTime(message.timestamp)}
-              </ThemedText>
+              </Text>
               
               {/* Status indicator for user messages */}
               {!isAI && (

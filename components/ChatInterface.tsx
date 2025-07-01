@@ -1,20 +1,19 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { 
-  View, 
-  ScrollView, 
-  TouchableOpacity,
+import { ChatMessage } from '@/components/ChatMessage';
+import { Icon } from '@/components/Icon';
+import { ThemedText } from '@/components/ThemedText';
+import { useAudioContext } from '@/contexts/AudioContext';
+import { useChatContext } from '@/contexts/ChatContext';
+import { useEffect, useRef, useState } from 'react';
+import {
   Animated,
-  Text,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
+  Text,
   TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
-import { Icon } from '@/components/Icon';
-import { ChatMessage } from '@/components/ChatMessage';
-import { ChatInput } from '@/components/ChatInput';
-import { useChatContext } from '@/contexts/ChatContext';
-import { useAudioContext } from '@/contexts/AudioContext';
 
 interface ChatInterfaceProps {
   onClose: () => void;
@@ -49,10 +48,10 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
     return (
       <View className="flex-1 items-center justify-center p-6">
         <Icon name="MessageCircle" size={48} color="#9CA3AF" />
-        <ThemedText className="text-lg font-medium text-slate-600 mt-4 text-center">
+        <ThemedText lightColor="#475569" darkColor="#475569" className="text-lg font-medium mt-4 text-center">
           No active chat session
         </ThemedText>
-        <ThemedText className="text-sm text-slate-500 mt-2 text-center">
+        <ThemedText lightColor="#64748b" darkColor="#64748b" className="text-sm mt-2 text-center">
           Start a conversation with the AI assistant
         </ThemedText>
       </View>
@@ -92,6 +91,7 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
   return (
     <KeyboardAvoidingView 
       className="flex-1 bg-slate-100"
+      style={{ backgroundColor: '#f1f5f9' }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       {/* Header */}
@@ -110,14 +110,15 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
           <TouchableOpacity
             onPress={onClose}
             className="w-12 h-12 items-center justify-center rounded-full bg-slate-200"
+            style={{ backgroundColor: '#e2e8f0' }}
             activeOpacity={0.7}
           >
             <Icon name="chevron-back" size={24} color="#020617" />
           </TouchableOpacity>
           
           <View className="ml-4">
-            <View className="bg-slate-950 px-2.5 py-0.5 rounded-md">
-              <Text className="text-white text-xs font-geist-semibold">Ask AI</Text>
+            <View className="bg-slate-950 px-2.5 py-0.5 rounded-md" style={{ backgroundColor: '#020617' }}>
+              <Text className="text-white text-xs font-geist-semibold" style={{ color: '#ffffff' }}>Ask AI</Text>
             </View>
           </View>
         </View>
@@ -133,7 +134,7 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
       >
         {showSuggestions && messages.length === 0 ? (
           <View className="mt-6">
-            <Text className="text-xl font-geist-medium text-black mb-4 leading-7">
+            <Text className="text-xl font-geist-medium mb-4 leading-7" style={{ color: '#000000' }}>
               Hi Mr. Tan, here are some of the example questions relevant to {currentTopic} topic.
             </Text>
             
@@ -143,10 +144,11 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
                   key={index}
                   onPress={() => handleQuestionPress(question)}
                   className={`${index === 2 ? 'bg-slate-200' : 'bg-white'} rounded-3xl p-4`}
+                  style={{ backgroundColor: index === 2 ? '#e2e8f0' : '#ffffff' }}
                   activeOpacity={0.7}
                 >
-                  <Text className="text-base font-geist text-slate-950 leading-6">
-                    "{question}"
+                  <Text className="text-base font-geist leading-6" style={{ color: '#020617' }}>
+                    &ldquo;{question}&rdquo;
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -183,10 +185,10 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
         <View 
           className="flex-row items-center rounded-full"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
             backdropFilter: 'blur(10px)',
             borderWidth: 1,
-            borderColor: 'rgba(226, 226, 226, 0.5)',
+            borderColor: 'rgba(226, 232, 240, 0.8)',
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.05,
@@ -196,6 +198,7 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
         >
           <TouchableOpacity
             className="w-12 h-12 m-3 items-center justify-center rounded-full bg-slate-200"
+            style={{ backgroundColor: '#e2e8f0' }}
             activeOpacity={0.7}
           >
             <Icon name="add" size={24} color="#020617" />
@@ -205,8 +208,9 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
             value={inputText}
             onChangeText={setInputText}
             placeholder={`Ask AI about ${currentTopic === 'Special Educational Needs' ? 'SEN' : currentTopic}`}
-            placeholderTextColor="#475569"
-            className="flex-1 text-sm font-geist text-slate-600 mr-2"
+            placeholderTextColor="#64748b"
+            className="flex-1 text-sm font-geist mr-2"
+            style={{ color: '#475569' }}
             multiline={false}
             returnKeyType="send"
             onSubmitEditing={handleSend}
@@ -215,7 +219,8 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
           <TouchableOpacity
             onPress={handleSend}
             disabled={!inputText.trim()}
-            className={`w-12 h-12 m-3 items-center justify-center rounded-full ${inputText.trim() ? 'bg-slate-950' : 'bg-slate-300'}`}
+            className="w-12 h-12 m-3 items-center justify-center rounded-full"
+            style={{ backgroundColor: inputText.trim() ? '#020617' : '#cbd5e1' }}
             activeOpacity={0.7}
           >
             <Icon name="send" size={20} color="#FFFFFF" />
