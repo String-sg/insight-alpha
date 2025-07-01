@@ -1,6 +1,7 @@
 import { useAudioContext } from '@/contexts/AudioContext';
 import { BottomSheet } from '@/components/BottomSheet';
 import { SourceSheet } from '@/components/SourceSheet';
+import { Confetti } from '@/components/Confetti';
 import { educationalContent } from '@/data/educational-content';
 import Slider from '@react-native-community/slider';
 import { Video, ResizeMode } from 'expo-av';
@@ -8,6 +9,7 @@ import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { X, Upload, FileText, RotateCcw, RotateCw, Play, Pause, ThumbsUp, ThumbsDown, MoreHorizontal } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withSequence } from 'react-native-reanimated';
 import {
     ActivityIndicator,
     Share,
@@ -18,10 +20,18 @@ import {
 } from 'react-native';
 
 
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+
 export default function PlayerScreen() {
   const router = useRouter();
   const [showSourceSheet, setShowSourceSheet] = useState(false);
+  const [likeStatus, setLikeStatus] = useState<'liked' | 'disliked' | null>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
   const { height } = useWindowDimensions(); // Dynamic dimensions
+  
+  // Animation values
+  const likeButtonScale = useSharedValue(1);
+  const likeButtonRotation = useSharedValue(0);
   
   const {
     isPlaying,
@@ -78,6 +88,42 @@ export default function PlayerScreen() {
       console.error('Error sharing:', error);
     }
   };
+
+  const handleLike = () => {
+    const wasLiked = likeStatus === 'liked';
+    setLikeStatus(wasLiked ? null : 'liked');
+    
+    if (!wasLiked) {
+      // Trigger bouncy animation
+      likeButtonScale.value = withSequence(
+        withSpring(1.2, { damping: 2, stiffness: 200 }),
+        withSpring(1, { damping: 3, stiffness: 300 })
+      );
+      
+      likeButtonRotation.value = withSequence(
+        withSpring(-10, { damping: 2, stiffness: 200 }),
+        withSpring(10, { damping: 2, stiffness: 200 }),
+        withSpring(0, { damping: 3, stiffness: 300 })
+      );
+      
+      // Show confetti
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 1200);
+    }
+  };
+
+  const handleDislike = () => {
+    setLikeStatus(likeStatus === 'disliked' ? null : 'disliked');
+  };
+  
+  const likeButtonAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { scale: likeButtonScale.value },
+        { rotate: `${likeButtonRotation.value}deg` },
+      ],
+    };
+  });
 
   const formatTime = (milliseconds: number) => {
     const totalSeconds = Math.floor(milliseconds / 1000);
@@ -299,12 +345,38 @@ export default function PlayerScreen() {
 
           {/* Bottom Actions */}
           <View className="flex-row items-center justify-between px-6 pb-8">
-            <View className="flex-row gap-4">
-              <TouchableOpacity className="p-3">
-                <ThumbsUp size={20} color="white" strokeWidth={2} />
-              </TouchableOpacity>
-              <TouchableOpacity className="p-3">
-                <ThumbsDown size={20} color="white" strokeWidth={2} />
+            <View className="flex-row gap-3">
+              <View style={{ position: 'relative' }}>
+                <AnimatedTouchableOpacity 
+                  onPress={handleLike}
+                  className="px-4 py-3 rounded-full flex-row items-center gap-2"
+                  style={[
+                    {
+                      backgroundColor: likeStatus === 'liked' ? '#7C3AED' : 'rgba(255, 255, 255, 0.2)',
+                    },
+                    likeButtonAnimatedStyle
+                  ]}
+                >
+                  <ThumbsUp 
+                    size={16} 
+                    color="white" 
+                    strokeWidth={2}
+                  />
+                </AnimatedTouchableOpacity>
+                <Confetti isVisible={showConfetti} />
+              </View>
+              <TouchableOpacity 
+                onPress={handleDislike}
+                className="px-4 py-3 rounded-full flex-row items-center gap-2"
+                style={{
+                  backgroundColor: likeStatus === 'disliked' ? '#7C3AED' : 'rgba(255, 255, 255, 0.2)',
+                }}
+              >
+                <ThumbsDown 
+                  size={16} 
+                  color="white" 
+                  strokeWidth={2}
+                />
               </TouchableOpacity>
             </View>
 

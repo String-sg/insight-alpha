@@ -1,6 +1,8 @@
 import { BottomSheet } from '@/components/BottomSheet';
 import { NavigationBar } from '@/components/NavigationBar';
 import { NoteEditor } from '@/components/NoteEditor';
+import { SourceSheet } from '@/components/SourceSheet';
+import { Confetti } from '@/components/Confetti';
 import { WebScrollView } from '@/components/WebScrollView';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { useNotes } from '@/contexts/NotesContext';
@@ -9,7 +11,7 @@ import { mockQuizzes } from '@/data/quizzes';
 import { useAudio } from '@/hooks/useAudio';
 import { Note } from '@/types/notes';
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { Lightbulb, Pause, Play, Plus } from 'lucide-react-native';
+import { Lightbulb, Pause, Play, Plus, FileText, ThumbsUp, ThumbsDown, ScrollText } from 'lucide-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
     ActivityIndicator,
@@ -21,7 +23,9 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming, withSpring, withSequence } from 'react-native-reanimated';
+
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
 export default function PodcastDetailsScreen() {
   const router = useRouter();
@@ -32,12 +36,20 @@ export default function PodcastDetailsScreen() {
   const [showNoteEditor, setShowNoteEditor] = useState(false);
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [isNewNote, setIsNewNote] = useState(false);
+  const [showSourceSheet, setShowSourceSheet] = useState(false);
+  const [showScriptSheet, setShowScriptSheet] = useState(false);
+  const [likeStatus, setLikeStatus] = useState<'liked' | 'disliked' | null>(null);
+  const [showLikeConfetti, setShowLikeConfetti] = useState(false);
   
   // Animation values for each note card - start at 0 degrees
   const note1Rotation = useSharedValue(0);
   const note2Rotation = useSharedValue(0);
   const note3Rotation = useSharedValue(0);
   const note4Rotation = useSharedValue(0);
+  
+  // Animation values for like button
+  const likeButtonScale = useSharedValue(1);
+  const likeButtonRotation = useSharedValue(0);
   
   const note1AnimatedStyle = useAnimatedStyle(() => {
     return {
@@ -226,6 +238,42 @@ export default function PodcastDetailsScreen() {
     setIsNewNote(false);
   };
 
+  const handleLike = () => {
+    const wasLiked = likeStatus === 'liked';
+    setLikeStatus(wasLiked ? null : 'liked');
+    
+    if (!wasLiked) {
+      // Trigger bouncy animation
+      likeButtonScale.value = withSequence(
+        withSpring(1.2, { damping: 2, stiffness: 200 }),
+        withSpring(1, { damping: 3, stiffness: 300 })
+      );
+      
+      likeButtonRotation.value = withSequence(
+        withSpring(-10, { damping: 2, stiffness: 200 }),
+        withSpring(10, { damping: 2, stiffness: 200 }),
+        withSpring(0, { damping: 3, stiffness: 300 })
+      );
+      
+      // Show confetti
+      setShowLikeConfetti(true);
+      setTimeout(() => setShowLikeConfetti(false), 1200);
+    }
+  };
+
+  const handleDislike = () => {
+    setLikeStatus(likeStatus === 'disliked' ? null : 'disliked');
+  };
+  
+  const likeButtonAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { scale: likeButtonScale.value },
+        { rotate: `${likeButtonRotation.value}deg` },
+      ],
+    };
+  });
+
   if (!content) {
     return (
       <View className="flex-1 justify-center items-center bg-purple-100">
@@ -388,6 +436,75 @@ export default function PodcastDetailsScreen() {
             <Text className="text-slate-600 text-sm leading-6 px-1">
               {content.description}
             </Text>
+            
+            {/* Action Buttons */}
+            <View className="flex-row items-center justify-between mt-4">
+              {/* Like/Dislike Buttons */}
+              <View className="flex-row gap-3">
+                {/* Like Button */}
+                <View style={{ position: 'relative' }}>
+                  <AnimatedTouchableOpacity 
+                    onPress={handleLike}
+                    className="p-3 rounded-full items-center justify-center"
+                    style={[
+                      {
+                        backgroundColor: likeStatus === 'liked' ? '#7C3AED' : '#E9D5FF',
+                      },
+                      likeButtonAnimatedStyle
+                    ]}
+                  >
+                    <ThumbsUp 
+                      size={16} 
+                      color={likeStatus === 'liked' ? '#FFFFFF' : '#7C3AED'} 
+                      strokeWidth={2} 
+                    />
+                  </AnimatedTouchableOpacity>
+                  <Confetti isVisible={showLikeConfetti} />
+                </View>
+                
+                {/* Dislike Button */}
+                <TouchableOpacity 
+                  onPress={handleDislike}
+                  className="p-3 rounded-full items-center justify-center"
+                  style={{
+                    backgroundColor: likeStatus === 'disliked' ? '#7C3AED' : '#E9D5FF',
+                  }}
+                >
+                  <ThumbsDown 
+                    size={16} 
+                    color={likeStatus === 'disliked' ? '#FFFFFF' : '#7C3AED'} 
+                    strokeWidth={2} 
+                  />
+                </TouchableOpacity>
+              </View>
+              
+              {/* Script/Source Buttons */}
+              <View className="flex-row gap-3">
+                {/* Script Button */}
+                <TouchableOpacity 
+                  onPress={() => setShowScriptSheet(true)}
+                  className="px-4 py-3 rounded-full flex-row items-center gap-2"
+                  style={{
+                    backgroundColor: '#E9D5FF',
+                  }}
+                >
+                  <ScrollText size={16} color="#7C3AED" strokeWidth={2} />
+                  <Text className="text-sm font-semibold text-purple-700">Script</Text>
+                </TouchableOpacity>
+                
+                {/* Source Button */}
+                <TouchableOpacity 
+                  onPress={() => setShowSourceSheet(true)}
+                  className="px-4 py-3 rounded-full flex-row items-center gap-2"
+                  style={{
+                    backgroundColor: '#E9D5FF',
+                  }}
+                >
+                  <FileText size={16} color="#7C3AED" strokeWidth={2} />
+                  <Text className="text-sm font-semibold text-purple-700">Sources</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
 
           {/* Your Notes Section */}
@@ -486,6 +603,47 @@ export default function PodcastDetailsScreen() {
             onDelete={isNewNote ? undefined : handleDeleteNote}
             onClose={handleCloseNoteEditor}
           />
+        </BottomSheet>
+        
+        {/* Source Bottom Sheet */}
+        <BottomSheet
+          visible={showSourceSheet}
+          onClose={() => setShowSourceSheet(false)}
+          height={490}
+        >
+          <SourceSheet 
+            sources={content.sources || []} 
+            onClose={() => setShowSourceSheet(false)}
+          />
+        </BottomSheet>
+        
+        {/* Script Bottom Sheet */}
+        <BottomSheet
+          visible={showScriptSheet}
+          onClose={() => setShowScriptSheet(false)}
+          height={300}
+        >
+          <View className="flex-1 p-4">
+            {/* Header */}
+            <View className="flex-row items-center justify-between mb-6">
+              <Text className="text-black text-xl font-geist-medium">
+                Script
+              </Text>
+              <TouchableOpacity
+                onPress={() => setShowScriptSheet(false)}
+                className="w-8 h-8 rounded-full bg-slate-100 items-center justify-center"
+              >
+                <Text className="text-base text-black">×</Text>
+              </TouchableOpacity>
+            </View>
+            
+            {/* Empty State */}
+            <View className="flex-1 items-center justify-center">
+              <Text className="text-slate-500 text-center">
+                No script available for this podcast
+              </Text>
+            </View>
+          </View>
         </BottomSheet>
       </View>
     </>
