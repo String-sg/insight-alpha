@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npx expo export --platform web && cp -r public/* dist/",
+  "buildCommand": "npx expo export --platform web && cp -r web/* dist/",
   "outputDirectory": "dist",
   "rewrites": [
     {
