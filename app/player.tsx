@@ -149,24 +149,32 @@ export default function PlayerScreen() {
     <View className="flex-1 bg-purple-900 relative">
       <StatusBar style="light" />
       {/* Full screen video background - at container level */}
-      <Video
-        source={require('@/assets/video/bg-mesh-gradient.mov')}
-        style={{
+      <View className="absolute inset-0 bg-purple-900 overflow-hidden">
+        <View style={{
           position: 'absolute',
           top: 0,
-          left: 0,
-          width: width,
+          left: '50%',
+          transform: [{ translateX: -384 }], // Half of 768px
+          width: 768,
           height: height,
-        }}
-        useNativeControls={false}
-        resizeMode={ResizeMode.STRETCH}
-        shouldPlay
-        isLooping
-        isMuted
-        positionMillis={0}
-        rate={1.0}
-        volume={0}
-      />
+        }}>
+          <Video
+            source={require('@/assets/video/bg-mesh-gradient.mp4')}
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+            useNativeControls={false}
+            resizeMode={ResizeMode.STRETCH}
+            shouldPlay
+            isLooping
+            isMuted
+            positionMillis={0}
+            rate={1.0}
+            volume={0}
+          />
+        </View>
+      </View>
       
       {/* Content wrapper with max width */}
       <View className="flex-1 relative z-10 mx-auto w-full px-4" style={{ maxWidth: 768 }}>
