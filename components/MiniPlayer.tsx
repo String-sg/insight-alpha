@@ -1,6 +1,6 @@
 import { useAudioContext } from '@/contexts/AudioContext';
-import { useRouter, usePathname } from 'expo-router';
-import React, { useEffect, useRef } from 'react';
+import { usePathname, useRouter } from 'expo-router';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
@@ -24,6 +24,7 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
   const insets = useSafeAreaInsets();
   const slideAnim = useRef(new Animated.Value(100)).current; // Start hidden below screen
   const opacityAnim = useRef(new Animated.Value(0)).current;
+  const [forceBlurUpdate, setForceBlurUpdate] = useState(0);
   
   const {
     isPlaying,
@@ -33,6 +34,25 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
     resumePodcast,
     pausePodcast,
   } = useAudioContext();
+
+  // Force backdrop blur on mount if podcast is already loaded (restored session)
+  useEffect(() => {
+    if (currentPodcast && Platform.OS === 'web') {
+      // Force backdrop blur to be applied immediately for restored sessions
+      const timer = setTimeout(() => {
+        const elements = document.querySelectorAll('.mini-player-blur, [class*="mini-player-blur"]');
+        elements.forEach((element: any) => {
+          if (element) {
+            element.style.backdropFilter = 'blur(10px)';
+            element.style.webkitBackdropFilter = 'blur(10px)';
+            // Force reflow
+            element.offsetHeight;
+          }
+        });
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [currentPodcast]);
 
   // Show/hide animation based on whether audio is playing or loaded
   // Hide when on player screen
@@ -52,7 +72,12 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
           duration: 300,
           useNativeDriver: false,
         }),
-      ]).start();
+      ]).start(() => {
+        // Force backdrop blur update after animation completes
+        if (Platform.OS === 'web') {
+          setForceBlurUpdate(prev => prev + 1);
+        }
+      });
     } else {
       // Slide down and fade out
       Animated.parallel([
@@ -118,16 +143,9 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
 
   const contentInfo = getCurrentInfo();
 
-  const containerStyle = Platform.OS === 'web' ? {
-    position: 'fixed' as any,
-    bottom: insets.bottom + 20,
-    left: 0,
-    right: 0,
-    transform: [{ translateY: slideAnim }],
-    opacity: opacityAnim,
-    zIndex: 1000,
-  } : {
-    position: 'absolute' as any,
+  // Use fixed positioning by default (web priority) with fallback for mobile
+  const containerStyle = {
+    position: Platform.OS === 'web' ? 'fixed' as any : 'absolute' as any,
     bottom: insets.bottom + 20,
     left: 0,
     right: 0,
@@ -136,10 +154,20 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
     zIndex: 1000,
   };
 
+  // Define blur style - apply everywhere for web priority with force update
+  const blurStyle = {
+    backdropFilter: 'blur(10px)',
+    WebkitBackdropFilter: 'blur(10px)',
+    // Force style recalculation when forceBlurUpdate changes
+    ...(Platform.OS === 'web' && forceBlurUpdate > 0 && {
+      filter: `blur(0px)`, // This will be overridden by backdrop-filter
+    }),
+  } as any;
+
   return (
     <Animated.View
       style={containerStyle}
-      className={Platform.OS === 'web' ? 'mini-player-web' : ''}
+      className="mini-player-web"
     >
       <View className="max-w-3xl mx-auto w-full px-6">
         <View className="flex-row items-center">
@@ -148,21 +176,26 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
           <TouchableWithoutFeedback
             onPress={handlePlayerPress}
           >
-            <View style={{
-              borderRadius: 1000,
-              backgroundColor: 'rgb(255, 255, 255)',
-              borderWidth: 1,
-              borderColor: 'rgb(226, 232, 240)',
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.05,
-              shadowRadius: 4,
-              elevation: 8,
-              padding: 12,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-          >
+            <View 
+              style={{
+                borderRadius: 1000,
+                backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                borderWidth: 1,
+                borderColor: 'rgba(226, 232, 240, 0.8)',
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.05,
+                shadowRadius: 4.4,
+                elevation: 8,
+                padding: 12,
+                flexDirection: 'row',
+                alignItems: 'center',
+                ...(Platform.OS === 'web' && {
+                  boxShadow: '0px 2px 2px 0px rgba(255, 255, 255, 0.40) inset, 0px 4px 12px 0px rgba(0, 0, 0, 0.10) inset, 0px 4px 4.4px 0px rgba(0, 0, 0, 0.05)',
+                }),
+                ...blurStyle,
+              }}
+            >
             {/* Podcast Image */}
             <View className="w-12 h-12 rounded-full overflow-hidden mr-3 bg-purple-500">
               <Image
@@ -186,15 +219,15 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
             {/* Play/Pause Button */}
             <TouchableOpacity
               onPress={handlePlayPause}
-              className="bg-slate-200 rounded-full p-3"
+              className="bg-white rounded-full p-3 border border-black/10"
             >
               {isLoading ? (
-                <ActivityIndicator size="small" color="#666" />
+                <ActivityIndicator size="small" color="#000000" />
               ) : (
                 <Icon
                   name={isPlaying ? "pause" : "play"}
                   size={24}
-                  color="#666"
+                  color="#000000"
                   style={isPlaying ? {} : { marginLeft: 2 }}
                 />
               )}
@@ -208,26 +241,31 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
           <TouchableWithoutFeedback
             onPress={handleChatPress}
           >
-            <View style={{
-              width: 72,
-              height: 72,
-              borderRadius: 36,
-              backgroundColor: 'rgb(255, 255, 255)',
-              borderWidth: 1,
-              borderColor: 'rgb(226, 232, 240)',
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.05,
-              shadowRadius: 4,
-              elevation: 8,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+            <View 
+              style={{
+                width: 72,
+                height: 72,
+                borderRadius: 36,
+                backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                borderWidth: 1,
+                borderColor: 'rgba(226, 232, 240, 0.8)',
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.05,
+                shadowRadius: 4.4,
+                elevation: 8,
+                alignItems: 'center',
+                justifyContent: 'center',
+                ...(Platform.OS === 'web' && {
+                  boxShadow: '0px 2px 2px 0px rgba(255, 255, 255, 0.40) inset, 0px 4px 12px 0px rgba(0, 0, 0, 0.10) inset, 0px 4px 4.4px 0px rgba(0, 0, 0, 0.05)',
+                }),
+                ...blurStyle,
+              }}
+            >
             <Icon
               name="sparkles"
               size={24}
-              color="#666"
+              color="#000000"
             />
             </View>
           </TouchableWithoutFeedback>

@@ -3,8 +3,8 @@ import { Episode, PlaybackState, Podcast } from '@/types/podcast';
 import { QuizProgress } from '@/types/quiz';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Audio } from 'expo-av';
-import { Platform } from 'react-native';
 import React, { createContext, ReactNode, useContext, useEffect, useReducer, useRef } from 'react';
+import { Platform } from 'react-native';
 
 // Audio context state interface
 interface AudioContextState extends PlaybackState {
@@ -227,6 +227,31 @@ export function AudioProvider({ children }: AudioProviderProps) {
         if (savedEpisode) {
           const episode = JSON.parse(savedEpisode);
           dispatch({ type: 'SET_CURRENT_EPISODE', payload: episode });
+        }
+
+        // Force backdrop blur initialization for web after state update
+        if (Platform.OS === 'web') {
+          // Use requestAnimationFrame to ensure DOM has updated
+          requestAnimationFrame(() => {
+            try {
+              const style = document.createElement('style');
+              style.textContent = `
+                .mini-player-blur {
+                  backdrop-filter: blur(20px) !important;
+                  -webkit-backdrop-filter: blur(20px) !important;
+                }
+              `;
+              document.head.appendChild(style);
+              console.log('Backdrop blur force-initialized for restored session');
+              
+              // Remove the temporary style after a short delay
+              setTimeout(() => {
+                document.head.removeChild(style);
+              }, 1000);
+            } catch (error) {
+              console.log('Backdrop blur initialization not needed:', error);
+            }
+          });
         }
       }
     } catch (error) {

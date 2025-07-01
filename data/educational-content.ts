@@ -26,13 +26,13 @@ export const educationalContent: EducationalContent[] = [
     description: 'Overview: This comprehensive professional development session explores evidence-based strategies for creating positive school environments that actively prevent bullying and promote student wellbeing. Drawing from successful case studies in Singapore schools, this content addresses the critical need for systematic approaches to school safety.\n\nWhat you will learn:\n• Identify early warning signs of bullying behavior and intervention strategies\n• Implement whole-school approaches to building positive culture and peer relationships\n• Develop effective communication protocols between students, teachers, and parents\n• Create inclusive classroom environments that celebrate diversity and reduce social exclusion\n• Apply restorative justice principles to address conflicts and repair relationships\n• Establish monitoring systems to track school climate and student wellbeing indicators',
     category: 'Special Educational Needs',
     author: 'Student Development Team',
-    duration: 2400000, // 40 minutes
+    duration: 780000, // 13 minutes
     imageUrl: 'https://picsum.photos/400/400?random=5',
     audioUrl: require('../assets/audio/building-safe-school-environments.mp3'),
     backgroundColor: 'bg-white',
     badgeColor: 'bg-purple-200',
     textColor: 'text-purple-900',
-    timeLeft: '40m left',
+    timeLeft: '13m left',
     progress: 0.2,
     publishedDate: '1 day ago',
     sources: [
@@ -79,13 +79,13 @@ export const educationalContent: EducationalContent[] = [
     description: 'Overview: This forward-looking session examines how artificial intelligence is transforming Singapore\'s education landscape, from personalized learning platforms to intelligent administrative systems. Educators will explore practical AI applications currently being implemented in local schools and understand the implications for teaching and learning in the digital age.\n\nWhat you will learn:\n• Understand Singapore\'s national AI in education strategy and implementation timeline\n• Explore AI-powered adaptive learning platforms and their impact on student outcomes\n• Analyze intelligent tutoring systems and personalized learning pathways\n• Examine AI applications in assessment, grading, and student progress tracking\n• Discuss ethical considerations and responsible AI use in educational settings\n• Identify opportunities to integrate AI tools into existing teaching practices',
     category: 'Artificial Intelligent',
     author: 'Education Technology Team',
-    duration: 2100000, // 35 minutes
+    duration: 360000, // 6 minutes
     imageUrl: 'https://picsum.photos/400/400?random=6',
     audioUrl: require('../assets/audio/ais-role-in-singapores-education-transformation.wav'),
     backgroundColor: 'bg-white',
     badgeColor: 'bg-yellow-200',
     textColor: 'text-yellow-900',
-    timeLeft: '35m left',
+    timeLeft: '6m left',
     progress: 0,
     publishedDate: 'Today',
     sources: [
