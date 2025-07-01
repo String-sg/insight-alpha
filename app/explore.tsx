@@ -1,10 +1,13 @@
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { SegmentedControl } from '@/components/SegmentedControl';
 import { WebScrollView } from '@/components/WebScrollView';
+import { TopicCard } from '@/components/TopicCard';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { Stack } from 'expo-router';
 import React from 'react';
-import { Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View, TextInput } from 'react-native';
+import { educationalContent } from '@/data/educational-content';
+import { Icon } from '@/components/Icon';
 
 export default function ExploreScreen() {
   const { currentPodcast } = useAudioContext();
@@ -12,47 +15,16 @@ export default function ExploreScreen() {
   // Calculate bottom padding based on mini player visibility
   const bottomPadding = currentPodcast ? 120 : 40;
 
-  // Popular topics data
-  const popularTopics = [
-    {
-      id: 'sen',
-      title: 'Special Educational Needs (SEN)',
-      podcasts: 12,
-      notes: 2,
-      gradient: 'from-purple-500 to-purple-600'
-    },
-    {
-      id: 'inclusive',
-      title: 'Inclusive Education',
-      podcasts: 12,
-      notes: 2,
-      gradient: 'from-fuchsia-500 to-pink-500'
-    }
-  ];
-
-  // Popular contents data
-  const popularContents = [
-    {
-      id: 'resilience',
-      title: 'Building Resilience in Children through SEL',
-      badges: [
-        { text: 'Social Emotional Learning Activities', color: 'bg-pink-200', textColor: 'text-pink-900' },
-        { text: 'Workshop', color: 'bg-slate-950', textColor: 'text-slate-50' }
-      ],
-      source: 'Community Center',
-      timeAgo: '2 weeks ago'
-    },
-    {
-      id: 'assessment',
-      title: 'Evaluating Student Performance with Modern Assessment Strategies',
-      badges: [
-        { text: 'Assessment Tools', color: 'bg-pink-200', textColor: 'text-pink-900' },
-        { text: 'Conference', color: 'bg-slate-950', textColor: 'text-slate-50' }
-      ],
-      source: 'National Education Summit',
-      timeAgo: '3 days ago'
-    }
-  ];
+  // Map educational content to popular contents format
+  const popularContents = educationalContent.map(content => ({
+    id: content.id,
+    title: content.title,
+    category: content.category,
+    badgeColor: content.badgeColor,
+    textColor: content.textColor,
+    author: content.author,
+    publishedDate: content.publishedDate
+  }));
 
   const content = (
     <WebScrollView 
@@ -70,72 +42,85 @@ export default function ExploreScreen() {
       <ProfileHeader />
 
       {/* Navigation Bar */}
-      <View className="px-6">
+      <View className="px-6 mb-6">
         <SegmentedControl activeSegment="explore" />
       </View>
 
-      {/* Popular Topics Section */}
-      <View className="mx-6 mb-6">
-        <Text className="text-black text-xl font-geist-semibold mb-4">
-          Popular topics
-        </Text>
-        
-        <View className="flex-row gap-4">
-          {popularTopics.map((topic) => (
-            <TouchableOpacity 
-              key={topic.id}
-              className={`flex-1 h-[182px] rounded-3xl p-4 justify-center bg-gradient-to-br ${topic.gradient}`}
-            >
-              <Text className="text-white text-xl font-geist-semibold mb-2">
-                {topic.title}
-              </Text>
-              
-              <Text className="text-white text-sm font-geist-regular">
-                {topic.podcasts} podcasts{'\n'}{topic.notes} notes
-              </Text>
-            </TouchableOpacity>
-          ))}
+      {/* Search Bar */}
+      <View className="px-6 mb-10">
+        <View className="bg-white rounded-[28px] h-14 flex-row items-center px-5">
+          <TextInput
+            placeholder="Search by keywords or your needs"
+            placeholderTextColor="#94a3b8"
+            className="flex-1 text-sm font-geist-medium text-slate-900"
+          />
+          <TouchableOpacity className="ml-2">
+            <Icon name="search" size={24} color="#000" />
+          </TouchableOpacity>
         </View>
       </View>
 
       {/* Popular Contents Section */}
-      <View className="mx-6">
+      <View className="mx-6 mb-10">
         <Text className="text-black text-xl font-geist-semibold mb-4">
-          Popular contents
+          Popular content today
         </Text>
         
         <View className="gap-3">
           {popularContents.map((content) => (
             <TouchableOpacity 
               key={content.id}
-              className="bg-pink-100 rounded-3xl p-6 shadow-sm"
+              className="bg-white rounded-3xl pt-6 pb-1 px-6"
             >
               {/* Badges */}
               <View className="flex-row gap-1 mb-1">
-                {content.badges.map((badge, index) => (
-                  <View 
-                    key={index}
-                    className={`${badge.color} rounded-md px-2.5 py-0.5`}
-                  >
-                    <Text className={`${badge.textColor} text-xs font-geist-semibold`}>
-                      {badge.text}
-                    </Text>
-                  </View>
-                ))}
+                <View className={`${content.badgeColor} rounded-md px-2.5 py-0.5 h-[22px]`}>
+                  <Text className={`${content.textColor} text-xs font-geist-semibold`}>
+                    {content.category}
+                  </Text>
+                </View>
+                <View className="bg-slate-200 rounded-md px-2.5 py-0.5 h-[22px]">
+                  <Text className="text-black text-xs font-geist-semibold">
+                    Podcast
+                  </Text>
+                </View>
               </View>
               
               {/* Title */}
-              <Text className="text-slate-950 text-xl font-geist-medium leading-7 mb-1">
+              <Text className="text-slate-950 text-xl font-geist-medium leading-7" numberOfLines={1}>
                 {content.title}
               </Text>
               
               {/* Metadata */}
-              <Text className="text-slate-600 text-sm font-geist-regular">
-                {content.source} • {content.timeAgo}
-              </Text>
+              <View className="py-1.5">
+                <Text className="text-slate-600 text-sm font-geist-regular">
+                  {content.author} • {content.publishedDate}
+                </Text>
+              </View>
             </TouchableOpacity>
           ))}
         </View>
+      </View>
+
+      {/* Popular Topic Today Section */}
+      <View className="mx-6">
+        <Text className="text-black text-xl font-geist-semibold mb-4">
+          Popular topic today
+        </Text>
+        
+        <TopicCard
+          id="ai-topic"
+          title="Learn to use AI"
+          subtitle="Artificial Intelligent"
+          podcasts={12}
+          gradientFrom="#fbbf24"
+          gradientTo="#fde047"
+          badgeBg="bg-amber-200"
+          badgeText="text-amber-900"
+          textColor="text-black"
+          iconComponent={<Text className="text-white text-4xl">✦</Text>}
+          showStats={true}
+        />
       </View>
     </WebScrollView>
   );

@@ -2,8 +2,8 @@ import { Icon } from '@/components/Icon';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { SegmentedControl } from '@/components/SegmentedControl';
 import { WebScrollView } from '@/components/WebScrollView';
+import { TopicCard } from '@/components/TopicCard';
 import { useAudioContext } from '@/contexts/AudioContext';
-import { LinearGradient } from 'expo-linear-gradient';
 import React, { useRef } from 'react';
 import { FlatList, Platform, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 
@@ -30,8 +30,7 @@ export default function LibraryScreen() {
       badgeBg: 'bg-purple-200',
       badgeText: 'text-purple-900',
       textColor: 'text-white',
-      icon: 'Moon',
-      iconColor: '#ffffff',
+      icon: require('@/assets/icon/icon-sen.svg'),
     },
     {
       id: 'ai',
@@ -44,8 +43,7 @@ export default function LibraryScreen() {
       badgeBg: 'bg-amber-200',
       badgeText: 'text-amber-900',
       textColor: 'text-black',
-      icon: 'Sparkles',
-      iconColor: '#ffffff',
+      icon: require('@/assets/icon/icon-learnai.svg'),
     },
     {
       id: 'wellbeing',
@@ -58,61 +56,13 @@ export default function LibraryScreen() {
       badgeBg: 'bg-teal-200',
       badgeText: 'text-teal-900',
       textColor: 'text-white',
-      icon: 'Sun',
-      iconColor: '#ffffff',
+      icon: require('@/assets/icon/icon-mentalhealth.svg'),
     }
   ];
 
   const renderCard = ({ item: subject }: { item: typeof learningSubjects[0] }) => (
     <View style={{ height: cardHeight }} className="mx-6 mb-2">
-      <TouchableOpacity 
-        className="flex-1"
-        activeOpacity={0.9}
-      >
-        <LinearGradient
-          colors={subject.gradientVia 
-            ? [subject.gradientFrom, subject.gradientVia, subject.gradientTo]
-            : [subject.gradientFrom, subject.gradientTo]
-          }
-          locations={subject.gradientVia ? [0.08, 0.43, 1.19] : [0, 1]}
-          className="flex-1 rounded-[32px] p-6"
-          style={{ height: 480 }}
-        >
-          {/* Card content container */}
-          <View className="flex-1 justify-between">
-            {/* Icon area */}
-            <View className="flex-1 items-center justify-center">
-              <Icon 
-                name={subject.icon as any}
-                size={80} 
-                color={subject.iconColor}
-              />
-            </View>
-            
-            {/* Content section */}
-            <View className="gap-2">
-              <View className="gap-1">
-                {/* Badge */}
-                <View className={`${subject.badgeBg} rounded-md px-2.5 py-0.5 self-start`}>
-                  <Text className={`${subject.badgeText} font-geist-semibold text-xs`}>
-                    {subject.subtitle}
-                  </Text>
-                </View>
-                
-                {/* Title */}
-                <Text className={`${subject.textColor} font-geist-semibold text-xl leading-7`}>
-                  {subject.title}
-                </Text>
-              </View>
-              
-              {/* Stats */}
-              <Text className={`${subject.textColor} font-geist-regular text-sm leading-5`}>
-                {subject.podcasts} podcasts{'\n'}{subject.notes} notes
-              </Text>
-            </View>
-          </View>
-        </LinearGradient>
-      </TouchableOpacity>
+      <TopicCard {...subject} />
     </View>
   );
 
@@ -144,7 +94,7 @@ export default function LibraryScreen() {
     </>
   );
 
-  // Use WebScrollView for web, FlatList for native to maintain scroll snap behavior
+  // Use WebScrollView for web, FlatList for native
   const content = Platform.OS === 'web' ? (
     <WebScrollView
       style={{ flex: 1 }}
@@ -167,11 +117,7 @@ export default function LibraryScreen() {
       keyExtractor={(item) => item.id}
       ListHeaderComponent={renderHeader}
       showsVerticalScrollIndicator={false}
-      snapToInterval={cardHeight}
-      decelerationRate="fast"
       contentContainerStyle={{ paddingBottom: bottomPadding }}
-      pagingEnabled={false}
-      snapToAlignment="start"
     />
   );
 

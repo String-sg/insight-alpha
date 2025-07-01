@@ -169,7 +169,7 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
             {/* Podcast Image */}
             <View className="w-12 h-12 rounded-full overflow-hidden mr-3 bg-purple-500">
               <Image
-                source={require('@/assets/images/podcast-cover-1.png')}
+                source={require('@/assets/images/cover-album.png')}
                 style={{ width: 48, height: 48 }}
                 resizeMode="cover"
               />
