@@ -15,7 +15,8 @@ interface BottomSheetProps {
 }
 
 export function BottomSheet({ visible, onClose, children, height = 490 }: BottomSheetProps) {
-  const translateY = useRef(new Animated.Value(height)).current;
+  const animHeight = height || 1000; // Use a large value for full-screen
+  const translateY = useRef(new Animated.Value(animHeight)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export function BottomSheet({ visible, onClose, children, height = 490 }: Bottom
       // Animate out
       Animated.parallel([
         Animated.spring(translateY, {
-          toValue: height,
+          toValue: animHeight,
           useNativeDriver: true,
           tension: 50,
           friction: 12,
@@ -50,7 +51,7 @@ export function BottomSheet({ visible, onClose, children, height = 490 }: Bottom
         }),
       ]).start();
     }
-  }, [visible, height, translateY, backdropOpacity]);
+  }, [visible, animHeight, translateY, backdropOpacity]);
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -99,12 +100,12 @@ export function BottomSheet({ visible, onClose, children, height = 490 }: Bottom
         <View className="flex-1 justify-end">
           <Animated.View
             style={{
-              height,
+              height: height || '100%',
               transform: [{ translateY }],
-              backgroundColor: 'rgb(255, 255, 255)',
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
-              borderWidth: 1,
+              backgroundColor: 'rgb(241, 245, 249)',
+              borderTopLeftRadius: height ? 20 : 0,
+              borderTopRightRadius: height ? 20 : 0,
+              borderWidth: height ? 1 : 0,
               borderColor: 'rgb(226, 232, 240)',
               shadowColor: '#000',
               shadowOffset: {
@@ -117,16 +118,18 @@ export function BottomSheet({ visible, onClose, children, height = 490 }: Bottom
             }}
             {...panResponder.panHandlers}
           >
-            {/* Drag handle */}
-            <View style={{
-              width: 48,
-              height: 4,
-              backgroundColor: 'rgb(226, 232, 240)',
-              borderRadius: 2,
-              alignSelf: 'center',
-              marginTop: 8,
-              marginBottom: 16,
-            }} />
+            {/* Drag handle - only show if not full screen */}
+            {height && (
+              <View style={{
+                width: 48,
+                height: 4,
+                backgroundColor: 'rgb(226, 232, 240)',
+                borderRadius: 2,
+                alignSelf: 'center',
+                marginTop: 8,
+                marginBottom: 16,
+              }} />
+            )}
             
             {children}
           </Animated.View>

@@ -9,7 +9,7 @@ import { mockQuizzes } from '@/data/quizzes';
 import { useAudio } from '@/hooks/useAudio';
 import { Note } from '@/types/notes';
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { Play, Pause, Lightbulb, Plus } from 'lucide-react-native';
+import { Play, Pause, Lightbulb, Plus, Share2 } from 'lucide-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -19,6 +19,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Share,
 } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
@@ -144,6 +145,21 @@ export default function PodcastDetailsScreen() {
         pathname: `/quiz/${quiz.id}` as any,
         params: { podcastId: content.id }
       });
+    }
+  };
+
+  const handleShare = async () => {
+    if (!content) return;
+    
+    try {
+      const shareOptions = {
+        message: `Check out this podcast: ${content.title} by ${content.author}`,
+        title: content.title,
+      };
+
+      await Share.share(shareOptions);
+    } catch (error) {
+      console.error('Error sharing:', error);
     }
   };
 
@@ -276,6 +292,7 @@ export default function PodcastDetailsScreen() {
             }
           }}
           showUploadButton={true}
+          onUploadPress={handleShare}
         />
 
         <WebScrollView 

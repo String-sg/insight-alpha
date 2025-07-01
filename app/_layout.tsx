@@ -14,19 +14,16 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import '../global.css';
 
 // import { useColorScheme } from '@/hooks/useColorScheme'; // Disabled dark mode
-import { BottomSheet } from '@/components/BottomSheet';
-import { ChatInterface } from '@/components/ChatInterface';
 import { MiniPlayer } from '@/components/MiniPlayer';
 import { AudioProvider } from '@/contexts/AudioContext';
-import { ChatProvider, useChatContext } from '@/contexts/ChatContext';
+import { ChatProvider } from '@/contexts/ChatContext';
 import { NotesProvider } from '@/contexts/NotesContext';
 
 function AppContent() {
   const pathname = usePathname();
-  const { isChatVisible, hideChat } = useChatContext();
 
-  // Hide mini player when fullscreen player is active or on quiz pages
-  const shouldShowMiniPlayer = pathname !== '/player' && !pathname.startsWith('/quiz');
+  // Hide mini player when fullscreen player is active, on quiz pages, or on chat page
+  const shouldShowMiniPlayer = pathname !== '/player' && !pathname.startsWith('/quiz') && pathname !== '/chat';
 
   return (
     <ThemeProvider value={DefaultTheme}>
@@ -36,20 +33,12 @@ function AppContent() {
           <Stack.Screen name="library" options={{ headerShown: false }} />
           <Stack.Screen name="explore" options={{ headerShown: false }} />
           <Stack.Screen name="player" options={{ headerShown: false, presentation: 'modal' }} />
+          <Stack.Screen name="chat" options={{ headerShown: false, presentation: 'modal' }} />
           <Stack.Screen name="+not-found" />
         </Stack>
         
         {shouldShowMiniPlayer && <MiniPlayer />}
         <StatusBar style="auto" />
-        
-        {/* Chat Bottom Sheet */}
-        <BottomSheet
-          visible={isChatVisible}
-          onClose={hideChat}
-          height={600}
-        >
-          <ChatInterface onClose={hideChat} />
-        </BottomSheet>
       </View>
     </ThemeProvider>
   );

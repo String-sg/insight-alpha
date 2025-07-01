@@ -3,14 +3,15 @@ import { SegmentedControl } from '@/components/SegmentedControl';
 import { WebScrollView } from '@/components/WebScrollView';
 import { TopicCard } from '@/components/TopicCard';
 import { useAudioContext } from '@/contexts/AudioContext';
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import React from 'react';
-import { Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View, TextInput } from 'react-native';
+import { Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { educationalContent } from '@/data/educational-content';
 import { Icon } from '@/components/Icon';
 
 export default function ExploreScreen() {
   const { currentPodcast } = useAudioContext();
+  const router = useRouter();
   
   // Calculate bottom padding based on mini player visibility
   const bottomPadding = currentPodcast ? 120 : 40;
@@ -46,22 +47,9 @@ export default function ExploreScreen() {
         <SegmentedControl activeSegment="explore" />
       </View>
 
-      {/* Search Bar */}
-      <View className="px-6 mb-10">
-        <View className="bg-white rounded-[28px] h-14 flex-row items-center px-5">
-          <TextInput
-            placeholder="Search by keywords or your needs"
-            placeholderTextColor="#94a3b8"
-            className="flex-1 text-sm font-geist-medium text-slate-900"
-          />
-          <TouchableOpacity className="ml-2">
-            <Icon name="search" size={24} color="#000" />
-          </TouchableOpacity>
-        </View>
-      </View>
 
       {/* Popular Contents Section */}
-      <View className="mx-6 mb-10">
+      <View className="mx-6 mb-10 mt-6">
         <Text className="text-black text-xl font-geist-semibold mb-4">
           Popular content today
         </Text>
@@ -71,6 +59,8 @@ export default function ExploreScreen() {
             <TouchableOpacity 
               key={content.id}
               className="bg-white rounded-3xl pt-6 pb-1 px-6"
+              onPress={() => router.push(`/podcast/${content.id}`)}
+              activeOpacity={0.8}
             >
               {/* Badges */}
               <View className="flex-row gap-1 mb-1">

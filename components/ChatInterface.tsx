@@ -1,24 +1,32 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { 
   View, 
   ScrollView, 
   TouchableOpacity,
   Animated,
+  Text,
+  KeyboardAvoidingView,
+  Platform,
+  TextInput,
 } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { Icon } from '@/components/Icon';
 import { ChatMessage } from '@/components/ChatMessage';
 import { ChatInput } from '@/components/ChatInput';
 import { useChatContext } from '@/contexts/ChatContext';
+import { useAudioContext } from '@/contexts/AudioContext';
 
 interface ChatInterfaceProps {
   onClose: () => void;
 }
 
 export function ChatInterface({ onClose }: ChatInterfaceProps) {
-  const { currentSession, isTyping } = useChatContext();
+  const { currentSession, isTyping, sendMessage } = useChatContext();
+  const { currentPodcast } = useAudioContext();
   const scrollViewRef = useRef<ScrollView>(null);
   const headerAnim = useRef(new Animated.Value(0)).current;
+  const [inputText, setInputText] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(true);
 
   // Scroll to bottom when new messages arrive
   useEffect(() => {
@@ -53,8 +61,39 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
 
   const messages = currentSession.messages || [];
 
+  // Get current topic from podcast if available
+  const currentTopic = currentPodcast?.category || 'Special Educational Needs';
+  
+  // Suggested questions based on topic
+  const suggestedQuestions = currentTopic === 'Special Educational Needs' ? [
+    "What are three quick strategies for teaching reading to a student with dyslexia in a mainstream classroom?",
+    "How can I create a sensory-friendly classroom for students with autism spectrum disorder?",
+    "What are effective ways to support students with ADHD in group activities?"
+  ] : [
+    "How can I use AI to create personalized learning materials?",
+    "What are the best practices for using AI in education?",
+    "How can AI help with assessment and feedback?"
+  ];
+
+  const handleQuestionPress = (question: string) => {
+    setInputText(question);
+    setShowSuggestions(false);
+    sendMessage(question);
+  };
+
+  const handleSend = () => {
+    if (inputText.trim()) {
+      sendMessage(inputText.trim());
+      setInputText('');
+      setShowSuggestions(false);
+    }
+  };
+
   return (
-    <View className="flex-1">
+    <KeyboardAvoidingView 
+      className="flex-1 bg-slate-100"
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       {/* Header */}
       <Animated.View
         style={{
@@ -67,88 +106,122 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
           }],
         }}
       >
-        <View className="flex-row items-center justify-between px-4 py-3 border-b border-slate-100">
-          <View className="flex-row items-center flex-1">
-            {/* AI Avatar */}
-            <View className="w-10 h-10 bg-blue-100 rounded-full items-center justify-center mr-3">
-              <Icon name="Bot" size={20} color="#3B82F6" />
-            </View>
-            
-            <View className="flex-1">
-              <ThemedText className="text-lg font-semibold text-slate-900">
-                AI Assistant
-              </ThemedText>
-              <ThemedText className="text-sm text-slate-500">
-                {isTyping ? 'Typing...' : 'Online'}
-              </ThemedText>
-            </View>
-          </View>
-
-          {/* Close Button */}
+        <View className="flex-row items-center px-6 pt-4 pb-4">
           <TouchableOpacity
             onPress={onClose}
-            className="w-8 h-8 items-center justify-center rounded-full bg-slate-100"
+            className="w-12 h-12 items-center justify-center rounded-full bg-slate-200"
             activeOpacity={0.7}
           >
-            <Icon name="X" size={18} color="#6B7280" />
+            <Icon name="chevron-back" size={24} color="#020617" />
           </TouchableOpacity>
+          
+          <View className="ml-4">
+            <View className="bg-slate-950 px-2.5 py-0.5 rounded-md">
+              <Text className="text-white text-xs font-geist-semibold">Ask AI</Text>
+            </View>
+          </View>
         </View>
       </Animated.View>
 
-      {/* Messages */}
+      {/* Content */}
       <ScrollView
         ref={scrollViewRef}
-        className="flex-1 px-4"
-        contentContainerStyle={{ paddingTop: 16, paddingBottom: 16 }}
+        className="flex-1"
+        contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        {messages.length === 0 ? (
-          <View className="flex-1 items-center justify-center py-12">
-            <View className="w-16 h-16 bg-blue-50 rounded-full items-center justify-center mb-4">
-              <Icon name="Sparkles" size={24} color="#3B82F6" />
+        {showSuggestions && messages.length === 0 ? (
+          <View className="mt-6">
+            <Text className="text-xl font-geist-medium text-black mb-4 leading-7">
+              Hi Mr. Tan, here are some of the example questions relevant to {currentTopic} topic.
+            </Text>
+            
+            <View className="space-y-3">
+              {suggestedQuestions.map((question, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => handleQuestionPress(question)}
+                  className={`${index === 2 ? 'bg-slate-200' : 'bg-white'} rounded-3xl p-4`}
+                  activeOpacity={0.7}
+                >
+                  <Text className="text-base font-geist text-slate-950 leading-6">
+                    "{question}"
+                  </Text>
+                </TouchableOpacity>
+              ))}
             </View>
-            <ThemedText className="text-lg font-medium text-slate-700 text-center mb-2">
-              Start a conversation
-            </ThemedText>
-            <ThemedText className="text-sm text-slate-500 text-center max-w-xs">
-              Ask me anything about podcasts, learning, or how to use this app!
-            </ThemedText>
           </View>
         ) : (
-          messages.map((message, index) => (
-            <ChatMessage
-              key={message.id}
-              message={message}
-              isLastMessage={index === messages.length - 1}
-            />
-          ))
-        )}
-
-        {/* Typing indicator as a message */}
-        {isTyping && (
-          <ChatMessage
-            message={{
-              id: 'typing-indicator',
-              content: '',
-              userId: 'ai-assistant',
-              timestamp: new Date(),
-              type: 'typing',
-              status: 'delivered',
-            }}
-          />
+          <View>
+            {messages.map((message, index) => (
+              <ChatMessage
+                key={message.id}
+                message={message}
+                isLastMessage={index === messages.length - 1}
+              />
+            ))}
+            
+            {isTyping && (
+              <ChatMessage
+                message={{
+                  id: 'typing-indicator',
+                  content: '',
+                  userId: 'ai-assistant',
+                  timestamp: new Date(),
+                  type: 'typing',
+                  status: 'delivered',
+                }}
+              />
+            )}
+          </View>
         )}
       </ScrollView>
 
-      {/* Input */}
-      <ChatInput 
-        onSend={() => {
-          // Scroll to bottom after sending
-          setTimeout(() => {
-            scrollViewRef.current?.scrollToEnd({ animated: true });
-          }, 100);
-        }}
-      />
-    </View>
+      {/* Floating Input Bar */}
+      <View className="absolute bottom-6 left-6 right-6">
+        <View 
+          className="flex-row items-center rounded-full"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+            backdropFilter: 'blur(10px)',
+            borderWidth: 1,
+            borderColor: 'rgba(226, 226, 226, 0.5)',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.05,
+            shadowRadius: 4.4,
+            elevation: 5,
+          }}
+        >
+          <TouchableOpacity
+            className="w-12 h-12 m-3 items-center justify-center rounded-full bg-slate-200"
+            activeOpacity={0.7}
+          >
+            <Icon name="add" size={24} color="#020617" />
+          </TouchableOpacity>
+          
+          <TextInput
+            value={inputText}
+            onChangeText={setInputText}
+            placeholder={`Ask AI about ${currentTopic === 'Special Educational Needs' ? 'SEN' : currentTopic}`}
+            placeholderTextColor="#475569"
+            className="flex-1 text-sm font-geist text-slate-600 mr-2"
+            multiline={false}
+            returnKeyType="send"
+            onSubmitEditing={handleSend}
+          />
+          
+          <TouchableOpacity
+            onPress={handleSend}
+            disabled={!inputText.trim()}
+            className={`w-12 h-12 m-3 items-center justify-center rounded-full ${inputText.trim() ? 'bg-slate-950' : 'bg-slate-300'}`}
+            activeOpacity={0.7}
+          >
+            <Icon name="send" size={20} color="#FFFFFF" />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 }

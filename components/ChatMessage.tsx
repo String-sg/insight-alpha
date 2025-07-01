@@ -65,23 +65,12 @@ export function ChatMessage({ message, isLastMessage = false }: ChatMessageProps
       className={`mb-4 ${isLastMessage ? 'mb-6' : ''}`}
     >
       <View className={`flex-row ${isAI ? 'justify-start' : 'justify-end'}`}>
-        {/* AI Avatar */}
-        {isAI && (
-          <View className="mr-3 mt-1">
-            <View className="w-8 h-8 bg-blue-100 rounded-full items-center justify-center">
-              <Icon name="Bot" size={16} color="#3B82F6" />
-            </View>
-          </View>
-        )}
-
         {/* Message Content */}
         <View className={`max-w-[80%] ${isAI ? 'items-start' : 'items-end'}`}>
           {/* Message Bubble */}
           <View
-            className={`px-4 py-3 rounded-2xl ${
-              isAI
-                ? 'bg-slate-100 rounded-bl-md'
-                : 'bg-blue-500 rounded-br-md'
+            className={`px-4 py-3 rounded-2xl bg-white ${
+              isAI ? 'rounded-bl-md' : 'rounded-br-md'
             }`}
             style={{
               shadowColor: '#000',
@@ -115,9 +104,7 @@ export function ChatMessage({ message, isLastMessage = false }: ChatMessageProps
             ) : (
               // Regular message
               <ThemedText
-                className={`text-base leading-5 ${
-                  isAI ? 'text-slate-900' : 'text-white'
-                }`}
+                className="text-base leading-5 text-slate-900"
               >
                 {message.content}
               </ThemedText>
@@ -144,15 +131,6 @@ export function ChatMessage({ message, isLastMessage = false }: ChatMessageProps
             </View>
           )}
         </View>
-
-        {/* User Avatar Placeholder */}
-        {!isAI && (
-          <View className="ml-3 mt-1">
-            <View className="w-8 h-8 bg-blue-500 rounded-full items-center justify-center">
-              <Icon name="User" size={16} color="white" />
-            </View>
-          </View>
-        )}
       </View>
     </Animated.View>
   );

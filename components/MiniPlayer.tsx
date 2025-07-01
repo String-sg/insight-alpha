@@ -1,5 +1,4 @@
 import { useAudioContext } from '@/contexts/AudioContext';
-import { useChatContext } from '@/contexts/ChatContext';
 import { useRouter, usePathname } from 'expo-router';
 import React, { useEffect, useRef } from 'react';
 import {
@@ -34,8 +33,6 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
     resumePodcast,
     pausePodcast,
   } = useAudioContext();
-
-  const { showChat } = useChatContext();
 
   // Show/hide animation based on whether audio is playing or loaded
   // Hide when on player screen
@@ -95,7 +92,7 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
   };
 
   const handleChatPress = () => {
-    showChat();
+    router.push('/chat');
   };
 
   const getCurrentInfo = () => {
