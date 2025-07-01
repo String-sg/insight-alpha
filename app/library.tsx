@@ -1,13 +1,12 @@
-import { Icon } from '@/components/Icon';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { SegmentedControl } from '@/components/SegmentedControl';
-import { WebScrollView } from '@/components/WebScrollView';
 import { TopicCard } from '@/components/TopicCard';
+import { WebScrollView } from '@/components/WebScrollView';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { educationalContent } from '@/data/educational-content';
 import { useRouter } from 'expo-router';
-import React, { useRef, useMemo } from 'react';
-import { FlatList, Platform, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import React, { useMemo, useRef } from 'react';
+import { FlatList, Platform, SafeAreaView, Text, View } from 'react-native';
 
 export default function LibraryScreen() {
   const { currentPodcast } = useAudioContext();
@@ -93,19 +92,10 @@ export default function LibraryScreen() {
       </View>
 
       {/* Your learnings section */}
-      <View className="flex-row items-center justify-between mx-6 mb-6">
+      <View className="mx-6 mb-6">
         <Text className="text-black text-xl font-geist-semibold">
           Your learnings
         </Text>
-        
-        <View className="flex-row gap-4">
-          <TouchableOpacity className="w-12 h-14 bg-slate-100 rounded-2xl items-center justify-center">
-            <Icon name="settings-outline" size={24} color="#020617" />
-          </TouchableOpacity>
-          <TouchableOpacity className="w-12 h-14 bg-slate-100 rounded-2xl items-center justify-center">
-            <Icon name="funnel-outline" size={24} color="#020617" />
-          </TouchableOpacity>
-        </View>
       </View>
     </>
   );

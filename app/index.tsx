@@ -72,18 +72,10 @@ export default function HomeScreen() {
         
         {/* Recently Learned Section */}
         <View className="mt-8 mb-4">
-          <View className="flex-row items-center justify-between mx-6 mb-4">
+          <View className="mx-6 mb-4">
             <Text className="text-black text-xl font-semibold">
               Recently learned
             </Text>
-            <TouchableOpacity
-              className="px-3 py-1.5 rounded-full"
-              activeOpacity={0.7}
-            >
-              <Text className="text-slate-900 text-sm font-medium tracking-wide">
-                See all
-              </Text>
-            </TouchableOpacity>
           </View>
           
           <View className="px-6">

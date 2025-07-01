@@ -5,23 +5,23 @@ import { QuizQuestion } from '@/components/QuizQuestion';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { mockQuizzes } from '@/data/quizzes';
 import {
-    Quiz,
-    QuizAnswer,
-    QuizAttempt,
-    QuizProgress,
-    QuizResult
+  Quiz,
+  QuizAnswer,
+  QuizAttempt,
+  QuizProgress,
+  QuizResult
 } from '@/types/quiz';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-    Alert,
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    Text,
-    TouchableOpacity,
-    View
+  Alert,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 const QUIZ_STORAGE_KEY = 'quiz_attempts';
