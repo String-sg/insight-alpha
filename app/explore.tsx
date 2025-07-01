@@ -2,12 +2,11 @@ import { ProfileHeader } from '@/components/ProfileHeader';
 import { SegmentedControl } from '@/components/SegmentedControl';
 import { WebScrollView } from '@/components/WebScrollView';
 import { useAudioContext } from '@/contexts/AudioContext';
-import { Stack, useRouter } from 'expo-router';
+import { Stack } from 'expo-router';
 import React from 'react';
 import { Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 export default function ExploreScreen() {
-  const router = useRouter();
   const { currentPodcast } = useAudioContext();
   
   // Calculate bottom padding based on mini player visibility
@@ -73,7 +72,7 @@ export default function ExploreScreen() {
         contentContainerStyle={{ paddingBottom: bottomPadding }}
       >
         {/* Header */}
-        <ProfileHeader onProfilePress={() => router.push('/profile')} />
+        <ProfileHeader />
 
         {/* Navigation Bar */}
         <View className="px-6">

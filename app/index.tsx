@@ -137,7 +137,7 @@ export default function HomeScreen() {
         contentContainerStyle={{ paddingBottom: bottomPadding }}
       >
         {/* Header */}
-        <ProfileHeader onProfilePress={() => router.push('/profile')} />
+        <ProfileHeader />
         
         {/* Navigation Bar */}
         <View className="px-6">
