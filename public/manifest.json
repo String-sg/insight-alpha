@@ -3,7 +3,7 @@
   "short_name": "MOE Onward",
   "description": "Educational podcast listening app with quizzes",
   "theme_color": "#000000",
-  "background_color": "#ffffff",
+  "background_color": "#f1f5f9",
   "display": "standalone",
   "orientation": "portrait",
   "scope": "/",
