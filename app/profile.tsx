@@ -1,9 +1,9 @@
-import { View, Text, TouchableOpacity, Image, Platform, SafeAreaView, StatusBar } from 'react-native';
-import { router, Stack } from 'expo-router';
-import { CheckSquare, BookOpenCheck, Lightbulb, ChevronRight } from 'lucide-react-native';
-import { WebScrollView } from '@/components/WebScrollView';
 import { NavigationBar } from '@/components/NavigationBar';
+import { WebScrollView } from '@/components/WebScrollView';
 import { useAudioContext } from '@/contexts/AudioContext';
+import { router, Stack } from 'expo-router';
+import { BookOpenCheck, CheckSquare, Lightbulb } from 'lucide-react-native';
+import { Image, Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 export default function ProfileScreen() {
   const { currentPodcast } = useAudioContext();
@@ -34,10 +34,10 @@ export default function ProfileScreen() {
         {/* Profile Card */}
         <View className="mx-6 mb-6 bg-white rounded-3xl">
           <View className="flex-row items-start p-4 gap-6">
-            <View className="w-[66px] h-[66px] bg-white rounded-full overflow-hidden">
+            <View className="w-[66px] h-[66px] bg-gray-200 rounded-full overflow-hidden">
               <Image 
                 source={require('@/assets/images/cover-album.png')} 
-                className="w-full h-full"
+                style={{ width: 66, height: 66 }}
                 resizeMode="cover"
               />
             </View>
