@@ -8,7 +8,9 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "build:web": "npx expo export --platform web && cp -r public/* dist/",
+    "build:pwa": "./scripts/build-pwa.sh"
   },
   "dependencies": {
     "@expo-google-fonts/geist": "^0.4.0",

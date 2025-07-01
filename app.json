@@ -29,7 +29,10 @@
       "themeColor": "#000000",
       "startUrl": "/",
       "display": "standalone",
-      "orientation": "portrait"
+      "orientation": "portrait",
+      "preferRelatedApplications": false,
+      "scope": "/",
+      "lang": "en"
     },
     "plugins": [
       "expo-router",
