@@ -10,18 +10,19 @@ import { X, Upload, FileText, RotateCcw, RotateCw, Play, Pause, ThumbsUp, Thumbs
 import React, { useEffect, useState } from 'react';
 import {
     ActivityIndicator,
-    Dimensions,
     Share,
     Text,
     TouchableOpacity,
-    View
+    View,
+    useWindowDimensions,
+    Platform
 } from 'react-native';
 
-const { height, width } = Dimensions.get('window');
 
 export default function PlayerScreen() {
   const router = useRouter();
   const [showSourceSheet, setShowSourceSheet] = useState(false);
+  const { height, width } = useWindowDimensions(); // Dynamic dimensions
   
   const {
     isPlaying,
@@ -150,17 +151,15 @@ export default function PlayerScreen() {
       {/* Full screen video background - at container level */}
       <Video
         source={require('@/assets/video/bg-mesh-gradient.mov')}
-        className="absolute inset-0"
         style={{
           position: 'absolute',
           top: 0,
           left: 0,
-          right: 0,
-          bottom: 0,
           width: width,
           height: height,
         }}
-        resizeMode={ResizeMode.COVER}
+        useNativeControls={false}
+        resizeMode={ResizeMode.STRETCH}
         shouldPlay
         isLooping
         isMuted
@@ -226,7 +225,8 @@ export default function PlayerScreen() {
               onSlidingComplete={handleSeek}
               minimumTrackTintColor="#7C3AED"
               maximumTrackTintColor="#E9D5FF"
-              // thumbTintColor="#FFFFFF"
+              // @ts-ignore - thumbTintColor exists at runtime
+              thumbTintColor="#ffffff"
             />
             
             {/* Time Display */}
