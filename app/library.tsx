@@ -12,6 +12,8 @@ export default function LibraryScreen() {
   const { currentPodcast } = useAudioContext();
   const flatListRef = useRef<FlatList>(null);
   const router = useRouter();
+  const { animatedStyle } = usePageTransition({ duration: 400 });
+  const { getItemStyle } = useStaggeredTransition(4, { delay: 120 }); // Header + 3 cards
   
   // Calculate bottom padding based on mini player visibility
   const bottomPadding = currentPodcast ? 120 : 40;
@@ -72,17 +74,17 @@ export default function LibraryScreen() {
     }
   ];
 
-  const renderCard = ({ item: subject }: { item: typeof learningSubjects[0] }) => (
-    <View style={{ height: cardHeight }} className="mx-6 mb-2">
+  const renderCard = ({ item: subject, index }: { item: typeof learningSubjects[0], index: number }) => (
+    <Animated.View style={[{ height: cardHeight }, getItemStyle(index + 1)]} className="mx-6 mb-2">
       <TopicCard 
         {...subject} 
         onPress={() => router.push(`/topic/${subject.id}`)}
       />
-    </View>
+    </Animated.View>
   );
 
   const renderHeader = () => (
-    <>
+    <Animated.View style={getItemStyle(0)}>
       {/* Header */}
       <ProfileHeader />
 
@@ -97,34 +99,38 @@ export default function LibraryScreen() {
           Your learnings
         </Text>
       </View>
-    </>
+    </Animated.View>
   );
 
   // Use WebScrollView for web, FlatList for native
-  const content = Platform.OS === 'web' ? (
-    <WebScrollView
-      style={{ flex: 1 }}
-      showsVerticalScrollIndicator={false}
-    >
-      {renderHeader()}
-      <View style={{ marginBottom: bottomPadding }}>
-        {learningSubjects.map((subject) => (
-          <React.Fragment key={subject.id}>
-            {renderCard({ item: subject })}
-          </React.Fragment>
-        ))}
-      </View>
-    </WebScrollView>
-  ) : (
-    <FlatList
-      ref={flatListRef}
-      data={learningSubjects}
-      renderItem={renderCard}
-      keyExtractor={(item) => item.id}
-      ListHeaderComponent={renderHeader}
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: bottomPadding }}
-    />
+  const content = (
+    <Animated.View style={[{ flex: 1 }, animatedStyle]}>
+      {Platform.OS === 'web' ? (
+        <WebScrollView
+          style={{ flex: 1 }}
+          showsVerticalScrollIndicator={false}
+        >
+          {renderHeader()}
+          <View style={{ marginBottom: bottomPadding }}>
+            {learningSubjects.map((subject, index) => (
+              <React.Fragment key={subject.id}>
+                {renderCard({ item: subject, index })}
+              </React.Fragment>
+            ))}
+          </View>
+        </WebScrollView>
+      ) : (
+        <FlatList
+          ref={flatListRef}
+          data={learningSubjects}
+          renderItem={renderCard}
+          keyExtractor={(item) => item.id}
+          ListHeaderComponent={renderHeader}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: bottomPadding }}
+        />
+      )}
+    </Animated.View>
   );
 
   if (Platform.OS === 'web') {

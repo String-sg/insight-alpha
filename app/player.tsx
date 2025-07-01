@@ -1,20 +1,20 @@
-import { useAudioContext } from '@/contexts/AudioContext';
 import { BottomSheet } from '@/components/BottomSheet';
 import { SourceSheet } from '@/components/SourceSheet';
+import { useAudioContext } from '@/contexts/AudioContext';
 import { educationalContent } from '@/data/educational-content';
 import Slider from '@react-native-community/slider';
-import { Video, ResizeMode } from 'expo-av';
+import { ResizeMode, Video } from 'expo-av';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { X, Upload, FileText, RotateCcw, RotateCw, Play, Pause, ThumbsUp, ThumbsDown, MoreHorizontal } from 'lucide-react-native';
-import React, { useEffect, useState } from 'react';
+import { FileText, MoreHorizontal, Pause, Play, RotateCcw, RotateCw, ThumbsDown, ThumbsUp, Upload, X } from 'lucide-react-native';
+import { useEffect, useState } from 'react';
 import {
-    ActivityIndicator,
-    Share,
-    Text,
-    TouchableOpacity,
-    View,
-    useWindowDimensions
+  ActivityIndicator,
+  Share,
+  Text,
+  TouchableOpacity,
+  View,
+  useWindowDimensions
 } from 'react-native';
 
 
@@ -22,6 +22,7 @@ export default function PlayerScreen() {
   const router = useRouter();
   const [showSourceSheet, setShowSourceSheet] = useState(false);
   const { height } = useWindowDimensions(); // Dynamic dimensions
+  const { modalStyle } = useModalTransition({ duration: 400 });
   
   const {
     isPlaying,
@@ -145,7 +146,7 @@ export default function PlayerScreen() {
   }
 
   return (
-    <View className="flex-1 bg-purple-900 relative">
+    <Animated.View style={[{ flex: 1 }, modalStyle]} className="bg-purple-900 relative">
       <StatusBar style="light" />
       {/* Full screen video background - at container level */}
       <View className="absolute inset-0 bg-purple-900 overflow-hidden">
@@ -331,6 +332,6 @@ export default function PlayerScreen() {
           onClose={() => setShowSourceSheet(false)}
         />
       </BottomSheet>
-    </View>
+    </Animated.View>
   );
 }

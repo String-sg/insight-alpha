@@ -7,7 +7,6 @@ import { WeekCalendar } from '@/components/WeekCalendar';
 import { EducationalContent, educationalContent, weeklyProgress } from '@/data/educational-content';
 import { useAudio } from '@/hooks/useAudio';
 import { useRouter } from 'expo-router';
-import React from 'react';
 import { Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 export default function HomeScreen() {
@@ -50,72 +49,81 @@ export default function HomeScreen() {
 
   // Get daily recommendation (newest content - the AI one)
   const dailyRecommendation = educationalContent[educationalContent.length - 1]; // Latest added content
+  
+  // Page transition hooks
+  const { animatedStyle } = usePageTransition({ duration: 400 });
+  const { getItemStyle } = useStaggeredTransition(recentlyLearned.length + 1, { delay: 100 });
 
   const content = (
-    <WebScrollView 
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: bottomPadding }}
-    >
-      <StatusBar barStyle="dark-content" />
-        {/* Header */}
-        <ProfileHeader />
-        
-        {/* Navigation Bar */}
-        <View className="px-6">
-          <SegmentedControl activeSegment="home" />
-        </View>
-        
-        {/* Week Calendar */}
-        <View className="px-6">
-          <WeekCalendar weekData={weeklyProgress} />
-        </View>
-        
-        {/* Recently Learned Section */}
-        <View className="mt-8 mb-4">
-          <View className="mx-6 mb-4">
-            <Text className="text-black text-xl font-semibold">
-              Recently learned
-            </Text>
-          </View>
+    <Animated.View style={[{ flex: 1 }, animatedStyle]}>
+      <WebScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: bottomPadding }}
+      >
+        <StatusBar barStyle="dark-content" />
+          {/* Header */}
+          <Animated.View style={getItemStyle(0)}>
+            <ProfileHeader />
+          </Animated.View>
           
-          <View className="px-6">
-            {recentlyLearned.map((content) => (
-              <EducationalCard
-                key={content.id}
-                content={content}
-                onPress={() => handleContentPress(content)}
-                onPlayPress={() => handlePlayPress(content)}
-              />
-            ))}
-          </View>
-        </View>
-
-        {/* Daily Recommendation Section */}
-        <View className="mt-4" style={{ marginBottom: bottomPadding }}>
-          <View className="flex-row items-center mx-6 mb-4">
-            <View className="flex-row items-center gap-1 flex-1">
+          {/* Navigation Bar */}
+          <Animated.View style={getItemStyle(1)} className="px-6">
+            <SegmentedControl activeSegment="home" />
+          </Animated.View>
+          
+          {/* Week Calendar */}
+          <Animated.View style={getItemStyle(2)} className="px-6">
+            <WeekCalendar weekData={weeklyProgress} />
+          </Animated.View>
+          
+          {/* Recently Learned Section */}
+          <Animated.View style={getItemStyle(3)} className="mt-8 mb-4">
+            <View className="mx-6 mb-4">
               <Text className="text-black text-xl font-semibold">
-                Daily recommendation
+                Recently learned
               </Text>
             </View>
-            <TouchableOpacity
-              onPress={handleRefreshRecommendation}
-              className="w-8 h-8 bg-white rounded-full items-center justify-center"
-              activeOpacity={0.8}
-            >
-              <Icon name="refresh" size={16} color="#000000" />
-            </TouchableOpacity>
-          </View>
-          
-          <View className="px-6">
-            <EducationalCard
-              content={dailyRecommendation}
-              onPress={() => handleContentPress(dailyRecommendation)}
-              onPlayPress={() => handlePlayPress(dailyRecommendation)}
-            />
-          </View>
-        </View>
-    </WebScrollView>
+            
+            <View className="px-6">
+              {recentlyLearned.map((content, index) => (
+                <Animated.View key={content.id} style={getItemStyle(4 + index)}>
+                  <EducationalCard
+                    content={content}
+                    onPress={() => handleContentPress(content)}
+                    onPlayPress={() => handlePlayPress(content)}
+                  />
+                </Animated.View>
+              ))}
+            </View>
+          </Animated.View>
+
+          {/* Daily Recommendation Section */}
+          <Animated.View style={[getItemStyle(4 + recentlyLearned.length), { marginBottom: bottomPadding }]} className="mt-4">
+            <View className="flex-row items-center mx-6 mb-4">
+              <View className="flex-row items-center gap-1 flex-1">
+                <Text className="text-black text-xl font-semibold">
+                  Daily recommendation
+                </Text>
+              </View>
+              <TouchableOpacity
+                onPress={handleRefreshRecommendation}
+                className="w-8 h-8 bg-white rounded-full items-center justify-center"
+                activeOpacity={0.8}
+              >
+                <Icon name="refresh" size={16} color="#000000" />
+              </TouchableOpacity>
+            </View>
+            
+            <View className="px-6">
+              <EducationalCard
+                content={dailyRecommendation}
+                onPress={() => handleContentPress(dailyRecommendation)}
+                onPlayPress={() => handlePlayPress(dailyRecommendation)}
+              />
+            </View>
+          </Animated.View>
+      </WebScrollView>
+    </Animated.View>
   );
 
   if (Platform.OS === 'web') {
