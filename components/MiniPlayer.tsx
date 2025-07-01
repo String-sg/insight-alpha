@@ -1,5 +1,5 @@
 import { useAudioContext } from '@/contexts/AudioContext';
-import { useRouter, usePathname } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 import React, { useEffect, useRef } from 'react';
 import {
   ActivityIndicator,
@@ -148,21 +148,24 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
           <TouchableWithoutFeedback
             onPress={handlePlayerPress}
           >
-            <View style={{
-              borderRadius: 1000,
-              backgroundColor: 'rgb(255, 255, 255)',
-              borderWidth: 1,
-              borderColor: 'rgb(226, 232, 240)',
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.05,
-              shadowRadius: 4,
-              elevation: 8,
-              padding: 12,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-          >
+            <View 
+              style={{
+                borderRadius: 1000,
+                backgroundColor: Platform.OS === 'web' ? 'transparent' : 'rgba(255, 255, 255, 0.85)',
+                backdropFilter: Platform.OS === 'web' ? undefined : 'blur(20px)',
+                borderWidth: 1,
+                borderColor: 'rgba(226, 232, 240, 0.6)',
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.05,
+                shadowRadius: 4,
+                elevation: 8,
+                padding: 12,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+              className={Platform.OS === 'web' ? 'mini-player-blur' : ''}
+            >
             {/* Podcast Image */}
             <View className="w-12 h-12 rounded-full overflow-hidden mr-3 bg-purple-500">
               <Image
@@ -208,22 +211,25 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
           <TouchableWithoutFeedback
             onPress={handleChatPress}
           >
-            <View style={{
-              width: 72,
-              height: 72,
-              borderRadius: 36,
-              backgroundColor: 'rgb(255, 255, 255)',
-              borderWidth: 1,
-              borderColor: 'rgb(226, 232, 240)',
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.05,
-              shadowRadius: 4,
-              elevation: 8,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+            <View 
+              style={{
+                width: 72,
+                height: 72,
+                borderRadius: 36,
+                backgroundColor: Platform.OS === 'web' ? 'transparent' : 'rgba(255, 255, 255, 0.85)',
+                backdropFilter: Platform.OS === 'web' ? undefined : 'blur(20px)',
+                borderWidth: 1,
+                borderColor: 'rgba(226, 232, 240, 0.6)',
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.05,
+                shadowRadius: 4,
+                elevation: 8,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              className={Platform.OS === 'web' ? 'mini-player-blur' : ''}
+            >
             <Icon
               name="sparkles"
               size={24}

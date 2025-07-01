@@ -36,4 +36,23 @@
     right: 0;
     z-index: 50;
   }
+  
+  /* Backdrop blur support with fallbacks */
+  .mini-player-blur {
+    /* Webkit prefix for Safari */
+    -webkit-backdrop-filter: blur(20px);
+    /* Standard property */
+    backdrop-filter: blur(20px);
+    /* Fallback for browsers that don't support backdrop-filter */
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+  
+  /* Support backdrop-filter feature query */
+  @supports (backdrop-filter: blur(20px)) {
+    .mini-player-blur {
+      background-color: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+  }
 }
