@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npx expo export --platform web && cp -r web/* dist/",
+  "buildCommand": "npx expo export --platform web && ./scripts/add-pwa-tags.sh",
   "outputDirectory": "dist",
   "rewrites": [
     {

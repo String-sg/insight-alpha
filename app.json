@@ -21,18 +21,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png",
-      "name": "MOE Onward Podcast App",
-      "shortName": "MOE Onward",
-      "description": "Educational podcast listening app with quizzes",
-      "backgroundColor": "#ffffff",
-      "themeColor": "#000000",
-      "startUrl": "/",
-      "display": "standalone",
-      "orientation": "portrait",
-      "preferRelatedApplications": false,
-      "scope": "/",
-      "lang": "en"
+      "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       "expo-router",
