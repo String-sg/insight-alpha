@@ -13,6 +13,7 @@ import React, { useEffect, useState } from 'react';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring, withSequence, withTiming, FadeIn } from 'react-native-reanimated';
 import {
     ActivityIndicator,
+    Platform,
     Share,
     Text,
     TouchableOpacity,
@@ -81,12 +82,23 @@ export default function PlayerScreen() {
       const contentInfo = getCurrentInfo();
       if (!contentInfo) return;
 
-      const shareOptions = {
-        message: `Check out this podcast: ${contentInfo.title}${contentInfo.subtitle ? ` by ${contentInfo.subtitle}` : ''}`,
+      const shareData = {
         title: contentInfo.title,
+        text: `Check out this podcast: ${contentInfo.title}${contentInfo.subtitle ? ` by ${contentInfo.subtitle}` : ''}`,
+        url: window.location.href
       };
 
-      await Share.share(shareOptions);
+      if (Platform.OS === 'web' && navigator.share) {
+        // Use Web Share API for web browsers (including Edge on Windows)
+        await navigator.share(shareData);
+      } else {
+        // Use React Native Share for mobile platforms
+        const shareOptions = {
+          message: shareData.text,
+          title: shareData.title,
+        };
+        await Share.share(shareOptions);
+      }
     } catch (error) {
       console.error('Error sharing:', error);
     }
