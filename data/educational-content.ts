@@ -54,7 +54,7 @@ export const educationalContent: EducationalContent[] = [
         title: 'Framework for Inclusive Education: Policies and Practices',
         url: 'https://www.moe.gov.sg/education-in-sg/inclusive-education-framework',
         type: 'article',
-        author: '[Ministry of Education, Singapore.',
+        author: 'Ministry of Education, Singapore',
         publishedDate: '2019'
       },
       {
@@ -107,7 +107,7 @@ export const educationalContent: EducationalContent[] = [
         title: 'EdTech Plan: Transforming Education Through Technology',
         url: 'https://www.moe.gov.sg/education-in-sg/educational-technology',
         type: 'article',
-        author: '[Ministry of Education, Singapore.',
+        author: 'Ministry of Education, Singapore',
         publishedDate: '2021'
       },
       {
