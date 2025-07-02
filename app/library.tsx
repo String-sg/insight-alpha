@@ -23,7 +23,7 @@ export default function LibraryScreen() {
   const contentCounts = useMemo(() => {
     const counts: Record<string, number> = {
       'Special Educational Needs': educationalContent.filter(c => c.category === 'Special Educational Needs').length,
-      'Artificial Intelligent': educationalContent.filter(c => c.category === 'Artificial Intelligent').length,
+      'Artificial Intelligence': educationalContent.filter(c => c.category === 'Artificial Intelligence').length,
       'Teacher mental health literacy': educationalContent.filter(c => c.category === 'Teacher mental health literacy').length,
     };
     return counts;
@@ -48,7 +48,7 @@ export default function LibraryScreen() {
       id: 'ai',
       title: 'Learn to use AI',
       subtitle: 'Artificial Intelligence',
-      podcasts: contentCounts['Artificial Intelligent'] || 0,
+      podcasts: contentCounts['Artificial Intelligence'] || 0,
       notes: 2,
       gradientFrom: '#fbbf24',
       gradientTo: '#fde047',

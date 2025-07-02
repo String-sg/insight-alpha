@@ -101,7 +101,7 @@ export default function ExploreScreen() {
         <TopicCard
           id="ai-topic"
           title="Learn to use AI"
-          subtitle="Artificial Intelligent"
+          subtitle="Artificial Intelligence"
           podcasts={12}
           gradientFrom="#fbbf24"
           gradientTo="#fde047"

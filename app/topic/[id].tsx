@@ -32,7 +32,7 @@ const topicMapping: Record<string, {
     textColor: 'text-purple-900'
   },
   'ai': { 
-    name: 'Artificial Intelligent',
+    name: 'Artificial Intelligence',
     shortName: 'AI in Education',
     description: 'Discover how AI is transforming education through personalized learning, intelligent tutoring systems, and data-driven insights to enhance teaching effectiveness.',
     color: 'bg-amber-100',

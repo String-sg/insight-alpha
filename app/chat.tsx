@@ -37,7 +37,7 @@ export default function ChatScreen() {
     "What are three quick strategies for teaching reading to a student with dyslexia in a mainstream classroom?",
     "How can I create a sensory-friendly classroom for students with autism spectrum disorder?",
     "What are effective ways to support students with ADHD in group activities?"
-  ] : currentTopic === 'Artificial Intelligent' ? [
+  ] : currentTopic === 'Artificial Intelligence' ? [
     "How can I use AI to create personalized learning materials?",
     "What are the best practices for using AI in education?",
     "How can AI help with assessment and feedback?"

@@ -77,7 +77,7 @@ export const educationalContent: EducationalContent[] = [
     id: '6',
     title: "AI's Role in Singapore's Education Transformation",
     description: 'Overview: This forward-looking session examines how artificial intelligence is transforming Singapore\'s education landscape, from personalized learning platforms to intelligent administrative systems. Educators will explore practical AI applications currently being implemented in local schools and understand the implications for teaching and learning in the digital age.\n\nWhat you will learn:\n• Understand Singapore\'s national AI in education strategy and implementation timeline\n• Explore AI-powered adaptive learning platforms and their impact on student outcomes\n• Analyze intelligent tutoring systems and personalized learning pathways\n• Examine AI applications in assessment, grading, and student progress tracking\n• Discuss ethical considerations and responsible AI use in educational settings\n• Identify opportunities to integrate AI tools into existing teaching practices',
-    category: 'Artificial Intelligent',
+    category: 'Artificial Intelligence',
     author: 'Education Technology Team',
     duration: 360000, // 6 minutes
     imageUrl: 'https://picsum.photos/400/400?random=6',
