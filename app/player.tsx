@@ -82,25 +82,39 @@ export default function PlayerScreen() {
       const contentInfo = getCurrentInfo();
       if (!contentInfo) return;
 
-      const shareData = {
-        title: contentInfo.title,
-        text: `Check out this podcast: ${contentInfo.title}${contentInfo.subtitle ? ` by ${contentInfo.subtitle}` : ''}`,
-        url: window.location.href
-      };
+      if (Platform.OS === 'web') {
+        // Web platform handling
+        const shareData = {
+          title: contentInfo.title,
+          text: `Check out this podcast: ${contentInfo.title}${contentInfo.subtitle ? ` by ${contentInfo.subtitle}` : ''}`,
+          url: window.location.href
+        };
 
-      if (Platform.OS === 'web' && navigator.share) {
-        // Use Web Share API for web browsers (including Edge on Windows)
-        await navigator.share(shareData);
+        if (navigator.share) {
+          try {
+            await navigator.share(shareData);
+          } catch (shareError) {
+            // Fallback to clipboard if Web Share API fails
+            console.log('Web Share API failed, falling back to clipboard:', shareError);
+            await navigator.clipboard.writeText(`${shareData.text} - ${shareData.url}`);
+            alert('Link copied to clipboard!');
+          }
+        } else {
+          // Fallback for browsers without Web Share API
+          await navigator.clipboard.writeText(`${shareData.text} - ${shareData.url}`);
+          alert('Link copied to clipboard!');
+        }
       } else {
         // Use React Native Share for mobile platforms
         const shareOptions = {
-          message: shareData.text,
-          title: shareData.title,
+          message: `Check out this podcast: ${contentInfo.title}${contentInfo.subtitle ? ` by ${contentInfo.subtitle}` : ''}`,
+          title: contentInfo.title,
         };
         await Share.share(shareOptions);
       }
     } catch (error) {
       console.error('Error sharing:', error);
+      // Final fallback - just log the error and continue
     }
   };
 

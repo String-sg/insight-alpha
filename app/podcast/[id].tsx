@@ -18,6 +18,7 @@ import {
     ActivityIndicator,
     Dimensions,
     Image,
+    Platform,
     Share,
     StatusBar,
     Text,
@@ -165,14 +166,39 @@ export default function PodcastDetailsScreen() {
     if (!content) return;
     
     try {
-      const shareOptions = {
-        message: `Check out this podcast: ${content.title} by ${content.author}`,
-        title: content.title,
-      };
+      if (Platform.OS === 'web') {
+        // Web platform handling
+        const shareData = {
+          title: content.title,
+          text: `Check out this podcast: ${content.title} by ${content.author}`,
+          url: window.location.href
+        };
 
-      await Share.share(shareOptions);
+        if (navigator.share) {
+          try {
+            await navigator.share(shareData);
+          } catch (shareError) {
+            // Fallback to clipboard if Web Share API fails
+            console.log('Web Share API failed, falling back to clipboard:', shareError);
+            await navigator.clipboard.writeText(`${shareData.text} - ${shareData.url}`);
+            alert('Link copied to clipboard!');
+          }
+        } else {
+          // Fallback for browsers without Web Share API
+          await navigator.clipboard.writeText(`${shareData.text} - ${shareData.url}`);
+          alert('Link copied to clipboard!');
+        }
+      } else {
+        // Use React Native Share for mobile platforms
+        const shareOptions = {
+          message: `Check out this podcast: ${content.title} by ${content.author}`,
+          title: content.title,
+        };
+        await Share.share(shareOptions);
+      }
     } catch (error) {
       console.error('Error sharing:', error);
+      // Final fallback - just log the error and continue
     }
   };
 
