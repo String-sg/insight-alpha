@@ -228,11 +228,11 @@ export default function PlayerScreen() {
       </Animated.View>
       
       {/* Content wrapper with max width */}
-      <View className="flex-1 relative z-10 mx-auto w-full px-4" style={{ maxWidth: 768 }}>
+      <View className="flex-1 relative z-10 mx-auto w-full px-6" style={{ maxWidth: 768 }}>
 
         <View className="flex-1">
           {/* Header */}
-          <View className="flex-row items-center justify-between px-6 pt-12 pb-2">
+          <View className="flex-row items-center justify-between pt-8 pb-2">
             <TouchableOpacity
               onPress={() => {
                 if (router.canGoBack()) {
@@ -265,7 +265,7 @@ export default function PlayerScreen() {
           <View className="flex-1" />
 
           {/* Title Section */}
-          <View className="px-6 mb-4">
+          <View className="mb-4">
             <View className="bg-purple-600 px-3 py-1.5 rounded-full self-start mb-3">
               <Text className="text-xs font-semibold text-white">Special Educational Needs</Text>
             </View>
@@ -275,7 +275,7 @@ export default function PlayerScreen() {
           </View>
 
           {/* Progress Section */}
-          <View className="px-6 mb-3">
+          <View className="mb-3">
             <Slider
               style={{ height: 30, width: '100%' }}
               minimumValue={0}
@@ -300,7 +300,7 @@ export default function PlayerScreen() {
           </View>
 
           {/* Main Controls */}
-          <View className="flex-row items-center justify-center px-6 mb-6 gap-6">
+          <View className="flex-row items-center justify-center mb-6 gap-6">
             {/* More Options */}
             <TouchableOpacity className="p-2">
               <MoreHorizontal size={20} color="white" strokeWidth={2} />
@@ -350,13 +350,13 @@ export default function PlayerScreen() {
           </View>
 
           {/* Bottom Actions */}
-          <View className="px-6 pb-8">
+          <View className="pb-8">
             <View className="flex-row items-center justify-between">
-              <View className="flex-row gap-3">
+              <View className="flex-row items-center gap-2 sm:gap-1 md:gap-2">
                 <View style={{ position: 'relative' }}>
                   <AnimatedTouchableOpacity 
                     onPress={handleLike}
-                    className="px-4 py-3 rounded-full flex-row items-center gap-2"
+                    className="px-4 py-3 rounded-full flex-row items-center"
                     style={[
                       {
                         backgroundColor: likeStatus === 'liked' ? '#7C3AED' : 'rgba(255, 255, 255, 0.2)',
@@ -374,7 +374,7 @@ export default function PlayerScreen() {
                 </View>
                 <TouchableOpacity 
                   onPress={handleDislike}
-                  className="px-4 py-3 rounded-full flex-row items-center gap-2"
+                  className="px-4 py-3 rounded-full flex-row items-center"
                   style={{
                     backgroundColor: likeStatus === 'disliked' ? '#7C3AED' : 'rgba(255, 255, 255, 0.2)',
                   }}
@@ -387,7 +387,7 @@ export default function PlayerScreen() {
                 </TouchableOpacity>
               </View>
 
-              <View className="flex-row gap-3">
+              <View className="flex-row items-center gap-2 sm:gap-1 md:gap-2">
                 <TouchableOpacity 
                   onPress={() => setShowScriptSheet(true)}
                   className="bg-white/20 px-4 py-3 rounded-full flex-row items-center gap-2"
