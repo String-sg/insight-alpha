@@ -616,6 +616,38 @@ export default function PodcastDetailsScreen() {
               </TouchableOpacity>
             </View>
           </View>
+
+          {/* Next Steps Section */}
+          <View className="px-6 mt-8 mb-8">
+            <Text className="text-black text-xl font-medium mb-6 px-1">
+              Next steps?
+            </Text>
+            
+            {/* Course Card */}
+            <View className="relative">
+              {/* Course Image */}
+              <View className="w-full h-50 rounded-3xl overflow-hidden mb-6">
+                <Image
+                  source={require('@/assets/images/next-step-cover-1.png')}
+                  style={{ width: '100%', height: 200 }}
+                  resizeMode="cover"
+                />
+              </View>
+              
+              {/* Course Content */}
+              <View className="space-y-2">
+                <Text className="text-slate-900 text-lg font-semibold leading-7">
+                  Managing ADHD, Autism, Learning Disabilities, and Concussion in School
+                </Text>
+                <Text className="text-slate-600 text-sm leading-6">
+                  Skills you'll gain: Autism Spectrum Disorders, Mental and Behaviour Health Specialities, School Psychology, Patient Evaluation, Disabilities...
+                </Text>
+                <Text className="text-slate-500 text-sm">
+                  Guidance Branch (MOE) • 6 months ago
+                </Text>
+              </View>
+            </View>
+          </View>
         </WebScrollView>
         
         {/* Note Editor Bottom Sheet */}
