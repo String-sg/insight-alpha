@@ -7,7 +7,6 @@ import {
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
 import { Platform, View } from 'react-native';
 import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -36,9 +35,10 @@ function AppContent() {
           <Stack.Screen name="chat" options={{ headerShown: false, presentation: 'modal' }} />
           <Stack.Screen name="+not-found" />
         </Stack>
-        
+
         {shouldShowMiniPlayer && <MiniPlayer />}
         <StatusBar style="auto" />
+        <GoogleAnalytics pathname={pathname} />
       </View>
     </ThemeProvider>
   );
