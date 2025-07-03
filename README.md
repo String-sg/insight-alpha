@@ -1,6 +1,6 @@
-# Welcome to your Expo app 👋
+# Onward prototype app
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This repo is created for the purpose of building a fast prototype and test and preset the idea faster to the hand of users and stakeholders. This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
 ## Get started
 
