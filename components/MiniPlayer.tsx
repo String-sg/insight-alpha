@@ -222,13 +222,12 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
               className="bg-white rounded-full p-3 border border-black/10"
             >
               {isLoading ? (
-                <ActivityIndicator size="small" color="#000000" />
+                <ActivityIndicator size="small" style={{ color: '#000000' }} />
               ) : (
                 <Icon
                   name={isPlaying ? "pause" : "play"}
                   size={24}
-                  color="#000000"
-                  style={isPlaying ? {} : { marginLeft: 2 }}
+                  style={isPlaying ? { color: '#000000' } : { marginLeft: 2, color: '#000000' }}
                 />
               )}
             </TouchableOpacity>
@@ -265,7 +264,7 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
             <Icon
               name="sparkles"
               size={24}
-              color="#000000"
+              style={{ color: '#000000' }}
             />
             </View>
           </TouchableWithoutFeedback>

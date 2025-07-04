@@ -110,15 +110,14 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
           <TouchableOpacity
             onPress={onClose}
             className="w-12 h-12 items-center justify-center rounded-full bg-slate-200"
-            style={{ backgroundColor: '#e2e8f0' }}
             activeOpacity={0.7}
           >
-            <Icon name="chevron-back" size={24} color="#020617" />
+            <Icon name="chevron-back" size={24} style={{ color: '#020617' }} />
           </TouchableOpacity>
           
           <View className="ml-4">
-            <View className="bg-slate-950 px-2.5 py-0.5 rounded-md" style={{ backgroundColor: '#020617' }}>
-              <Text className="text-white text-xs font-geist-semibold" style={{ color: '#ffffff' }}>Ask AI</Text>
+            <View className="bg-slate-950 px-2.5 py-0.5 rounded-md">
+              <Text className="text-white text-xs font-geist-semibold">Ask AI</Text>
             </View>
           </View>
         </View>
@@ -134,7 +133,7 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
       >
         {showSuggestions && messages.length === 0 ? (
           <View className="mt-6">
-            <Text className="text-xl font-geist-medium mb-4 leading-7" style={{ color: '#000000' }}>
+            <Text className="text-xl font-geist-medium mb-4 leading-7 text-black">
               Hi Mr. Tan, here are some of the example questions relevant to {currentTopic} topic.
             </Text>
             
@@ -144,10 +143,10 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
                   key={index}
                   onPress={() => handleQuestionPress(question)}
                   className={`${index === 2 ? 'bg-slate-200' : 'bg-white'} rounded-3xl p-4`}
-                  style={{ backgroundColor: index === 2 ? '#e2e8f0' : '#ffffff' }}
+                  style={index === 2 ? {} : {}}
                   activeOpacity={0.7}
                 >
-                  <Text className="text-base font-geist leading-6" style={{ color: '#020617' }}>
+                  <Text className="text-base font-geist leading-6 text-slate-950">
                     &ldquo;{question}&rdquo;
                   </Text>
                 </TouchableOpacity>
@@ -198,10 +197,9 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
         >
           <TouchableOpacity
             className="w-12 h-12 m-3 items-center justify-center rounded-full bg-slate-200"
-            style={{ backgroundColor: '#e2e8f0' }}
             activeOpacity={0.7}
           >
-            <Icon name="add" size={24} color="#020617" />
+            <Icon name="add" size={24} style={{ color: '#020617' }} />
           </TouchableOpacity>
           
           <TextInput
@@ -210,7 +208,7 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
             placeholder={`Ask AI about ${currentTopic === 'Special Educational Needs' ? 'SEN' : currentTopic}`}
             placeholderTextColor="#64748b"
             className="flex-1 text-sm font-geist mr-2"
-            style={{ color: '#475569' }}
+            className="text-slate-600"
             multiline={false}
             returnKeyType="send"
             onSubmitEditing={handleSend}
@@ -220,10 +218,10 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
             onPress={handleSend}
             disabled={!inputText.trim()}
             className="w-12 h-12 m-3 items-center justify-center rounded-full"
-            style={{ backgroundColor: inputText.trim() ? '#020617' : '#cbd5e1' }}
+            className={inputText.trim() ? 'bg-slate-950' : 'bg-slate-300'}
             activeOpacity={0.7}
           >
-            <Icon name="send" size={20} color="#FFFFFF" />
+            <Icon name="send" size={20} style={{ color: '#FFFFFF' }} />
           </TouchableOpacity>
         </View>
       </View>

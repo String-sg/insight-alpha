@@ -102,12 +102,12 @@ export function BottomSheet({ visible, onClose, children, height = 490 }: Bottom
             style={{
               height: height || '100%',
               transform: [{ translateY }],
-              backgroundColor: 'white',
+              backgroundColor: '#ffffff',
               borderTopLeftRadius: height ? 20 : 0,
               borderTopRightRadius: height ? 20 : 0,
               borderWidth: height ? 1 : 0,
-              borderColor: 'rgb(226, 232, 240)',
-              shadowColor: '#000',
+              borderColor: '#e2e8f0',
+              shadowColor: '#000000',
               shadowOffset: {
                 width: 0,
                 height: 4,
@@ -123,7 +123,7 @@ export function BottomSheet({ visible, onClose, children, height = 490 }: Bottom
               <View style={{
                 width: 48,
                 height: 4,
-                backgroundColor: 'rgb(226, 232, 240)',
+                backgroundColor: '#e2e8f0',
                 borderRadius: 2,
                 alignSelf: 'center',
                 marginTop: 8,

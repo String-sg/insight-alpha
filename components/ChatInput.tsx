@@ -88,7 +88,7 @@ export function ChatInput({
 
   const borderColor = colorAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: ['#E5E7EB', '#3B82F6'],
+    outputRange: ['rgb(229, 231, 235)', 'rgb(59, 130, 246)'], // gray-300 to blue-500
   });
 
   return (
@@ -104,7 +104,7 @@ export function ChatInput({
             borderWidth: 1.5,
             borderColor: borderColor,
             borderRadius: 22,
-            backgroundColor: '#F9FAFB',
+            backgroundColor: 'rgb(249, 250, 251)', // gray-50
           }}
         >
           <TextInput
@@ -114,7 +114,7 @@ export function ChatInput({
             onBlur={handleBlur}
             onKeyPress={handleKeyPress}
             placeholder={placeholder}
-            placeholderTextColor="#9CA3AF"
+            className="placeholder:text-gray-400"
             multiline
             maxLength={maxLength}
             className="px-4 py-3 text-base text-slate-900 leading-5"
@@ -160,7 +160,7 @@ export function ChatInput({
                 : 'bg-slate-300'
             }`}
             style={{
-              shadowColor: canSend ? '#3B82F6' : 'transparent',
+              shadowColor: canSend ? 'rgb(59, 130, 246)' : 'transparent', // blue-500
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.3,
               shadowRadius: 4,
@@ -169,12 +169,12 @@ export function ChatInput({
             activeOpacity={0.8}
           >
             {isTyping ? (
-              <Icon name="Clock" size={20} color="white" />
+              <Icon name="Clock" size={20} style={{ color: 'white' }} />
             ) : (
               <Icon 
                 name="Send" 
                 size={18} 
-                color={canSend ? "white" : "#9CA3AF"} 
+                style={{ color: canSend ? 'white' : '#9CA3AF' }}
               />
             )}
           </TouchableOpacity>
