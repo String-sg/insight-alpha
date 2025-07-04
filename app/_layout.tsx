@@ -1,8 +1,8 @@
 import {
-  Geist_400Regular,
-  Geist_500Medium,
-  Geist_600SemiBold,
-  useFonts
+    Geist_400Regular,
+    Geist_500Medium,
+    Geist_600SemiBold,
+    useFonts
 } from '@expo-google-fonts/geist';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, usePathname } from 'expo-router';
@@ -38,7 +38,6 @@ function AppContent() {
 
         {shouldShowMiniPlayer && <MiniPlayer />}
         <StatusBar style="auto" />
-        <GoogleAnalytics pathname={pathname} />
       </View>
     </ThemeProvider>
   );

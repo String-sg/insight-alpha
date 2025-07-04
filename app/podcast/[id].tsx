@@ -1,8 +1,8 @@
 import { BottomSheet } from '@/components/BottomSheet';
+import { Confetti } from '@/components/Confetti';
 import { NavigationBar } from '@/components/NavigationBar';
 import { NoteEditor } from '@/components/NoteEditor';
 import { SourceSheet } from '@/components/SourceSheet';
-import { Confetti } from '@/components/Confetti';
 import { WebScrollView } from '@/components/WebScrollView';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { useNotes } from '@/contexts/NotesContext';
@@ -12,23 +12,61 @@ import { getScriptByPodcastId } from '@/data/scripts';
 import { useAudio } from '@/hooks/useAudio';
 import { Note } from '@/types/notes';
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { Lightbulb, Pause, Play, Plus, FileText, ThumbsUp, ThumbsDown, ScrollText } from 'lucide-react-native';
+import { FileText, Lightbulb, Pause, Play, Plus, ScrollText, ThumbsDown, ThumbsUp } from 'lucide-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
     ActivityIndicator,
     Dimensions,
     Image,
     Platform,
+    ScrollView,
     Share,
     StatusBar,
     Text,
     TouchableOpacity,
     View,
-    ScrollView,
 } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming, withSpring, withSequence } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+
+// Helper function to get topic colors based on category
+const getTopicColors = (category: string) => {
+  switch (category) {
+    case 'Special Educational Needs':
+      return {
+        background: 'bg-purple-100',
+        badge: 'bg-purple-200',
+        text: 'text-purple-900',
+        hex: '#7C3AED', // purple-700
+        lightHex: '#E9D5FF' // purple-200
+      };
+    case 'Artificial Intelligence':
+      return {
+        background: 'bg-amber-100',
+        badge: 'bg-amber-200',
+        text: 'text-amber-900',
+        hex: '#B45309', // amber-700
+        lightHex: '#FEF3C7' // amber-100
+      };
+    case 'Teacher mental health literacy':
+      return {
+        background: 'bg-teal-100',
+        badge: 'bg-teal-200',
+        text: 'text-teal-900',
+        hex: '#0F766E', // teal-700
+        lightHex: '#CCFBF1' // teal-100
+      };
+    default:
+      return {
+        background: 'bg-purple-100',
+        badge: 'bg-purple-200',
+        text: 'text-purple-900',
+        hex: '#7C3AED',
+        lightHex: '#E9D5FF'
+      };
+  }
+};
 
 export default function PodcastDetailsScreen() {
   const router = useRouter();
@@ -111,6 +149,9 @@ export default function PodcastDetailsScreen() {
 
   const { currentPodcast: currentlyPlayingPodcast } = useAudioContext();
   const { getNotesForPodcast, createNote, updateNote, deleteNote } = useNotes();
+
+  // Get topic colors based on content category
+  const topicColors = content ? getTopicColors(content.category) : getTopicColors('');
 
   const loadNotes = useCallback(async (podcastId: string) => {
     const podcastNotes = await getNotesForPodcast(podcastId);
@@ -304,7 +345,7 @@ export default function PodcastDetailsScreen() {
 
   if (!content) {
     return (
-      <View className="flex-1 justify-center items-center bg-purple-100">
+      <View className={`flex-1 justify-center items-center ${topicColors.background}`}>
         <StatusBar barStyle="dark-content" />
         <Text className="text-lg text-slate-600">
           Content not found
@@ -346,7 +387,7 @@ export default function PodcastDetailsScreen() {
           headerShown: false,
         }}
       />
-      <View className="flex-1 bg-purple-100">
+      <View className={`flex-1 ${topicColors.background}`}>
         <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
         
         {/* Navigation Bar */}
@@ -385,7 +426,7 @@ export default function PodcastDetailsScreen() {
               {/* Card Content */}
               <View className="p-6">
                 {/* Podcast Image */}
-                <View className="w-24 h-24 rounded-full overflow-hidden bg-purple-500 mb-4">
+                <View className="w-24 h-24 rounded-full overflow-hidden mb-4" style={{ backgroundColor: topicColors.hex }}>
                   <Image
                     source={require('@/assets/images/cover-album.png')}
                     style={{ width: 96, height: 96 }}
@@ -394,8 +435,8 @@ export default function PodcastDetailsScreen() {
                 </View>
                 {/* Category Tag */}
                 <View className="self-start mb-2">
-                  <View className="bg-purple-200 rounded-full px-2 py-1">
-                    <Text className="text-purple-800 text-xs font-semibold">
+                  <View className={`${topicColors.badge} rounded-full px-2 py-1`}>
+                    <Text className={`${topicColors.text} text-xs font-semibold`}>
                       {content.category}
                     </Text>
                   </View>
@@ -476,14 +517,14 @@ export default function PodcastDetailsScreen() {
                     className="p-3 rounded-full items-center justify-center"
                     style={[
                       {
-                        backgroundColor: likeStatus === 'liked' ? '#7C3AED' : '#E9D5FF',
+                        backgroundColor: likeStatus === 'liked' ? topicColors.hex : topicColors.lightHex,
                       },
                       likeButtonAnimatedStyle
                     ]}
                   >
                     <ThumbsUp 
                       size={16} 
-                      color={likeStatus === 'liked' ? '#FFFFFF' : '#7C3AED'} 
+                      color={likeStatus === 'liked' ? '#FFFFFF' : topicColors.hex} 
                       strokeWidth={2} 
                     />
                   </AnimatedTouchableOpacity>
@@ -495,12 +536,12 @@ export default function PodcastDetailsScreen() {
                   onPress={handleDislike}
                   className="p-3 rounded-full items-center justify-center"
                   style={{
-                    backgroundColor: likeStatus === 'disliked' ? '#7C3AED' : '#E9D5FF',
+                    backgroundColor: likeStatus === 'disliked' ? topicColors.hex : topicColors.lightHex,
                   }}
                 >
                   <ThumbsDown 
                     size={16} 
-                    color={likeStatus === 'disliked' ? '#FFFFFF' : '#7C3AED'} 
+                    color={likeStatus === 'disliked' ? '#FFFFFF' : topicColors.hex} 
                     strokeWidth={2} 
                   />
                 </TouchableOpacity>
@@ -513,11 +554,11 @@ export default function PodcastDetailsScreen() {
                   onPress={() => setShowScriptSheet(true)}
                   className="px-4 py-3 rounded-full flex-row items-center gap-2"
                   style={{
-                    backgroundColor: '#E9D5FF',
+                    backgroundColor: topicColors.lightHex,
                   }}
                 >
-                  <ScrollText size={16} color="#7C3AED" strokeWidth={2} />
-                  <Text className="text-sm font-semibold text-purple-700">Script</Text>
+                  <ScrollText size={16} color={topicColors.hex} strokeWidth={2} />
+                  <Text className={`text-sm font-semibold ${topicColors.text}`}>Script</Text>
                 </TouchableOpacity>
                 
                 {/* Source Button */}
@@ -525,11 +566,11 @@ export default function PodcastDetailsScreen() {
                   onPress={() => setShowSourceSheet(true)}
                   className="px-4 py-3 rounded-full flex-row items-center gap-2"
                   style={{
-                    backgroundColor: '#E9D5FF',
+                    backgroundColor: topicColors.lightHex,
                   }}
                 >
-                  <FileText size={16} color="#7C3AED" strokeWidth={2} />
-                  <Text className="text-sm font-semibold text-purple-700">Sources</Text>
+                  <FileText size={16} color={topicColors.hex} strokeWidth={2} />
+                  <Text className={`text-sm font-semibold ${topicColors.text}`}>Sources</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -558,7 +599,7 @@ export default function PodcastDetailsScreen() {
                     onPress={() => handleNotePress(note.id)}
                   >
                     <Animated.View 
-                      className="bg-purple-200 rounded-3xl p-4 w-full h-full justify-between"
+                      className={`${topicColors.badge} rounded-3xl p-4 w-full h-full justify-between`}
                       style={[animatedStyle]}
                     >
                       <Text className="text-slate-600 text-xs">{formatNoteDate(note.createdAt)}</Text>
