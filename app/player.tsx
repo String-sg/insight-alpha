@@ -91,18 +91,9 @@ export default function PlayerScreen() {
         };
 
         if (navigator.share) {
-          try {
-            await navigator.share(shareData);
-          } catch (shareError) {
-            // Fallback to clipboard if Web Share API fails
-            console.log('Web Share API failed, falling back to clipboard:', shareError);
-            await navigator.clipboard.writeText(`${shareData.text} - ${shareData.url}`);
-            alert('Link copied to clipboard!');
-          }
+          await navigator.share(shareData);
         } else {
-          // Fallback for browsers without Web Share API
-          await navigator.clipboard.writeText(`${shareData.text} - ${shareData.url}`);
-          alert('Link copied to clipboard!');
+          throw new Error('Web Share API not supported');
         }
       } else {
         // Use React Native Share for mobile platforms
@@ -113,8 +104,9 @@ export default function PlayerScreen() {
         await Share.share(shareOptions);
       }
     } catch (error) {
-      console.error('Error sharing:', error);
-      // Final fallback - just log the error and continue
+      console.error('Sharing not supported on this platform:', error);
+      // Catch-all fallback - show a simple message
+      alert('Sharing is not available on this platform.');
     }
   };
 
