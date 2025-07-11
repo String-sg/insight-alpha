@@ -337,7 +337,7 @@ export default function PodcastDetailsScreen() {
 
   if (!content) {
     return (
-      <View className={`flex-1 justify-center items-center ${topicColors.background}`}>
+      <View className="flex-1 justify-center items-center bg-slate-100">
         <StatusBar barStyle="dark-content" />
         <Text className="text-lg text-slate-600">
           Content not found
@@ -379,7 +379,7 @@ export default function PodcastDetailsScreen() {
           headerShown: false,
         }}
       />
-      <View className={`flex-1 ${topicColors.background}`}>
+      <View className="flex-1 bg-slate-100">
         <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
         
         {/* Navigation Bar */}
