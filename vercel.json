@@ -1,6 +1,8 @@
 {
-  "buildCommand": "npx expo export --platform web && ./scripts/add-pwa-tags.sh",
+  "framework": null,
+  "buildCommand": "npm run build:web && npm run add-pwa-tags",
   "outputDirectory": "dist",
+  "installCommand": "npm install",
   "rewrites": [
     {
       "source": "/(.*)",
@@ -30,5 +32,7 @@
         }
       ]
     }
-  ]
+  ],
+  "functions": {},
+  "routes": []
 } 

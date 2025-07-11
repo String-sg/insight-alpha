@@ -9,7 +9,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "build:web": "npx expo export --platform web"
+    "build:web": "npx expo export --platform web",
+    "add-pwa-tags": "node -e \"const fs = require('fs'); const path = 'dist/index.html'; if (fs.existsSync(path)) { let html = fs.readFileSync(path, 'utf8'); html = html.replace('</head>', '<meta name=\\\"theme-color\\\" content=\\\"#f1f5f9\\\" /><meta name=\\\"description\\\" content=\\\"Educational podcast listening app with quizzes\\\" /><meta name=\\\"apple-mobile-web-app-capable\\\" content=\\\"yes\\\" /><meta name=\\\"apple-mobile-web-app-status-bar-style\\\" content=\\\"default\\\" /><meta name=\\\"apple-mobile-web-app-title\\\" content=\\\"MOE Onward\\\" /><link rel=\\\"manifest\\\" href=\\\"/manifest.json\\\" /><link rel=\\\"apple-touch-icon\\\" href=\\\"/apple-touch-icon.png\\\" /></head>'); fs.writeFileSync(path, html); console.log('PWA tags added successfully!'); } else { console.log('index.html not found, skipping PWA tags'); }\""
   },
   "dependencies": {
     "@expo-google-fonts/geist": "^0.4.0",
