@@ -2,6 +2,7 @@ import { BottomSheet } from '@/components/BottomSheet';
 import { Confetti } from '@/components/Confetti';
 import { NavigationBar } from '@/components/NavigationBar';
 import { NoteEditor } from '@/components/NoteEditor';
+import { SimpleMarkdown } from '@/components/SimpleMarkdown';
 import { SourceSheet } from '@/components/SourceSheet';
 import { WebScrollView } from '@/components/WebScrollView';
 import { useAudioContext } from '@/contexts/AudioContext';
@@ -494,9 +495,9 @@ export default function PodcastDetailsScreen() {
 
           {/* Description Section */}
           <View className="px-6 mt-6">
-            <Text className="text-slate-600 text-sm leading-6 px-1">
+            <SimpleMarkdown className="px-1">
               {content.description}
-            </Text>
+            </SimpleMarkdown>
             
             {/* Action Buttons */}
             <View className="flex-row items-center justify-between mt-4">
