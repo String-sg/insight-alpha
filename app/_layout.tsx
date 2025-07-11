@@ -26,7 +26,7 @@ function AppContent() {
 
   return (
     <ThemeProvider value={DefaultTheme}>
-      <View className={Platform.OS === 'web' ? "h-dvh" : "flex-1"}>
+      <View className={Platform.OS === 'web' ? "h-dvh bg-slate-100" : "flex-1 bg-slate-100"}>
         <Stack>
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="library" options={{ headerShown: false }} />

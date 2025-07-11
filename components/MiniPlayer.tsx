@@ -117,7 +117,11 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
   };
 
   const handleChatPress = () => {
-    router.push('/chat');
+    const category = currentPodcast?.category || '';
+    router.push({
+      pathname: '/chat',
+      params: { category }
+    });
   };
 
   const getCurrentInfo = () => {

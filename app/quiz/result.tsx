@@ -57,7 +57,7 @@ export default function QuizResultScreen() {
 
   if (!result) {
     return (
-      <SafeAreaView className="flex-1 bg-neutral-100">
+      <SafeAreaView className="flex-1">
         <StatusBar barStyle="dark-content" />
         <View className="flex-1 justify-center items-center">
           <Text className="text-lg">Loading results...</Text>
@@ -67,14 +67,14 @@ export default function QuizResultScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-neutral-100">
+    <SafeAreaView className="flex-1">
       <Stack.Screen 
         options={{
           headerShown: false,
           gestureEnabled: false,
         }}
       />
-      <StatusBar barStyle="dark-content" backgroundColor="#F5F5F5" />
+      <StatusBar barStyle="dark-content" />
 
       {/* Enhanced Confetti Animation */}
       <ConfettiCannon

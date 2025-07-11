@@ -26,6 +26,7 @@ import {
     Text,
     TouchableOpacity,
     View,
+    useWindowDimensions,
 } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 
@@ -133,12 +134,23 @@ export default function PodcastDetailsScreen() {
   };
   
   // Get screen dimensions for responsive layout
-  const { width: screenWidth } = Dimensions.get('window');
+  const { width: screenWidth } = useWindowDimensions();
   const notesContainerPadding = 48; // 24px padding on each side (px-6)
   const noteGap = 16;
-  const notesPerRow = 2; // Always 2 columns for both mobile and tablet
+  
+  // Max content width from WebScrollView (max-w-3xl = 768px)
+  const maxContentWidth = 768;
+  const contentWidth = Math.min(screenWidth, maxContentWidth);
+  
+  // Responsive breakpoints
+  const isTablet = screenWidth >= 768;
+  const notesPerRow = 2; // Always 2 columns for consistency
+  
+  // Calculate note card width considering the gaps between cards and max width constraint
   const totalGaps = (notesPerRow - 1) * noteGap;
-  const noteCardWidth = (screenWidth - notesContainerPadding - totalGaps) / notesPerRow;
+  const availableWidth = contentWidth - notesContainerPadding - totalGaps;
+  const noteCardWidth = Math.floor(availableWidth / notesPerRow);
+  const noteCardHeight = isTablet ? 140 : 120; // Slightly taller on tablet
 
   const {
     isContentPlaying,
@@ -338,7 +350,7 @@ export default function PodcastDetailsScreen() {
 
   if (!content) {
     return (
-      <View className="flex-1 justify-center items-center bg-slate-100">
+      <View className="flex-1 justify-center items-center">
         <StatusBar barStyle="dark-content" />
         <Text className="text-lg text-slate-600">
           Content not found
@@ -380,7 +392,7 @@ export default function PodcastDetailsScreen() {
           headerShown: false,
         }}
       />
-      <View className="flex-1 bg-slate-100">
+      <View className="flex-1">
         <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
         
         {/* Navigation Bar */}
@@ -576,7 +588,7 @@ export default function PodcastDetailsScreen() {
             </Text>
             
             {/* Responsive Grid Container */}
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: noteGap }}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: -noteGap/2 }}>
               {/* Existing Notes */}
               {notes.slice(0, 3).map((note, index) => {
                 const animatedStyle = index === 0 ? note1AnimatedStyle :
@@ -584,70 +596,79 @@ export default function PodcastDetailsScreen() {
                                     note3AnimatedStyle;
                 
                 return (
-                  <TouchableOpacity 
-                    key={note.id}
-                    className="relative" 
-                    style={{ width: noteCardWidth, height: 120 }}
-                    activeOpacity={0.8}
-                    onPress={() => handleNotePress(note.id)}
-                  >
-                    <Animated.View 
-                      className={`${topicColors.badge} rounded-3xl p-4 w-full h-full justify-between`}
-                      style={[animatedStyle]}
+                  <View key={note.id} style={{ paddingHorizontal: noteGap/2, marginBottom: noteGap }}>
+                    <TouchableOpacity 
+                      className="relative" 
+                      style={{ width: noteCardWidth, height: noteCardHeight }}
+                      activeOpacity={0.8}
+                      onPress={() => handleNotePress(note.id)}
                     >
-                      <Text className="text-slate-600 text-xs">{formatNoteDate(note.createdAt)}</Text>
-                      <Text className="text-slate-900 text-base font-medium leading-6" numberOfLines={2}>
-                        {note.title}
-                      </Text>
-                    </Animated.View>
-                  </TouchableOpacity>
+                      <Animated.View 
+                        className={`${topicColors.badge} rounded-3xl p-4 w-full h-full justify-between`}
+                        style={[animatedStyle]}
+                      >
+                        <Text className="text-slate-600 text-xs">{formatNoteDate(note.createdAt)}</Text>
+                        <Text className="text-slate-900 text-base font-medium leading-6" numberOfLines={2}>
+                          {note.title}
+                        </Text>
+                      </Animated.View>
+                    </TouchableOpacity>
+                  </View>
                 );
               })}
 
-              {/* Placeholder cards if less than 3 notes */}
-              {notes.length < 3 && Array.from({ length: 3 - notes.length }).map((_, index) => {
-                const actualIndex = notes.length + index;
-                const animatedStyle = actualIndex === 0 ? note1AnimatedStyle :
-                                    actualIndex === 1 ? note2AnimatedStyle :
-                                    note3AnimatedStyle;
-                
-                return (
-                  <TouchableOpacity 
-                    key={`placeholder-${index}`}
-                    className="relative" 
-                    style={{ width: noteCardWidth, height: 120 }}
-                    activeOpacity={0.7}
-                    onPress={handleNewNotePress}
-                  >
-                    <Animated.View 
-                      className="bg-slate-50 rounded-3xl p-4 w-full h-full justify-center items-center"
-                      style={[animatedStyle]}
-                    >
-                      <Text className="text-slate-400 text-sm">No note yet</Text>
-                    </Animated.View>
-                  </TouchableOpacity>
-                );
-              })}
+              {/* Placeholder cards if less than max notes */}
+              {(() => {
+                const displayedNotesCount = Math.min(notes.length, 3);
+                const maxNotesInRow = 4; // 3 notes + 1 "New note" card in 2x2 grid
+                const placeholderCount = Math.max(0, maxNotesInRow - displayedNotesCount - 1); // -1 for new note card
+                return Array.from({ length: placeholderCount }).map((_, index) => {
+                  const actualIndex = notes.length + index;
+                  const animatedStyle = actualIndex === 0 ? note1AnimatedStyle :
+                                      actualIndex === 1 ? note2AnimatedStyle :
+                                      note3AnimatedStyle;
+                  
+                  return (
+                    <View key={`placeholder-${index}`} style={{ paddingHorizontal: noteGap/2, marginBottom: noteGap }}>
+                      <TouchableOpacity 
+                        className="relative" 
+                        style={{ width: noteCardWidth, height: noteCardHeight }}
+                        activeOpacity={0.7}
+                        onPress={handleNewNotePress}
+                      >
+                        <Animated.View 
+                          className="bg-slate-50 rounded-3xl p-4 w-full h-full justify-center items-center"
+                          style={[animatedStyle]}
+                        >
+                          <Text className="text-slate-400 text-sm">No note yet</Text>
+                        </Animated.View>
+                      </TouchableOpacity>
+                    </View>
+                  );
+                });
+              })()}
 
               {/* New Note Card */}
-              <TouchableOpacity 
-                className="relative" 
-                style={{ width: noteCardWidth, height: 120 }}
-                activeOpacity={0.7}
-                onPress={handleNewNotePress}
-              >
-                <Animated.View 
-                  className="bg-white rounded-3xl p-4 w-full h-full justify-between"
-                  style={[note4AnimatedStyle]}
+              <View style={{ paddingHorizontal: noteGap/2, marginBottom: noteGap }}>
+                <TouchableOpacity 
+                  className="relative" 
+                  style={{ width: noteCardWidth, height: noteCardHeight }}
+                  activeOpacity={0.7}
+                  onPress={handleNewNotePress}
                 >
-                  <View className="bg-slate-200 rounded-full p-2 self-start">
-                    <Plus size={16} color="#000" strokeWidth={2} />
-                  </View>
-                  <Text className="text-slate-600 text-base font-medium">
-                    New note
-                  </Text>
-                </Animated.View>
-              </TouchableOpacity>
+                  <Animated.View 
+                    className="bg-white rounded-3xl p-4 w-full h-full justify-between"
+                    style={[note4AnimatedStyle]}
+                  >
+                    <View className="bg-slate-200 rounded-full p-2 self-start">
+                      <Plus size={16} color="#000" strokeWidth={2} />
+                    </View>
+                    <Text className="text-slate-600 text-base font-medium">
+                      New note
+                    </Text>
+                  </Animated.View>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
 

@@ -249,7 +249,7 @@ export default function QuizScreen() {
 
   if (isLoading) {
     return (
-      <View className="flex-1 bg-slate-100">
+      <View className="flex-1">
         <SafeAreaView className="flex-1">
           <StatusBar barStyle="dark-content" />
           <View className="flex-1 justify-center items-center">
@@ -262,7 +262,7 @@ export default function QuizScreen() {
 
   if (!quiz) {
     return (
-      <View className="flex-1 bg-slate-100">
+      <View className="flex-1">
         <SafeAreaView className="flex-1">
           <StatusBar barStyle="dark-content" />
           <View className="flex-1 justify-center items-center">
@@ -277,7 +277,7 @@ export default function QuizScreen() {
   const hasSelectedAnswer = answers.some(answer => answer.questionId === currentQuestion.id);
 
   return (
-    <View className="flex-1 bg-slate-100">
+    <View className="flex-1">
       <SafeAreaView className="flex-1">
         <Stack.Screen 
           options={{

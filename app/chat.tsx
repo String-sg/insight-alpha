@@ -1,9 +1,9 @@
 import { ChatMessage } from '@/components/ChatMessage';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { useChatContext } from '@/contexts/ChatContext';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { ChevronLeft, Plus, Send } from 'lucide-react-native';
+import { ChevronLeft, Plus, SendHorizontal } from 'lucide-react-native';
 import { useEffect, useRef, useState } from 'react';
 import {
     Animated,
@@ -19,6 +19,7 @@ import {
 
 export default function ChatScreen() {
   const router = useRouter();
+  const { category } = useLocalSearchParams<{ category?: string }>();
   const { currentSession, isTyping, sendMessage } = useChatContext();
   const { currentPodcast } = useAudioContext();
   const scrollViewRef = useRef<ScrollView>(null);
@@ -29,8 +30,8 @@ export default function ChatScreen() {
 
   const messages = currentSession?.messages || [];
 
-  // Get current topic from podcast if available
-  const currentTopic = currentPodcast?.category || 'Special Educational Needs';
+  // Get current topic from params, then podcast, then default
+  const currentTopic = category || currentPodcast?.category || 'Special Educational Needs';
   
   // Suggested questions based on topic
   const suggestedQuestions = currentTopic === 'Special Educational Needs' ? [
@@ -87,7 +88,7 @@ export default function ChatScreen() {
   };
 
   return (
-    <View className="flex-1 bg-slate-100" style={{ backgroundColor: '#f1f5f9' }}>
+    <View className="flex-1">
       <StatusBar style="dark" />
       
       <SafeAreaView className="flex-1">
@@ -183,13 +184,25 @@ export default function ChatScreen() {
             )}
           </ScrollView>
 
+          {/* Context Label */}
+          <View className="absolute bottom-24 left-0 right-0 flex-row justify-center mb-2">
+            <View className="bg-slate-200 rounded-full px-3 py-2">
+              <Text className="text-sm font-geist text-slate-900">
+                You are in the '{currentTopic === 'Special Educational Needs' ? 'SEN' : 
+                  currentTopic === 'Artificial Intelligence' ? 'AI' : 
+                  'Teacher mental health literacy'} topic context
+              </Text>
+            </View>
+          </View>
+
           {/* Floating Input Bar */}
           <View className="absolute bottom-6 left-6 right-6">
             <View 
               className="flex-row items-center rounded-full"
               style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                backgroundColor: 'rgba(255, 255, 255, 0.5)',
                 backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
                 borderWidth: 1,
                 borderColor: 'rgba(226, 232, 240, 0.8)',
                 shadowColor: '#000',
@@ -197,21 +210,23 @@ export default function ChatScreen() {
                 shadowOpacity: 0.05,
                 shadowRadius: 4.4,
                 elevation: 5,
+                ...(Platform.OS === 'web' && {
+                  boxShadow: '0px 2px 2px 0px rgba(255, 255, 255, 0.40) inset, 0px 4px 12px 0px rgba(0, 0, 0, 0.10) inset, 0px 4px 4.4px 0px rgba(0, 0, 0, 0.05)',
+                }),
               }}
             >
               <TouchableOpacity
-                className="w-12 h-12 m-3 items-center justify-center rounded-full bg-slate-200"
-                style={{ backgroundColor: '#e2e8f0' }}
+                className="w-12 h-12 m-3 items-center justify-center"
                 activeOpacity={0.7}
               >
-                <Plus size={24} color="#020617" />
+                <Plus size={24} color="#64748b" />
               </TouchableOpacity>
               
               <TextInput
                 ref={inputRef}
                 value={inputText}
                 onChangeText={setInputText}
-                placeholder={`Ask AI about ${currentTopic === 'Special Educational Needs' ? 'SEN' : currentTopic}`}
+                placeholder="Ask AI about SEN"
                 placeholderTextColor="#64748b"
                 className="flex-1 text-base font-geist mr-2"
                 style={{ color: '#475569', outline: 'none' } as any}
@@ -227,7 +242,7 @@ export default function ChatScreen() {
                 style={{ backgroundColor: inputText.trim() ? '#020617' : '#cbd5e1' }}
                 activeOpacity={0.7}
               >
-                <Send size={20} color="#FFFFFF" />
+                <SendHorizontal size={20} color="#FFFFFF" />
               </TouchableOpacity>
             </View>
           </View>
