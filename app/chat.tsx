@@ -213,7 +213,7 @@ export default function ChatScreen() {
                 onChangeText={setInputText}
                 placeholder={`Ask AI about ${currentTopic === 'Special Educational Needs' ? 'SEN' : currentTopic}`}
                 placeholderTextColor="#64748b"
-                className="flex-1 text-sm font-geist mr-2"
+                className="flex-1 text-base font-geist mr-2"
                 style={{ color: '#475569', outline: 'none' } as any}
                 multiline={false}
                 returnKeyType="send"
