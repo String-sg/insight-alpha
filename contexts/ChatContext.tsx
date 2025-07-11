@@ -153,7 +153,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
     return `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   };
 
-  const sendMessage = async (content: string): Promise<void> => {
+  const sendMessage = async (content: string, context?: string): Promise<void> => {
     if (!state.currentSession || !content.trim()) return;
 
     // Create user message
@@ -164,6 +164,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
       timestamp: new Date(),
       type: 'text',
       status: 'sending',
+      context: context,
     };
 
     // Add user message
@@ -191,6 +192,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
         timestamp: new Date(),
         type: 'text',
         status: 'delivered',
+        context: context,
       };
       
       dispatch({ type: 'ADD_MESSAGE', payload: aiResponse });

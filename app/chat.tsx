@@ -1,12 +1,12 @@
 import { ChatMessage } from '@/components/ChatMessage';
+import { ContextLabel } from '@/components/ContextLabel';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { useChatContext } from '@/contexts/ChatContext';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { ChevronLeft, Plus, SendHorizontal } from 'lucide-react-native';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-    Animated,
     KeyboardAvoidingView,
     Platform,
     SafeAreaView,
@@ -20,12 +20,12 @@ import {
 export default function ChatScreen() {
   const router = useRouter();
   const { category } = useLocalSearchParams<{ category?: string }>();
-  const { currentSession, isTyping, sendMessage } = useChatContext();
+  const { currentSession, isTyping, sendMessage, clearCurrentSession } = useChatContext();
   const { currentPodcast } = useAudioContext();
   const scrollViewRef = useRef<ScrollView>(null);
-  const headerAnim = useRef(new Animated.Value(0)).current;
   const [inputText, setInputText] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(true);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const inputRef = useRef<TextInput>(null);
 
   const messages = currentSession?.messages || [];
@@ -33,51 +33,60 @@ export default function ChatScreen() {
   // Get current topic from params, then podcast, then default
   const currentTopic = category || currentPodcast?.category || 'Special Educational Needs';
   
-  // Suggested questions based on topic
+  // Check if there are any messages for the current topic
+  const hasMessagesForCurrentTopic = messages.some(msg => 
+    msg.context === currentTopic || 
+    (currentTopic === 'Artificial Intelligence' && msg.context === 'AI') ||
+    (currentTopic === 'AI' && msg.context === 'Artificial Intelligence')
+  );
+  
+  // Filter messages for current topic
+  const topicMessages = messages.filter(msg => 
+    msg.context === currentTopic || 
+    (currentTopic === 'Artificial Intelligence' && msg.context === 'AI') ||
+    (currentTopic === 'AI' && msg.context === 'Artificial Intelligence')
+  );
+  
+  // Suggested questions based on topic (showing only 2 questions)
   const suggestedQuestions = currentTopic === 'Special Educational Needs' ? [
     "What are three quick strategies for teaching reading to a student with dyslexia in a mainstream classroom?",
-    "How can I create a sensory-friendly classroom for students with autism spectrum disorder?",
-    "What are effective ways to support students with ADHD in group activities?"
-  ] : currentTopic === 'Artificial Intelligence' ? [
+    "How can I create a sensory-friendly classroom for students with autism spectrum disorder?"
+  ] : (currentTopic === 'Artificial Intelligence' || currentTopic === 'AI') ? [
     "How can I use AI to create personalized learning materials?",
-    "What are the best practices for using AI in education?",
-    "How can AI help with assessment and feedback?"
+    "What are the best practices for using AI in education?"
   ] : [
     "What are effective strategies for teacher self-care?",
-    "How can I recognize signs of burnout in myself or colleagues?",
-    "What resources are available for teacher mental health support?"
+    "How can I recognize signs of burnout in myself or colleagues?"
   ];
 
   const handleQuestionPress = (question: string) => {
     setInputText(question);
     setShowSuggestions(false);
-    sendMessage(question);
+    sendMessage(question, currentTopic);
   };
 
   const handleSend = () => {
     if (inputText.trim()) {
-      sendMessage(inputText.trim());
+      sendMessage(inputText.trim(), currentTopic);
       setInputText('');
       setShowSuggestions(false);
     }
   };
 
-  // Scroll to bottom when new messages arrive
+  // Scroll to bottom when new messages arrive for current topic
   useEffect(() => {
     const timer = setTimeout(() => {
       scrollViewRef.current?.scrollToEnd({ animated: true });
     }, 100);
     return () => clearTimeout(timer);
-  }, [messages]);
+  }, [topicMessages]);
 
-  // Header animation
+  // Reset suggestions and input when topic changes
   useEffect(() => {
-    Animated.timing(headerAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-  }, [headerAnim]);
+    setShowSuggestions(true);
+    setInputText('');
+  }, [currentTopic]);
+
 
   const handleBack = () => {
     if (router.canGoBack()) {
@@ -99,101 +108,113 @@ export default function ChatScreen() {
           {/* Content wrapper with max width */}
           <View className="flex-1 mx-auto w-full" style={{ maxWidth: 768 }}>
           {/* Header */}
-          <Animated.View
-            style={{
-              opacity: headerAnim,
-              transform: [{
-                translateY: headerAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [-20, 0],
-                }),
-              }],
-            }}
-          >
-            <View className="flex-row items-center px-6 pt-4 pb-4">
-              <TouchableOpacity
-                onPress={handleBack}
-                className="w-12 h-12 items-center justify-center rounded-full bg-slate-200"
-                style={{ backgroundColor: '#e2e8f0' }}
-                activeOpacity={0.7}
-              >
-                <ChevronLeft size={24} color="#020617" />
-              </TouchableOpacity>
-              
-              <View className="ml-4">
-                <View className="bg-slate-950 px-2.5 py-0.5 rounded-md" style={{ backgroundColor: '#020617' }}>
-                  <Text className="text-white text-xs font-geist-semibold" style={{ color: '#ffffff' }}>Ask AI</Text>
+          <View className="flex-row items-center justify-between px-6 pt-4 pb-4">
+              <View className="flex-row items-center">
+                <TouchableOpacity
+                  onPress={handleBack}
+                  className="w-10 h-10 items-center justify-center rounded-full bg-white"
+                  activeOpacity={0.7}
+                >
+                  <ChevronLeft size={24} color="#000" strokeWidth={2} />
+                </TouchableOpacity>
+                
+                <View className="ml-4">
+                  <View className="bg-slate-950 px-2.5 py-0.5 rounded-md" style={{ backgroundColor: '#020617' }}>
+                    <Text className="text-white text-xs font-geist-semibold" style={{ color: '#ffffff' }}>Ask AI</Text>
+                  </View>
                 </View>
               </View>
+              
+              {/* Clear chat button */}
+              <TouchableOpacity
+                onPress={() => clearCurrentSession()}
+                className="px-3 py-2"
+                activeOpacity={0.7}
+              >
+                <Text className="text-base font-geist-medium text-slate-600">Clear chat</Text>
+              </TouchableOpacity>
             </View>
-          </Animated.View>
 
           {/* Content */}
           <ScrollView
             ref={scrollViewRef}
             className="flex-1"
-            contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 100 }}
+            contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 100, flexGrow: 1 }}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
-            {showSuggestions && messages.length === 0 ? (
-              <View className="mt-6">
-                <Text className="text-xl font-geist-medium mb-4 leading-7" style={{ color: '#000000' }}>
-                  Hi Mr. Tan, here are some of the example questions relevant to {currentTopic} topic.
-                </Text>
+            {showSuggestions && !hasMessagesForCurrentTopic ? (
+              <View className="flex-1">
+                <View className="mt-6">
+                  <Text className="text-xl font-geist-medium mb-4 leading-7 text-black">
+                    Hi Mr. Tan, here are some of the example questions relevant to {currentTopic === 'Artificial Intelligence' || currentTopic === 'AI' ? 'Artificial Intelligence' : currentTopic} topic.
+                  </Text>
+                  
+                  <View className="space-y-3">
+                    {suggestedQuestions.map((question, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => handleQuestionPress(question)}
+                        onPressIn={() => setHoveredIndex(index)}
+                        onPressOut={() => setHoveredIndex(null)}
+                        className={`rounded-3xl p-4 mb-3 transition-colors ${
+                          hoveredIndex === index ? 'bg-slate-100' : 'bg-white'
+                        }`}
+                        activeOpacity={0.9}
+                      >
+                        <Text className="text-base font-geist leading-6 text-slate-900">
+                          &ldquo;{question}&rdquo;
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </View>
                 
-                <View className="space-y-3">
-                  {suggestedQuestions.map((question, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      onPress={() => handleQuestionPress(question)}
-                      className={`${index === 2 ? 'bg-slate-200' : 'bg-white'} rounded-3xl p-4 mb-3`}
-                      style={{ backgroundColor: index === 2 ? '#e2e8f0' : '#ffffff' }}
-                      activeOpacity={0.7}
-                    >
-                      <Text className="text-base font-geist leading-6" style={{ color: '#020617' }}>
-                        &ldquo;{question}&rdquo;
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
+                {/* Context label at the bottom */}
+                <View className="flex-1 justify-end pb-4">
+                  <ContextLabel context={currentTopic} />
                 </View>
               </View>
             ) : (
-              <View>
-                {messages.map((message, index) => (
-                  <ChatMessage
-                    key={message.id}
-                    message={message}
-                    isLastMessage={index === messages.length - 1}
-                  />
-                ))}
-                
-                {isTyping && (
-                  <ChatMessage
-                    message={{
-                      id: 'typing-indicator',
-                      content: '',
-                      userId: 'ai-assistant',
-                      timestamp: new Date(),
-                      type: 'typing',
-                      status: 'delivered',
-                    }}
-                  />
+              <View className="flex-1">
+                {!hasMessagesForCurrentTopic ? (
+                  // Show context label at the end when no messages for current topic
+                  <View className="flex-1 justify-end pb-4">
+                    <ContextLabel context={currentTopic} />
+                  </View>
+                ) : (
+                  // Show messages with context labels
+                  <>
+                    {topicMessages.map((message, index) => (
+                      <ChatMessage
+                        key={message.id}
+                        message={message}
+                        isLastMessage={index === topicMessages.length - 1}
+                      />
+                    ))}
+                    
+                    {/* Show typing indicator before context label */}
+                    {isTyping && (
+                      <ChatMessage
+                        message={{
+                          id: 'typing-indicator',
+                          content: '',
+                          userId: 'ai-assistant',
+                          timestamp: new Date(),
+                          type: 'typing',
+                          status: 'delivered',
+                          context: currentTopic,
+                        }}
+                      />
+                    )}
+                    
+                    {/* Show context label after messages */}
+                    <ContextLabel context={currentTopic} />
+                  </>
                 )}
               </View>
             )}
           </ScrollView>
-
-          {/* Context Label */}
-          <View className="absolute bottom-24 left-0 right-0 flex-row justify-center mb-2">
-            <View className="bg-slate-200 rounded-full px-3 py-2">
-              <Text className="text-sm font-geist text-slate-900">
-                You are in the '{currentTopic === 'Special Educational Needs' ? 'SEN' : 
-                  currentTopic === 'Artificial Intelligence' ? 'AI' : 
-                  'Teacher mental health literacy'} topic context
-              </Text>
-            </View>
-          </View>
 
           {/* Floating Input Bar */}
           <View className="absolute bottom-6 left-6 right-6">
@@ -226,7 +247,7 @@ export default function ChatScreen() {
                 ref={inputRef}
                 value={inputText}
                 onChangeText={setInputText}
-                placeholder="Ask AI about SEN"
+                placeholder={`Ask AI about ${currentTopic === 'Special Educational Needs' ? 'Special Educational Needs' : currentTopic === 'Artificial Intelligence' || currentTopic === 'AI' ? 'Artificial Intelligence' : 'teacher wellbeing'}`}
                 placeholderTextColor="#64748b"
                 className="flex-1 text-base font-geist mr-2"
                 style={{ color: '#475569', outline: 'none' } as any}

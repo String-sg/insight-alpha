@@ -12,6 +12,7 @@ export interface ChatMessage {
   timestamp: Date;
   type: 'text' | 'typing';
   status: 'sending' | 'sent' | 'delivered' | 'failed';
+  context?: string; // Topic context when message was sent
 }
 
 export interface ChatSession {
@@ -31,7 +32,7 @@ export interface ChatContextState {
 }
 
 export interface ChatContextActions {
-  sendMessage: (content: string) => Promise<void>;
+  sendMessage: (content: string, context?: string) => Promise<void>;
   createNewSession: () => void;
   loadSession: (sessionId: string) => void;
   clearCurrentSession: () => void;
