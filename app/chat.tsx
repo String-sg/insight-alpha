@@ -188,15 +188,20 @@ export default function ChatScreen() {
                 ) : (
                   // Show messages with context labels
                   <>
-                    {topicMessages.map((message, index) => (
-                      <ChatMessage
-                        key={message.id}
-                        message={message}
-                        isLastMessage={index === topicMessages.length - 1}
-                      />
-                    ))}
+                    {/* Show context label at the top */}
+                    <ContextLabel context={currentTopic} />
                     
-                    {/* Show typing indicator before context label */}
+                    <View className="space-y-4 mt-5">
+                      {topicMessages.map((message, index) => (
+                        <ChatMessage
+                          key={message.id}
+                          message={message}
+                          isLastMessage={index === topicMessages.length - 1}
+                        />
+                      ))}
+                    </View>
+                    
+                    {/* Show typing indicator */}
                     {isTyping && (
                       <ChatMessage
                         message={{
@@ -210,9 +215,6 @@ export default function ChatScreen() {
                         }}
                       />
                     )}
-                    
-                    {/* Show context label after messages */}
-                    <ContextLabel context={currentTopic} />
                   </>
                 )}
               </View>

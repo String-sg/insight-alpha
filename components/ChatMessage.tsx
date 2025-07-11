@@ -40,7 +40,7 @@ export function ChatMessage({ message, isLastMessage = false }: ChatMessageProps
         opacity: fadeAnim,
         transform: [{ translateY: slideAnim }],
       }}
-      className={`mb-4 ${isLastMessage ? 'mb-6' : ''}`}
+      className={`mb-8 ${isLastMessage ? 'mb-10' : ''}`}
     >
       <View className={`flex-row ${isAI ? 'justify-start' : 'justify-end'}`}>
         {/* Message Content */}
