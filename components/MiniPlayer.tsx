@@ -118,6 +118,8 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
 
   const handleChatPress = () => {
     const category = currentPodcast?.category || '';
+    console.log('[MiniPlayer] Current podcast:', currentPodcast);
+    console.log('[MiniPlayer] Category being passed:', category);
     router.push({
       pathname: '/chat',
       params: { category }

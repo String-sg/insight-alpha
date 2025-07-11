@@ -32,6 +32,9 @@ export default function ChatScreen() {
 
   // Get current topic from params, then podcast, then default
   const currentTopic = category || currentPodcast?.category || 'Special Educational Needs';
+  console.log('[ChatScreen] Received category param:', category);
+  console.log('[ChatScreen] CurrentPodcast category:', currentPodcast?.category);
+  console.log('[ChatScreen] Final currentTopic:', currentTopic);
   
   // Check if there are any messages for the current topic
   const hasMessagesForCurrentTopic = messages.some(msg => 

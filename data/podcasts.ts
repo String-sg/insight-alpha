@@ -12,6 +12,7 @@ export const mockPodcasts: Podcast[] = [
     audioUrl: require('../assets/audio/building-safe-school-environments.mp3'),
     duration: 2400000, // 40 minutes in milliseconds
     author: 'Student Development Team',
+    category: 'Special Educational Needs',
     sources: [
       {
         title: '[Understanding Special Educational Needs in Singapore: A Comprehensive Guide]',
@@ -58,6 +59,7 @@ export const mockPodcasts: Podcast[] = [
     audioUrl: require('../assets/audio/ais-role-in-singapores-education-transformation.wav'),
     duration: 2100000, // 35 minutes in milliseconds
     author: 'Education Technology Team',
+    category: 'Artificial Intelligence',
     sources: [
       {
         title: '[AI in Education: Singapore\'s National Strategy and Implementation]',
