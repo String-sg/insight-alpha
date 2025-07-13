@@ -239,7 +239,8 @@ export default function PodcastDetailsScreen() {
         if (navigator.share) {
           await navigator.share(shareData);
         } else {
-          throw new Error('Web Share API not supported');
+          // Fallback for web platforms without Web Share API
+          alert('Sharing is not available on this platform.');
         }
       } else {
         // Use React Native Share for mobile platforms
@@ -247,12 +248,23 @@ export default function PodcastDetailsScreen() {
           message: `Check out this podcast: ${content.title} by ${content.author}`,
           title: content.title,
         };
-        await Share.share(shareOptions);
+        const result = await Share.share(shareOptions);
+        
+        // On Android, Share.share returns an object with action and activityType
+        // On iOS, it returns an object with action
+        // We don't need to handle the result unless there's an actual error
       }
-    } catch (error) {
-      console.error('Sharing not supported on this platform:', error);
-      // Catch-all fallback - show a simple message
-      alert('Sharing is not available on this platform.');
+    } catch (error: any) {
+      console.error('Share error:', error);
+      
+      // Only show fallback for actual sharing not supported errors
+      // Don't show error for user cancellation or other non-critical errors
+      if (error?.message?.includes('not supported') || 
+          error?.message?.includes('not available') ||
+          error?.code === 'UNAVAILABLE') {
+        alert('Sharing is not available on this platform.');
+      }
+      // For other errors (like user cancellation), silently ignore
     }
   };
 

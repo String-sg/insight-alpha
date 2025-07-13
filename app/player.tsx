@@ -1,26 +1,26 @@
-import { useAudioContext } from '@/contexts/AudioContext';
 import { BottomSheet } from '@/components/BottomSheet';
-import { SourceSheet } from '@/components/SourceSheet';
 import { Confetti } from '@/components/Confetti';
+import { SourceSheet } from '@/components/SourceSheet';
+import { useAudioContext } from '@/contexts/AudioContext';
 import { educationalContent } from '@/data/educational-content';
 import { getScriptByPodcastId } from '@/data/scripts';
 import Slider from '@react-native-community/slider';
-import { Video, ResizeMode } from 'expo-av';
+import { ResizeMode, Video } from 'expo-av';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { X, Upload, FileText, RotateCcw, RotateCw, Play, Pause, ThumbsUp, ThumbsDown, MoreHorizontal, ScrollText } from 'lucide-react-native';
+import { FileText, MoreHorizontal, Pause, Play, RotateCcw, RotateCw, ScrollText, ThumbsDown, ThumbsUp, Upload, X } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withSequence, withTiming, FadeIn } from 'react-native-reanimated';
 import {
     ActivityIndicator,
     Platform,
+    ScrollView,
     Share,
     Text,
     TouchableOpacity,
     View,
-    useWindowDimensions,
-    ScrollView
+    useWindowDimensions
 } from 'react-native';
+import Animated, { FadeIn, useAnimatedStyle, useSharedValue, withSequence, withSpring } from 'react-native-reanimated';
 
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
@@ -93,7 +93,8 @@ export default function PlayerScreen() {
         if (navigator.share) {
           await navigator.share(shareData);
         } else {
-          throw new Error('Web Share API not supported');
+          // Fallback for web platforms without Web Share API
+          alert('Sharing is not available on this platform.');
         }
       } else {
         // Use React Native Share for mobile platforms
@@ -101,12 +102,23 @@ export default function PlayerScreen() {
           message: `Check out this podcast: ${contentInfo.title}${contentInfo.subtitle ? ` by ${contentInfo.subtitle}` : ''}`,
           title: contentInfo.title,
         };
-        await Share.share(shareOptions);
+        const result = await Share.share(shareOptions);
+        
+        // On Android, Share.share returns an object with action and activityType
+        // On iOS, it returns an object with action
+        // We don't need to handle the result unless there's an actual error
       }
-    } catch (error) {
-      console.error('Sharing not supported on this platform:', error);
-      // Catch-all fallback - show a simple message
-      alert('Sharing is not available on this platform.');
+    } catch (error: any) {
+      console.error('Share error:', error);
+      
+      // Only show fallback for actual sharing not supported errors
+      // Don't show error for user cancellation or other non-critical errors
+      if (error?.message?.includes('not supported') || 
+          error?.message?.includes('not available') ||
+          error?.code === 'UNAVAILABLE') {
+        alert('Sharing is not available on this platform.');
+      }
+      // For other errors (like user cancellation), silently ignore
     }
   };
 
