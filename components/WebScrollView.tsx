@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, ScrollView, ScrollViewProps, View, ViewStyle } from 'react-native';
+import { Platform, ScrollView, ScrollViewProps, ViewStyle } from 'react-native';
 
 interface WebScrollViewProps extends ScrollViewProps {
   children: React.ReactNode;

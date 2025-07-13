@@ -16,17 +16,16 @@ import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-rou
 import { FileText, Lightbulb, Pause, Play, Plus, ScrollText, ThumbsDown, ThumbsUp } from 'lucide-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-    ActivityIndicator,
-    Dimensions,
-    Image,
-    Platform,
-    ScrollView,
-    Share,
-    StatusBar,
-    Text,
-    TouchableOpacity,
-    View,
-    useWindowDimensions,
+  ActivityIndicator,
+  Image,
+  Platform,
+  ScrollView,
+  Share,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View
 } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 
@@ -74,7 +73,6 @@ export default function PodcastDetailsScreen() {
   const router = useRouter();
   const { id, from, topicId } = useLocalSearchParams<{ id: string; from?: string; topicId?: string }>();
   const [content, setContent] = useState<EducationalContent | null>(null);
-  const [notesInView, setNotesInView] = useState(false);
   const [notes, setNotes] = useState<Note[]>([]);
   const [showNoteEditor, setShowNoteEditor] = useState(false);
   const [editingNote, setEditingNote] = useState<Note | null>(null);
@@ -84,11 +82,14 @@ export default function PodcastDetailsScreen() {
   const [likeStatus, setLikeStatus] = useState<'liked' | 'disliked' | null>(null);
   const [showLikeConfetti, setShowLikeConfetti] = useState(false);
   
-  // Animation values for each note card - start at 0 degrees
-  const note1Rotation = useSharedValue(0);
-  const note2Rotation = useSharedValue(0);
-  const note3Rotation = useSharedValue(0);
-  const note4Rotation = useSharedValue(0);
+  // Generate random rotations between -4 and 4 degrees
+  const randomRotation = () => Math.random() * 8 - 4;
+  
+  // Animation values for each note card - start with random rotation
+  const note1Rotation = useSharedValue(randomRotation());
+  const note2Rotation = useSharedValue(randomRotation());
+  const note3Rotation = useSharedValue(randomRotation());
+  const note4Rotation = useSharedValue(randomRotation());
   
   // Animation values for like button
   const likeButtonScale = useSharedValue(1);
@@ -118,19 +119,14 @@ export default function PodcastDetailsScreen() {
     };
   });
   
-  // Animate notes when they come into view
-  const animateNotesIntoView = () => {
-    if (!notesInView) {
-      setNotesInView(true);
-      // Generate random rotations between -4 and 4 degrees
-      const randomRotation = () => Math.random() * 8 - 4;
-      
-      // Stagger the animations with slight delays
-      setTimeout(() => note1Rotation.value = withTiming(randomRotation(), { duration: 400 }), 0);
-      setTimeout(() => note2Rotation.value = withTiming(randomRotation(), { duration: 400 }), 100);
-      setTimeout(() => note3Rotation.value = withTiming(randomRotation(), { duration: 400 }), 200);
-      setTimeout(() => note4Rotation.value = withTiming(randomRotation(), { duration: 400 }), 300);
-    }
+  // Function to reset rotation to 0 on click
+  const resetNoteRotation = (rotationValue: any) => {
+    rotationValue.value = withTiming(0, { duration: 200 });
+  };
+  
+  // Function to restore random rotation
+  const restoreNoteRotation = (rotationValue: any) => {
+    rotationValue.value = withTiming(randomRotation(), { duration: 200 });
   };
   
   // Get screen dimensions for responsive layout
@@ -177,6 +173,18 @@ export default function PodcastDetailsScreen() {
       setContent(foundContent || null);
     }
   }, [id]);
+
+  // Regenerate random rotations when notes change
+  useEffect(() => {
+    // Apply new random rotations with animation
+    const rotationValues = [note1Rotation, note2Rotation, note3Rotation, note4Rotation];
+    rotationValues.forEach((rotation, index) => {
+      // Stagger the animations with slight delays
+      setTimeout(() => {
+        rotation.value = withTiming(randomRotation(), { duration: 300 });
+      }, index * 50);
+    });
+  }, [notes.length]);
 
   // Load notes when screen comes into focus
   useFocusEffect(
@@ -260,9 +268,15 @@ export default function PodcastDetailsScreen() {
     return noteDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
-  const handleNotePress = (noteId: string) => {
+  const handleNotePress = (noteId: string, index: number) => {
     const note = notes.find(n => n.id === noteId);
     if (note) {
+      // Reset rotation to 0 on click
+      const rotationValues = [note1Rotation, note2Rotation, note3Rotation, note4Rotation];
+      if (rotationValues[index]) {
+        resetNoteRotation(rotationValues[index]);
+      }
+      
       setEditingNote(note);
       setIsNewNote(false);
       setShowNoteEditor(true);
@@ -270,6 +284,9 @@ export default function PodcastDetailsScreen() {
   };
 
   const handleNewNotePress = () => {
+    // Reset rotation to 0 on click for new note card
+    resetNoteRotation(note4Rotation);
+    
     setEditingNote(null);
     setIsNewNote(true);
     setShowNoteEditor(true);
@@ -307,6 +324,20 @@ export default function PodcastDetailsScreen() {
   };
 
   const handleCloseNoteEditor = () => {
+    // Restore random rotation when closing editor
+    if (editingNote) {
+      const noteIndex = notes.findIndex(n => n.id === editingNote.id);
+      if (noteIndex !== -1 && noteIndex < 3) {
+        const rotationValues = [note1Rotation, note2Rotation, note3Rotation];
+        if (rotationValues[noteIndex]) {
+          restoreNoteRotation(rotationValues[noteIndex]);
+        }
+      }
+    } else if (isNewNote) {
+      // Restore rotation for new note card
+      restoreNoteRotation(note4Rotation);
+    }
+    
     setShowNoteEditor(false);
     setEditingNote(null);
     setIsNewNote(false);
@@ -370,19 +401,9 @@ export default function PodcastDetailsScreen() {
   // Calculate dynamic padding for scroll content - match other screens
   const scrollPaddingBottom = isMiniPlayerVisible ? 120 : 40;
   
-  // Handle scroll events to detect when notes section is in view
+  // Handle scroll events (removed note animation trigger since notes are rotated by default)
   const handleScroll = (event: any) => {
-    const { contentOffset, layoutMeasurement } = event.nativeEvent;
-    const scrollY = contentOffset.y;
-    const screenHeight = layoutMeasurement.height;
-    
-    // Approximate position where notes section starts (after content card and description)
-    const notesOffsetPosition = 600; // Adjust based on your layout
-    const notesVisibilityThreshold = notesOffsetPosition - (screenHeight * 0.7);
-    
-    if (scrollY >= notesVisibilityThreshold && !notesInView) {
-      animateNotesIntoView();
-    }
+    // Empty function - keeping for potential future scroll-based features
   };
 
   return (
@@ -601,7 +622,7 @@ export default function PodcastDetailsScreen() {
                       className="relative" 
                       style={{ width: noteCardWidth, height: noteCardHeight }}
                       activeOpacity={0.8}
-                      onPress={() => handleNotePress(note.id)}
+                      onPress={() => handleNotePress(note.id, index)}
                     >
                       <Animated.View 
                         className={`${topicColors.badge} rounded-3xl p-4 w-full h-full justify-between`}
