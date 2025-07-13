@@ -452,7 +452,7 @@ export default function PodcastDetailsScreen() {
                   {content.title}
                 </Text>
                 <Text className="text-slate-600 text-sm mb-6">
-                  By {content.author} · 2 days ago
+                  By {content.author} · {content.publishedDate}
                 </Text>
 
                 {/* Action Buttons */}
@@ -691,14 +691,30 @@ export default function PodcastDetailsScreen() {
               
               {/* Course Content */}
               <View className="space-y-2">
+                {/* Course Badges */}
+                <View className="flex-row items-center gap-2 mb-2">
+                  <View className="bg-yellow-200 rounded-full px-3 py-1">
+                    <Text className="text-yellow-900 text-xs font-semibold">
+                      Artificial Intelligent
+                    </Text>
+                  </View>
+                  <View className="bg-slate-100 rounded-full px-3 py-1">
+                    <Text className="text-slate-700 text-xs font-semibold">
+                      Workshop
+                    </Text>
+                  </View>
+                </View>
+                
                 <Text className="text-slate-900 text-lg font-semibold leading-7">
-                  Managing ADHD, Autism, Learning Disabilities, and Concussion in School
+                  Hands-On AI for Educators: Empowering Teaching and Learning in Singapore
                 </Text>
+                
                 <Text className="text-slate-600 text-sm leading-6">
-                  Skills you'll gain: Autism Spectrum Disorders, Mental and Behaviour Health Specialities, School Psychology, Patient Evaluation, Disabilities...
+                  Skills you'll gain: AI Literacy, Tool Integration, Curriculum Design, Data Analysis, Ethical AI Use, Practical Implementation, Collaboration with AI
                 </Text>
+                
                 <Text className="text-slate-500 text-sm">
-                  Guidance Branch (MOE) • 6 months ago
+                  DXD • August
                 </Text>
               </View>
             </View>
