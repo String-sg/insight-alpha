@@ -221,17 +221,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Mobile-specific OAuth flow
   const handleMobileOAuth = async () => {
+    // Generate PKCE code verifier and challenge using AuthSession utilities
+    const codeVerifier = AuthSession.AuthRequest.generateRandomCodeVerifier();
+    const codeChallenge = await AuthSession.AuthRequest.generateRandomCodeChallengeAsync(codeVerifier);
+
+    // Store code verifier for later use
+    await AsyncStorage.setItem('code_verifier', codeVerifier);
+
     // Create auth request
     const request = new AuthSession.AuthRequest({
       clientId: GOOGLE_OAUTH_CONFIG.CLIENT_ID,
       scopes: ['openid', 'profile', 'email'],
       redirectUri: GOOGLE_OAUTH_CONFIG.REDIRECT_URI,
       responseType: AuthSession.ResponseType.Code,
-      codeChallenge: await Crypto.digestStringAsync(
-        Crypto.CryptoDigestAlgorithm.SHA256,
-        Crypto.randomUUID(),
-        { encoding: Crypto.CryptoEncoding.BASE64 }
-      ).then(result => result.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')),
+      codeChallenge: codeChallenge,
       codeChallengeMethod: AuthSession.CodeChallengeMethod.S256,
     });
 
