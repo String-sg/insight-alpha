@@ -33,9 +33,8 @@ export default function LoginScreen() {
       size: 15 + Math.random() * 25, // Random size between 15-40
     }));
 
-    setStars(initialStars);
-
-    const timeouts: number[] = [];
+    const timeoutsRef = useRef<number[]>([]);
+    timeoutsRef.current = [];
 
     // Animate individual star
     const animateStar = (star: AnimatedStar) => {
