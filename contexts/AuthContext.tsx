@@ -1,4 +1,5 @@
 import { GOOGLE_OAUTH_CONFIG, MOE_DOMAIN, STORAGE_KEYS } from '@/config/auth';
+import { logLogin, logUserEngagement } from '@/config/firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import * as AuthSession from 'expo-auth-session';
@@ -52,7 +53,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Show whitelist error
-  const showWhitelistError = () => {
+  const showWhitelistError = (email?: string) => {
+    // Log domain validation failure
+    logUserEngagement('domain_validation_failed', {
+      attempted_email: email,
+      allowed_domain: MOE_DOMAIN,
+      platform: Platform.OS
+    });
+    
     Alert.alert(
       'Access Denied',
       'Oops you are not whitelisted, please email lee_kah_how@moe.edu.sg if you think this is a mistake',
@@ -127,7 +135,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     // Validate email domain
     if (!validateEmailDomain(userInfo.email)) {
-      throw new Error('INVALID_DOMAIN');
+      throw new Error(`INVALID_DOMAIN:${userInfo.email}`);
     }
 
     // Generate or retrieve UUID
@@ -167,8 +175,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error: any) {
       console.error('Login error:', error);
       
-      if (error.message === 'INVALID_DOMAIN') {
-        showWhitelistError();
+      if (error.message.startsWith('INVALID_DOMAIN')) {
+        const email = error.message.split(':')[1];
+        showWhitelistError(email);
       } else {
         Alert.alert(
           'Login Failed',
@@ -254,41 +263,68 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const handleOAuthCallback = async (code: string) => {
     const codeVerifier = await AsyncStorage.getItem('code_verifier');
     
-    // Exchange code for tokens
-    const tokenResponse = await AuthSession.exchangeCodeAsync(
-      {
-        clientId: GOOGLE_OAUTH_CONFIG.CLIENT_ID,
-        clientSecret: GOOGLE_OAUTH_CONFIG.CLIENT_SECRET,
-        code: code,
-        redirectUri: GOOGLE_OAUTH_CONFIG.REDIRECT_URI,
-        extraParams: {
-          code_verifier: codeVerifier!,
+    try {
+      // Exchange code for tokens
+      const tokenResponse = await AuthSession.exchangeCodeAsync(
+        {
+          clientId: GOOGLE_OAUTH_CONFIG.CLIENT_ID,
+          clientSecret: GOOGLE_OAUTH_CONFIG.CLIENT_SECRET,
+          code: code,
+          redirectUri: GOOGLE_OAUTH_CONFIG.REDIRECT_URI,
+          extraParams: {
+            code_verifier: codeVerifier!,
+          },
         },
-      },
-      {
-        tokenEndpoint: 'https://oauth2.googleapis.com/token',
-      }
-    );
+        {
+          tokenEndpoint: 'https://oauth2.googleapis.com/token',
+        }
+      );
 
-    // Get user info
-    const userData = await getUserInfo(tokenResponse.accessToken);
-    
-    // Store auth data
-    await storeAuthData(
-      tokenResponse.accessToken,
-      tokenResponse.refreshToken!,
-      userData
-    );
+      // Get user info
+      const userData = await getUserInfo(tokenResponse.accessToken);
+      
+      // Store auth data
+      await storeAuthData(
+        tokenResponse.accessToken,
+        tokenResponse.refreshToken!,
+        userData
+      );
 
-    setUser(userData);
-    
-    // Clear code verifier
-    await AsyncStorage.removeItem('code_verifier');
+      setUser(userData);
+      
+      // Log successful login analytics
+      logLogin('google_oauth', true, 'moe.edu.sg');
+      logUserEngagement('user_login_success', {
+        user_id: userData.uuid,
+        email_domain: userData.email.split('@')[1],
+        platform: Platform.OS
+      });
+      
+      // Clear code verifier
+      await AsyncStorage.removeItem('code_verifier');
+    } catch (error) {
+      // Log failed login analytics
+      logLogin('google_oauth', false, 'unknown');
+      logUserEngagement('user_login_failed', {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        platform: Platform.OS
+      });
+      throw error;
+    }
   };
 
   // Logout function
   const logout = async () => {
     try {
+      // Log logout analytics before clearing data
+      if (user) {
+        logUserEngagement('user_logout', {
+          user_id: user.uuid,
+          email_domain: user.email.split('@')[1],
+          platform: Platform.OS
+        });
+      }
+      
       await clearAuthData();
       setUser(null);
     } catch (error) {

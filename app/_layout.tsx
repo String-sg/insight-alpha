@@ -1,15 +1,16 @@
 import {
-    Geist_400Regular,
-    Geist_500Medium,
-    Geist_600SemiBold,
-    useFonts
+  Geist_400Regular,
+  Geist_500Medium,
+  Geist_600SemiBold,
+  useFonts
 } from '@expo-google-fonts/geist';
 import {
-    GeistMono_400Regular,
-    GeistMono_500Medium,
-    GeistMono_600SemiBold,
+  GeistMono_400Regular,
+  GeistMono_500Medium,
+  GeistMono_600SemiBold,
 } from '@expo-google-fonts/geist-mono';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
+
 import { Stack, usePathname, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, View } from 'react-native';
@@ -19,6 +20,7 @@ import '../global.css';
 
 // import { useColorScheme } from '@/hooks/useColorScheme'; // Disabled dark mode
 import { MiniPlayer } from '@/components/MiniPlayer';
+import '@/config/firebase'; // Initialize Firebase
 import { AudioProvider } from '@/contexts/AudioContext';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { ChatProvider } from '@/contexts/ChatContext';
@@ -81,6 +83,7 @@ export default function RootLayout() {
           </NotesProvider>
         </AudioProvider>
       </AuthProvider>
+
     </SafeAreaProvider>
   );
 }
