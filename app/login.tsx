@@ -17,7 +17,7 @@ interface AnimatedStar {
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { login, isLoading, isOffline, enableDemoMode } = useAuth();
+  const { login, isLoading, isOffline, enableDemoMode, user } = useAuth();
   const [stars, setStars] = useState<AnimatedStar[]>([]);
   const timeoutsRef = useRef<number[]>([]);
 
@@ -57,8 +57,22 @@ export default function LoginScreen() {
   };
 
   const handleDemoMode = () => {
-    enableDemoMode();
+    console.log('Demo mode button clicked!');
+    try {
+      enableDemoMode();
+      console.log('Demo mode function called successfully');
+    } catch (error) {
+      console.error('Error in handleDemoMode:', error);
+    }
   };
+
+  // Navigate to homepage when user is authenticated (including demo mode)
+  useEffect(() => {
+    if (user && !isLoading) {
+      console.log('User authenticated, navigating to homepage');
+      router.replace('/');
+    }
+  }, [user, isLoading, router]);
 
   useEffect(() => {
     // Create initial animated stars

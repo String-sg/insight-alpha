@@ -147,13 +147,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Enable demo mode
   const enableDemoMode = () => {
-    setIsDemoMode(true);
-    setUser({
+    const demoUser = {
       id: 'demo-user',
       email: 'demo@moe.edu.sg',
       name: 'Demo User',
       uuid: 'demo-uuid-12345'
-    });
+    };
+    
+    setIsDemoMode(true);
+    setUser(demoUser);
     setIsLoading(false);
   };
 
