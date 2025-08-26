@@ -1,10 +1,15 @@
 // Google OAuth Configuration
 // Replace these with your actual credentials from Google Cloud Console
 
+// Environment variables are loaded by Expo automatically
+// Make sure to restart the development server after changing .env
+
+const EXPO_USERNAME = process.env.EXPO_USERNAME || 'kahhow';
+
 export const GOOGLE_OAUTH_CONFIG = {
-  CLIENT_ID: 'YOUR_GOOGLE_CLIENT_ID', // Replace with your actual client ID
-  CLIENT_SECRET: 'YOUR_GOOGLE_CLIENT_SECRET', // Replace with your actual client secret
-  REDIRECT_URI: 'https://auth.expo.io/@your-expo-username/moe-onward-app', // Replace with your actual redirect URI
+  CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '976215026609-koq4ev5ppenqk34864qjg3evts2393ko.apps.googleusercontent.com',
+  CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || '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',
+  REDIRECT_URI: `https://auth.expo.io/@${EXPO_USERNAME}/moe-onward-app`,
 };
 
 // Domain validation

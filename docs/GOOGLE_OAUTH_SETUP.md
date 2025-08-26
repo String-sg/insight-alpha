@@ -44,36 +44,32 @@ This guide will walk you through setting up Google OAuth for the MOE Onward app.
 - Copy the **Client ID** and **Client Secret**
 - Keep these secure and don't commit them to version control
 
-## Step 2: Update Configuration
+## Step 2: Configure Environment Variables
 
-### 2.1 Update Auth Configuration
-Edit `config/auth.ts` and replace the placeholder values:
+### 2.1 Set Up Environment File
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
 
-```typescript
-export const GOOGLE_OAUTH_CONFIG = {
-  CLIENT_ID: 'your-actual-client-id.apps.googleusercontent.com',
-  CLIENT_SECRET: 'your-actual-client-secret',
-  REDIRECT_URI: 'https://auth.expo.io/@your-expo-username/moe-onward-app',
-};
-```
+2. Edit the `.env` file and replace the placeholder values:
+   ```bash
+   # Your Google Cloud Console OAuth 2.0 Client ID
+   GOOGLE_CLIENT_ID=your-actual-client-id.apps.googleusercontent.com
+   
+   # Your Google Cloud Console OAuth 2.0 Client Secret
+   GOOGLE_CLIENT_SECRET=your-actual-client-secret
+   
+   # Your Expo username (used in redirect URI)
+   EXPO_USERNAME=your-expo-username
+   ```
 
-### 2.2 Environment Variables (Optional)
-For better security, you can use environment variables:
-
-1. Create `.env` file in the root directory:
-```
-GOOGLE_CLIENT_ID=your-actual-client-id.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=your-actual-client-secret
-```
-
-2. Update `config/auth.ts`:
-```typescript
-export const GOOGLE_OAUTH_CONFIG = {
-  CLIENT_ID: process.env.GOOGLE_CLIENT_ID || 'fallback-client-id',
-  CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || 'fallback-client-secret',
-  REDIRECT_URI: 'https://auth.expo.io/@your-expo-username/moe-onward-app',
-};
-```
+### 2.2 Configuration Details
+The `config/auth.ts` file automatically reads these environment variables. The configuration includes:
+- **CLIENT_ID**: Your Google OAuth 2.0 Client ID
+- **CLIENT_SECRET**: Your Google OAuth 2.0 Client Secret  
+- **REDIRECT_URI**: Automatically generated using your Expo username
+- **Security**: The `.env` file is gitignored to keep credentials secure
 
 ## Step 3: Testing
 

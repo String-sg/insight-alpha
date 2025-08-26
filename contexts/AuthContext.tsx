@@ -148,12 +148,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Login function
   const login = async () => {
+    console.log('Login function called');
+    console.log('OAuth config:', GOOGLE_OAUTH_CONFIG);
+    
     if (isOffline) {
+      console.log('Offline detected, showing error');
       showOfflineError();
       return;
     }
 
     try {
+      console.log('Starting login process...');
       setIsLoading(true);
 
       // Create auth request
