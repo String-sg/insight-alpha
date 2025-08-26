@@ -17,8 +17,6 @@ export const GOOGLE_OAUTH_CONFIG = {
 };
 
 
-
-
 // Domain validation
 export const MOE_DOMAIN = 'moe.edu.sg';
 
