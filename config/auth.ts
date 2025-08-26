@@ -7,8 +7,8 @@
 const EXPO_USERNAME = process.env.EXPO_USERNAME || 'kahhow';
 
 export const GOOGLE_OAUTH_CONFIG = {
-  CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '976215026609-koq4ev5ppenqk34864qjg3evts2393ko.apps.googleusercontent.com',
-  CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || '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',
+  CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   REDIRECT_URI: 'http://localhost:8081/',
 };
 
