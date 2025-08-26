@@ -4,6 +4,11 @@ import {
     Geist_600SemiBold,
     useFonts
 } from '@expo-google-fonts/geist';
+import {
+    GeistMono_400Regular,
+    GeistMono_500Medium,
+    GeistMono_600SemiBold,
+} from '@expo-google-fonts/geist-mono';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, usePathname, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -60,6 +65,9 @@ export default function RootLayout() {
     Geist_400Regular,
     Geist_500Medium,
     Geist_600SemiBold,
+    GeistMono_400Regular,
+    GeistMono_500Medium,
+    GeistMono_600SemiBold,
   });
 
   if (!loaded) {
