@@ -12,10 +12,6 @@ if (typeof window === 'undefined') {
 const EXPO_USERNAME = process.env.EXPO_USERNAME || 'kahhow';
 const PROJECT_SLUG = process.env.EXPO_PROJECT_SLUG || 'your-project-slug';
 
-// Production fallback - remove once env vars are working
-const PROD_CLIENT_ID = '976215026609-koq4ev5ppenqk34864qjg3evts2393ko.apps.googleusercontent.com';
-const PROD_CLIENT_SECRET = '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';
-
 // Debug environment variables
 console.log('Environment check:', {
   NODE_ENV: process.env.NODE_ENV,
@@ -25,8 +21,8 @@ console.log('Environment check:', {
 });
 
 export const GOOGLE_OAUTH_CONFIG = {
-  CLIENT_ID: process.env.GOOGLE_CLIENT_ID || PROD_CLIENT_ID, // Always use fallback for now
-  CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || PROD_CLIENT_SECRET, // Always use fallback for now
+  CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
+  CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || '',
   REDIRECT_URI: process.env.NODE_ENV === 'production' 
     ? 'https://insight.string.sg/' // Your production domain
     : 'http://localhost:8081/',
