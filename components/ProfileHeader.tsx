@@ -1,3 +1,4 @@
+import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
@@ -9,6 +10,7 @@ interface ProfileHeaderProps {
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ onProfilePress }) => {
   const router = useRouter();
+  const { user } = useAuth();
   
   const handleProfilePress = () => {
     if (onProfilePress) {
@@ -39,14 +41,20 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ onProfilePress }) 
       
       <TouchableOpacity
         onPress={handleProfilePress}
-        className="w-10 h-10 rounded-full overflow-hidden"
+        className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 items-center justify-center"
         activeOpacity={0.8}
       >
-        <Image
-          source={require('@/assets/images/cover-album.png')}
-          style={{ width: 40, height: 40 }}
-          resizeMode="cover"
-        />
+        {user?.name ? (
+          <Text className="text-lg font-semibold text-gray-700">
+            {user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+          </Text>
+        ) : (
+          <Image
+            source={require('@/assets/images/cover-album.png')}
+            style={{ width: 40, height: 40 }}
+            resizeMode="cover"
+          />
+        )}
       </TouchableOpacity>
     </View>
   );

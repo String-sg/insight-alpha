@@ -1,6 +1,8 @@
+import { GoogleLogo } from '@/components/GoogleLogo';
+import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Platform, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
@@ -15,11 +17,35 @@ interface AnimatedStar {
 
 export default function LoginScreen() {
   const router = useRouter();
+  const { login, isLoading, isOffline } = useAuth();
   const [stars, setStars] = useState<AnimatedStar[]>([]);
+  const timeoutsRef = useRef<number[]>([]);
 
-  const handleLogin = () => {
-    // Navigate to the homescreen
-    router.replace('/');
+  console.log('LoginScreen render - isLoading:', isLoading, 'isOffline:', isOffline);
+
+
+
+  const handleLogin = async () => {
+    console.log('Login button pressed');
+    console.log('Button state - isLoading:', isLoading, 'isOffline:', isOffline);
+    
+    if (isOffline) {
+      console.log('Offline detected, not proceeding with login');
+      return;
+    }
+    
+    if (isLoading) {
+      console.log('Already loading, not proceeding with login');
+      return;
+    }
+    
+    try {
+      console.log('Calling login function...');
+      await login();
+    } catch (error: any) {
+      console.error('Error in handleLogin:', error);
+      alert(`Login error: ${error?.message || 'Unknown error'}`);
+    }
   };
 
   useEffect(() => {
@@ -33,7 +59,7 @@ export default function LoginScreen() {
       size: 15 + Math.random() * 25, // Random size between 15-40
     }));
 
-    const timeoutsRef = useRef<number[]>([]);
+    setStars(initialStars);
     timeoutsRef.current = [];
 
     // Animate individual star
@@ -93,14 +119,14 @@ export default function LoginScreen() {
                 
                 // Continue the cycle
                 const nextTimeout = setTimeout(() => animateStar(star), Math.random() * 2000);
-                timeouts.push(nextTimeout);
+                timeoutsRef.current.push(nextTimeout);
               });
             });
           });
         });
       }, delay);
       
-      timeouts.push(timeout);
+      timeoutsRef.current.push(timeout);
     };
 
     // Start animation for all stars
@@ -108,7 +134,7 @@ export default function LoginScreen() {
 
     return () => {
       // Cleanup all timeouts
-      timeouts.forEach(timeout => clearTimeout(timeout));
+      timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
     };
   }, []);
 
@@ -174,38 +200,20 @@ export default function LoginScreen() {
       <View className="w-full max-w-sm">
         <TouchableOpacity
           onPress={handleLogin}
-          className="w-full bg-slate-800 rounded-xl py-4 px-6 flex-row items-center justify-center mb-4"
+          disabled={isOffline || isLoading}
+          className={`w-full rounded-xl py-4 px-6 flex-row items-center justify-center mb-4 ${
+            isOffline ? 'bg-gray-400' : 'bg-slate-800'
+          }`}
           activeOpacity={0.8}
+          style={{ backgroundColor: isOffline ? '#9CA3AF' : '#1E293B' }}
         >
           {/* Google Logo */}
-          <View
-            className="w-6 h-6 mr-3"
-            accessible={true}
-            accessibilityLabel="Google logo"
-          >
-            <Svg width={24} height={24} viewBox="0 0 24 24">
-              <Path
-                d="M12 12v3.6h5.1c-.2 1.2-1.5 3.6-5.1 3.6-3.1 0-5.6-2.6-5.6-5.7s2.5-5.7 5.6-5.7c1.8 0 3 .7 3.7 1.3l2.5-2.4C16.7 5.7 14.6 4.8 12 4.8 7.6 4.8 4 8.4 4 12.8s3.6 8 8 8c4.6 0 7.6-3.2 7.6-7.7 0-.5-.1-.9-.2-1.3H12z"
-                fill="#4285F4"
-              />
-              <Path
-                d="M21.8 12.2c0-.5-.1-.9-.2-1.3H12v3.6h5.1c-.2 1.2-1.5 3.6-5.1 3.6-3.1 0-5.6-2.6-5.6-5.7s2.5-5.7 5.6-5.7c1.8 0 3 .7 3.7 1.3l2.5-2.4C16.7 5.7 14.6 4.8 12 4.8 7.6 4.8 4 8.4 4 12.8s3.6 8 8 8c4.6 0 7.6-3.2 7.6-7.7z"
-                fill="#34A853"
-                opacity={0.5}
-              />
-              <Path
-                d="M12 4.8c2.6 0 4.7.9 6.2 2.4l-2.5 2.4c-.7-.6-1.9-1.3-3.7-1.3-3.1 0-5.6 2.6-5.6 5.7s2.5 5.7 5.6 5.7c3.6 0 4.9-2.4 5.1-3.6H12v-3.6h9.6c.1.4.2.8.2 1.3 0 4.5-3 7.7-7.6 7.7-4.4 0-8-3.6-8-8s3.6-8 8-8z"
-                fill="#FBBC05"
-                opacity={0.5}
-              />
-              <Path
-                d="M12 4.8c2.6 0 4.7.9 6.2 2.4l-2.5 2.4c-.7-.6-1.9-1.3-3.7-1.3-3.1 0-5.6 2.6-5.6 5.7s2.5 5.7 5.6 5.7c3.6 0 4.9-2.4 5.1-3.6H12v-3.6h9.6c.1.4.2.8.2 1.3 0 4.5-3 7.7-7.6 7.7-4.4 0-8-3.6-8-8s3.6-8 8-8z"
-                fill="#EA4335"
-                opacity={0.5}
-              />
-            </Svg>
+          <View className="mr-3">
+            <GoogleLogo size={24} />
           </View>
-          <Text className="text-white text-lg font-medium">Continue with Google</Text>
+          <Text className="text-white text-lg font-medium">
+            {isLoading ? 'Signing in...' : isOffline ? 'No Internet Connection' : 'Continue with Google'}
+          </Text>
         </TouchableOpacity>
 
         {/* Terms */}
