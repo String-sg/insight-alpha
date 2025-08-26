@@ -1,6 +1,7 @@
 import { EducationalCard } from '@/components/EducationalCard';
 import { Icon } from '@/components/Icon';
 import { ProfileHeader } from '@/components/ProfileHeader';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { SegmentedControl } from '@/components/SegmentedControl';
 import { WebScrollView } from '@/components/WebScrollView';
 import { WeekCalendar } from '@/components/WeekCalendar';
@@ -53,13 +54,14 @@ export default function HomeScreen() {
   const dailyRecommendation = educationalContent[educationalContent.length - 1]; // Latest added content
 
   const content = (
-    <WebScrollView 
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: bottomPadding }}
-    >
-      <StatusBar barStyle="dark-content" />
-        {/* Header */}
-        <ProfileHeader />
+    <ProtectedRoute>
+      <WebScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: bottomPadding }}
+      >
+        <StatusBar barStyle="dark-content" />
+          {/* Header */}
+          <ProfileHeader />
         
         {/* Navigation Bar */}
         <View className="px-6">
@@ -116,7 +118,8 @@ export default function HomeScreen() {
             />
           </View>
         </View>
-    </WebScrollView>
+      </WebScrollView>
+    </ProtectedRoute>
   );
 
   if (Platform.OS === 'web') {

@@ -20,6 +20,7 @@ import '../global.css';
 // import { useColorScheme } from '@/hooks/useColorScheme'; // Disabled dark mode
 import { MiniPlayer } from '@/components/MiniPlayer';
 import { AudioProvider } from '@/contexts/AudioContext';
+import { AuthProvider } from '@/contexts/AuthContext';
 import { ChatProvider } from '@/contexts/ChatContext';
 import { NotesProvider } from '@/contexts/NotesContext';
 
@@ -71,13 +72,15 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider className={Platform.OS === 'web' ? "h-dvh" : undefined}>
-      <AudioProvider>
-        <NotesProvider>
-          <ChatProvider>
-            <AppContent />
-          </ChatProvider>
-        </NotesProvider>
-      </AudioProvider>
+      <AuthProvider>
+        <AudioProvider>
+          <NotesProvider>
+            <ChatProvider>
+              <AppContent />
+            </ChatProvider>
+          </NotesProvider>
+        </AudioProvider>
+      </AuthProvider>
     </SafeAreaProvider>
   );
 }

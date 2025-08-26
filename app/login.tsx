@@ -1,6 +1,7 @@
+import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Platform, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
@@ -15,11 +16,12 @@ interface AnimatedStar {
 
 export default function LoginScreen() {
   const router = useRouter();
+  const { login, isLoading, isOffline } = useAuth();
   const [stars, setStars] = useState<AnimatedStar[]>([]);
+  const timeoutsRef = useRef<number[]>([]);
 
-  const handleLogin = () => {
-    // Navigate to the homescreen
-    router.replace('/');
+  const handleLogin = async () => {
+    await login();
   };
 
   useEffect(() => {
@@ -33,7 +35,7 @@ export default function LoginScreen() {
       size: 15 + Math.random() * 25, // Random size between 15-40
     }));
 
-    const timeoutsRef = useRef<number[]>([]);
+    setStars(initialStars);
     timeoutsRef.current = [];
 
     // Animate individual star
@@ -93,14 +95,14 @@ export default function LoginScreen() {
                 
                 // Continue the cycle
                 const nextTimeout = setTimeout(() => animateStar(star), Math.random() * 2000);
-                timeouts.push(nextTimeout);
+                timeoutsRef.current.push(nextTimeout);
               });
             });
           });
         });
       }, delay);
       
-      timeouts.push(timeout);
+      timeoutsRef.current.push(timeout);
     };
 
     // Start animation for all stars
@@ -108,7 +110,7 @@ export default function LoginScreen() {
 
     return () => {
       // Cleanup all timeouts
-      timeouts.forEach(timeout => clearTimeout(timeout));
+      timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
     };
   }, []);
 
@@ -174,7 +176,10 @@ export default function LoginScreen() {
       <View className="w-full max-w-sm">
         <TouchableOpacity
           onPress={handleLogin}
-          className="w-full bg-slate-800 rounded-xl py-4 px-6 flex-row items-center justify-center mb-4"
+          disabled={isOffline || isLoading}
+          className={`w-full rounded-xl py-4 px-6 flex-row items-center justify-center mb-4 ${
+            isOffline ? 'bg-gray-400' : 'bg-slate-800'
+          }`}
           activeOpacity={0.8}
         >
           {/* Google Logo */}
@@ -205,7 +210,9 @@ export default function LoginScreen() {
               />
             </Svg>
           </View>
-          <Text className="text-white text-lg font-medium">Continue with Google</Text>
+          <Text className="text-white text-lg font-medium">
+            {isLoading ? 'Signing in...' : isOffline ? 'No Internet Connection' : 'Continue with Google'}
+          </Text>
         </TouchableOpacity>
 
         {/* Terms */}
