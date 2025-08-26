@@ -18,7 +18,7 @@ export default function LoginScreen() {
   const [stars, setStars] = useState<AnimatedStar[]>([]);
 
   const handleLogin = () => {
-    // Navigate to the main app
+    // Navigate to the homescreen
     router.replace('/');
   };
 

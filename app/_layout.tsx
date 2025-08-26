@@ -12,7 +12,6 @@ import {
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, usePathname, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
 import { Platform, View } from 'react-native';
 import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -28,12 +27,7 @@ function AppContent() {
   const pathname = usePathname();
   const router = useRouter();
 
-  // Redirect to login if not already there
-  useEffect(() => {
-    if (pathname === '/') {
-      router.replace('/login');
-    }
-  }, [pathname]);
+  // No automatic redirect - let individual screens handle navigation
 
   // Hide mini player when fullscreen player is active, on quiz pages, or on chat page
   const shouldShowMiniPlayer = pathname !== '/player' && !pathname.startsWith('/quiz') && pathname !== '/chat' && pathname !== '/login';
