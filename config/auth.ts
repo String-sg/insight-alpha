@@ -1,21 +1,17 @@
-// Google OAuth Configuration
-// Replace these with your actual credentials from Google Cloud Console
+import Constants from 'expo-constants';
 
-// Environment variables are loaded by Expo automatically
-// Make sure to restart the development server after changing .env
+// Google OAuth Configuration using Expo Constants
+// This approach properly handles environment variables in Expo
 
-const EXPO_USERNAME = process.env.EXPO_USERNAME || 'kahhow';
-const PROJECT_SLUG = process.env.EXPO_PROJECT_SLUG || 'your-project-slug';
+const EXPO_USERNAME = Constants.expoConfig?.extra?.expoUsername || 'kahhow';
+const NODE_ENV = Constants.expoConfig?.extra?.nodeEnv || 'development';
 
-// Debug environment variables
-console.log('Environment variables check:');
-console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID ? 'SET' : 'NOT SET');
-console.log('GOOGLE_CLIENT_SECRET:', process.env.GOOGLE_CLIENT_SECRET ? 'SET' : 'NOT SET');
+
 
 export const GOOGLE_OAUTH_CONFIG = {
-  CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
-  CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || '',
-  REDIRECT_URI: process.env.NODE_ENV === 'production' 
+  CLIENT_ID: Constants.expoConfig?.extra?.googleClientId || '',
+  CLIENT_SECRET: Constants.expoConfig?.extra?.googleClientSecret || '',
+  REDIRECT_URI: NODE_ENV === 'production' 
     ? 'https://insight.string.sg/' // Your production domain
     : 'http://localhost:8081/',
 };

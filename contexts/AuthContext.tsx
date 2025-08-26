@@ -6,6 +6,14 @@ import * as Crypto from 'expo-crypto';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Alert, Platform } from 'react-native';
 
+// Demo user configuration
+const DEMO_USER = {
+  id: 'demo-user',
+  email: 'demo@moe.edu.sg',
+  name: 'Demo User',
+  uuid: 'demo-uuid-12345'
+};
+
 interface User {
   id: string;
   email: string;
@@ -17,9 +25,11 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   isOffline: boolean;
+  isDemoMode: boolean;
   login: () => Promise<void>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
+  enableDemoMode: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,6 +40,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
+  const [isDemoMode, setIsDemoMode] = useState(false);
 
   // Check network connectivity
   useEffect(() => {
@@ -142,19 +153,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   };
 
+  // Enable demo mode
+  const enableDemoMode = () => {
+    setIsDemoMode(true);
+    setUser(DEMO_USER);
+    setIsLoading(false);
+  };
+
   // Login function
   const login = async () => {
-    console.log('Login function called');
-    console.log('OAuth config:', GOOGLE_OAUTH_CONFIG);
-    
     if (isOffline) {
-      console.log('Offline detected, showing error');
       showOfflineError();
       return;
     }
 
     try {
-      console.log('Starting login process...');
       setIsLoading(true);
 
       if (Platform.OS === 'web') {
@@ -250,7 +263,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (result.type === 'success' && result.params.code) {
       await handleOAuthCallback(result.params.code);
     } else if (result.type === 'cancel') {
-      console.log('Auth cancelled by user');
+      // User cancelled authentication
     }
   };
 
@@ -310,7 +323,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const error = urlParams.get('error');
         
         if (code) {
-          console.log('OAuth callback detected, processing code...');
           // Clean up URL
           window.history.replaceState({}, document.title, window.location.pathname);
           
@@ -351,9 +363,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     user,
     isLoading,
     isOffline,
+    isDemoMode,
     login,
     logout,
     checkAuth,
+    enableDemoMode,
   };
 
   return (

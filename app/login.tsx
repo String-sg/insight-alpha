@@ -3,7 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Platform, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Animated, Platform, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 interface AnimatedStar {
@@ -17,7 +17,7 @@ interface AnimatedStar {
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { login, isLoading, isOffline } = useAuth();
+  const { login, isLoading, isOffline, enableDemoMode, user } = useAuth();
   const [stars, setStars] = useState<AnimatedStar[]>([]);
   const timeoutsRef = useRef<number[]>([]);
 
@@ -26,27 +26,50 @@ export default function LoginScreen() {
 
 
   const handleLogin = async () => {
-    console.log('Login button pressed');
-    console.log('Button state - isLoading:', isLoading, 'isOffline:', isOffline);
-    
     if (isOffline) {
-      console.log('Offline detected, not proceeding with login');
       return;
     }
     
     if (isLoading) {
-      console.log('Already loading, not proceeding with login');
       return;
     }
     
     try {
-      console.log('Calling login function...');
       await login();
     } catch (error: any) {
       console.error('Error in handleLogin:', error);
-      alert(`Login error: ${error?.message || 'Unknown error'}`);
+      // Show demo mode option when login fails
+      Alert.alert(
+        'Login Failed',
+        'Unable to authenticate with Google. Would you like to try demo mode?',
+        [
+          {
+            text: 'Try Demo Mode',
+            onPress: enableDemoMode,
+          },
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+        ]
+      );
     }
   };
+
+  const handleDemoMode = () => {
+    try {
+      enableDemoMode();
+    } catch (error) {
+      console.error('Error in handleDemoMode:', error);
+    }
+  };
+
+  // Navigate to homepage when user is authenticated (including demo mode)
+  useEffect(() => {
+    if (user && !isLoading) {
+      router.replace('/');
+    }
+  }, [user, isLoading, router]);
 
   useEffect(() => {
     // Create initial animated stars
@@ -213,6 +236,17 @@ export default function LoginScreen() {
           </View>
           <Text className="text-white text-lg font-medium">
             {isLoading ? 'Signing in...' : isOffline ? 'No Internet Connection' : 'Continue with Google'}
+          </Text>
+        </TouchableOpacity>
+
+        {/* Demo Mode Button */}
+        <TouchableOpacity
+          onPress={handleDemoMode}
+          className="w-full rounded-xl py-3 px-6 border-2 border-slate-300 mb-4"
+          activeOpacity={0.8}
+        >
+          <Text className="text-slate-700 text-lg font-medium text-center">
+            Try Demo Mode
           </Text>
         </TouchableOpacity>
 

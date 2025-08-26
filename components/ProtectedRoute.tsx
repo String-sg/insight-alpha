@@ -7,7 +7,7 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, isDemoMode } = useAuth();
   const router = useRouter();
 
   React.useEffect(() => {
@@ -22,7 +22,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     return null; // This will show the splash screen while loading
   }
 
-  // Show children only if authenticated
+  // Show children if authenticated or in demo mode
   if (!user) {
     return null; // Will redirect to login
   }
