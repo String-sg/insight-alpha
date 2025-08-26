@@ -5,8 +5,9 @@ import {
     useFonts
 } from '@expo-google-fonts/geist';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack, usePathname } from 'expo-router';
+import { Stack, usePathname, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
 import { Platform, View } from 'react-native';
 import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -20,14 +21,23 @@ import { NotesProvider } from '@/contexts/NotesContext';
 
 function AppContent() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  // Redirect to login if not already there
+  useEffect(() => {
+    if (pathname === '/') {
+      router.replace('/login');
+    }
+  }, [pathname]);
 
   // Hide mini player when fullscreen player is active, on quiz pages, or on chat page
-  const shouldShowMiniPlayer = pathname !== '/player' && !pathname.startsWith('/quiz') && pathname !== '/chat';
+  const shouldShowMiniPlayer = pathname !== '/player' && !pathname.startsWith('/quiz') && pathname !== '/chat' && pathname !== '/login';
 
   return (
     <ThemeProvider value={DefaultTheme}>
       <View className={Platform.OS === 'web' ? "h-dvh bg-slate-100" : "flex-1 bg-slate-100"}>
         <Stack>
+          <Stack.Screen name="login" options={{ headerShown: false }} />
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="library" options={{ headerShown: false }} />
           <Stack.Screen name="explore" options={{ headerShown: false }} />
