@@ -7,7 +7,7 @@ console.log('GOOGLE_CLIENT_SECRET:', process.env.GOOGLE_CLIENT_SECRET ? '***SET*
 console.log('EXPO_USERNAME:', process.env.EXPO_USERNAME);
 
 // Test the auth config
-const { GOOGLE_OAUTH_CONFIG } = require('../config/auth.ts');
+const { GOOGLE_OAUTH_CONFIG } = require('../config/auth.js');
 
 console.log('\nOAuth Configuration:');
 console.log('CLIENT_ID:', GOOGLE_OAUTH_CONFIG.CLIENT_ID);
