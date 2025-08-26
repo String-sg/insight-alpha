@@ -4,8 +4,13 @@ import {
     Geist_600SemiBold,
     useFonts
 } from '@expo-google-fonts/geist';
+import {
+    GeistMono_400Regular,
+    GeistMono_500Medium,
+    GeistMono_600SemiBold,
+} from '@expo-google-fonts/geist-mono';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack, usePathname } from 'expo-router';
+import { Stack, usePathname, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, View } from 'react-native';
 import 'react-native-reanimated';
@@ -20,14 +25,18 @@ import { NotesProvider } from '@/contexts/NotesContext';
 
 function AppContent() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  // No automatic redirect - let individual screens handle navigation
 
   // Hide mini player when fullscreen player is active, on quiz pages, or on chat page
-  const shouldShowMiniPlayer = pathname !== '/player' && !pathname.startsWith('/quiz') && pathname !== '/chat';
+  const shouldShowMiniPlayer = pathname !== '/player' && !pathname.startsWith('/quiz') && pathname !== '/chat' && pathname !== '/login';
 
   return (
     <ThemeProvider value={DefaultTheme}>
       <View className={Platform.OS === 'web' ? "h-dvh bg-slate-100" : "flex-1 bg-slate-100"}>
         <Stack>
+          <Stack.Screen name="login" options={{ headerShown: false }} />
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="library" options={{ headerShown: false }} />
           <Stack.Screen name="explore" options={{ headerShown: false }} />
@@ -50,6 +59,9 @@ export default function RootLayout() {
     Geist_400Regular,
     Geist_500Medium,
     Geist_600SemiBold,
+    GeistMono_400Regular,
+    GeistMono_500Medium,
+    GeistMono_600SemiBold,
   });
 
   if (!loaded) {
