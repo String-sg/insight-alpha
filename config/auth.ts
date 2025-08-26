@@ -11,10 +11,13 @@ const PROJECT_SLUG = process.env.EXPO_PROJECT_SLUG || 'your-project-slug';
 console.log('Environment variables check:');
 console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID ? 'SET' : 'NOT SET');
 console.log('GOOGLE_CLIENT_SECRET:', process.env.GOOGLE_CLIENT_SECRET ? 'SET' : 'NOT SET');
+
 export const GOOGLE_OAUTH_CONFIG = {
   CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
   CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || '',
-  REDIRECT_URI: 'http://localhost:8081/',
+  REDIRECT_URI: process.env.NODE_ENV === 'production' 
+    ? 'https://insight.string.sg/' // Your production domain
+    : 'http://localhost:8081/',
 };
 
 // Debug config
