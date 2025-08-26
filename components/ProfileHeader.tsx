@@ -1,6 +1,8 @@
+import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'expo-router';
-import React from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { LogOut } from 'lucide-react-native';
+import React, { useState } from 'react';
+import { Alert, Image, Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 interface ProfileHeaderProps {
@@ -9,6 +11,8 @@ interface ProfileHeaderProps {
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ onProfilePress }) => {
   const router = useRouter();
+  const { user, logout } = useAuth();
+  const [showLogout, setShowLogout] = useState(false);
   
   const handleProfilePress = () => {
     if (onProfilePress) {
@@ -16,6 +20,31 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ onProfilePress }) 
     } else {
       router.push('/profile');
     }
+  };
+
+  const handleLogout = async () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to logout?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Logout',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await logout();
+              router.replace('/login');
+            } catch (error) {
+              console.error('Logout error:', error);
+            }
+          },
+        },
+      ]
+    );
   };
   return (
     <View className="flex-row items-center justify-between mx-6 mt-5 mb-4">
@@ -37,17 +66,33 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ onProfilePress }) 
         </Text>
       </View>
       
-      <TouchableOpacity
-        onPress={handleProfilePress}
-        className="w-10 h-10 rounded-full overflow-hidden"
-        activeOpacity={0.8}
-      >
-        <Image
-          source={require('@/assets/images/cover-album.png')}
-          style={{ width: 40, height: 40 }}
-          resizeMode="cover"
-        />
-      </TouchableOpacity>
+      <View className="flex-row items-center gap-2">
+        <TouchableOpacity
+          onPress={handleLogout}
+          className="p-2 rounded-full bg-red-50"
+          activeOpacity={0.7}
+        >
+          <LogOut size={16} color="#ef4444" />
+        </TouchableOpacity>
+        
+        <TouchableOpacity
+          onPress={handleProfilePress}
+          className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 items-center justify-center"
+          activeOpacity={0.8}
+        >
+          {user?.name ? (
+            <Text className="text-lg font-semibold text-gray-700">
+              {user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+            </Text>
+          ) : (
+            <Image
+              source={require('@/assets/images/cover-album.png')}
+              style={{ width: 40, height: 40 }}
+              resizeMode="cover"
+            />
+          )}
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

@@ -4,7 +4,7 @@ import NetInfo from '@react-native-community/netinfo';
 import * as AuthSession from 'expo-auth-session';
 import * as Crypto from 'expo-crypto';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 
 interface User {
   id: string;
@@ -161,57 +161,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.log('Starting login process...');
       setIsLoading(true);
 
-      // Create auth request
-      const request = new AuthSession.AuthRequest({
-        clientId: GOOGLE_OAUTH_CONFIG.CLIENT_ID,
-        clientSecret: GOOGLE_OAUTH_CONFIG.CLIENT_SECRET,
-        scopes: ['openid', 'profile', 'email'],
-        redirectUri: GOOGLE_OAUTH_CONFIG.REDIRECT_URI,
-        responseType: AuthSession.ResponseType.Code,
-        codeChallenge: await Crypto.digestStringAsync(
-          Crypto.CryptoDigestAlgorithm.SHA256,
-          Crypto.randomUUID(),
-          { encoding: Crypto.CryptoEncoding.BASE64URL }
-        ),
-        codeChallengeMethod: AuthSession.CodeChallengeMethod.S256,
-      });
-
-      // Start auth session
-      const result = await request.promptAsync({
-        authorizationEndpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
-      });
-
-      if (result.type === 'success' && result.params.code) {
-        // Exchange code for tokens
-        const tokenResponse = await AuthSession.exchangeCodeAsync(
-          {
-            clientId: GOOGLE_OAUTH_CONFIG.CLIENT_ID,
-            clientSecret: GOOGLE_OAUTH_CONFIG.CLIENT_SECRET,
-            code: result.params.code,
-            redirectUri: GOOGLE_OAUTH_CONFIG.REDIRECT_URI,
-            extraParams: {
-              code_verifier: request.codeChallenge!,
-            },
-          },
-          {
-            tokenEndpoint: 'https://oauth2.googleapis.com/token',
-          }
-        );
-
-        // Get user info
-        const userData = await getUserInfo(tokenResponse.accessToken);
-        
-        // Store auth data
-        await storeAuthData(
-          tokenResponse.accessToken,
-          tokenResponse.refreshToken!,
-          userData
-        );
-
-        setUser(userData);
-      } else if (result.type === 'cancel') {
-        // User cancelled auth
-        console.log('Auth cancelled by user');
+      if (Platform.OS === 'web') {
+        // Web-specific OAuth flow
+        await handleWebOAuth();
+      } else {
+        // Mobile-specific OAuth flow
+        await handleMobileOAuth();
       }
     } catch (error: any) {
       console.error('Login error:', error);
@@ -239,6 +194,99 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  // Web-specific OAuth flow
+  const handleWebOAuth = async () => {
+    // Generate PKCE challenge
+    const codeVerifier = Crypto.randomUUID();
+    const codeChallenge = await Crypto.digestStringAsync(
+      Crypto.CryptoDigestAlgorithm.SHA256,
+      codeVerifier,
+      { encoding: Crypto.CryptoEncoding.BASE64 }
+    ).then(result => result.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, ''));
+
+    // Store code verifier for later use
+    await AsyncStorage.setItem('code_verifier', codeVerifier);
+
+    // Build OAuth URL
+    const params = new URLSearchParams({
+      client_id: GOOGLE_OAUTH_CONFIG.CLIENT_ID,
+      redirect_uri: GOOGLE_OAUTH_CONFIG.REDIRECT_URI,
+      response_type: 'code',
+      scope: 'openid profile email',
+      code_challenge: codeChallenge,
+      code_challenge_method: 'S256',
+    });
+
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+    
+    // Redirect to Google OAuth
+    window.location.href = authUrl;
+  };
+
+  // Mobile-specific OAuth flow
+  const handleMobileOAuth = async () => {
+    // Create auth request
+    const request = new AuthSession.AuthRequest({
+      clientId: GOOGLE_OAUTH_CONFIG.CLIENT_ID,
+      scopes: ['openid', 'profile', 'email'],
+      redirectUri: GOOGLE_OAUTH_CONFIG.REDIRECT_URI,
+      responseType: AuthSession.ResponseType.Code,
+      codeChallenge: await Crypto.digestStringAsync(
+        Crypto.CryptoDigestAlgorithm.SHA256,
+        Crypto.randomUUID(),
+        { encoding: Crypto.CryptoEncoding.BASE64 }
+      ).then(result => result.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')),
+      codeChallengeMethod: AuthSession.CodeChallengeMethod.S256,
+    });
+
+    // Start auth session
+    const result = await request.promptAsync({
+      authorizationEndpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
+    });
+
+    if (result.type === 'success' && result.params.code) {
+      await handleOAuthCallback(result.params.code);
+    } else if (result.type === 'cancel') {
+      console.log('Auth cancelled by user');
+    }
+  };
+
+  // Handle OAuth callback (common for both web and mobile)
+  const handleOAuthCallback = async (code: string) => {
+    const codeVerifier = await AsyncStorage.getItem('code_verifier');
+    
+    // Exchange code for tokens
+    const tokenResponse = await AuthSession.exchangeCodeAsync(
+      {
+        clientId: GOOGLE_OAUTH_CONFIG.CLIENT_ID,
+        clientSecret: GOOGLE_OAUTH_CONFIG.CLIENT_SECRET,
+        code: code,
+        redirectUri: GOOGLE_OAUTH_CONFIG.REDIRECT_URI,
+        extraParams: {
+          code_verifier: codeVerifier!,
+        },
+      },
+      {
+        tokenEndpoint: 'https://oauth2.googleapis.com/token',
+      }
+    );
+
+    // Get user info
+    const userData = await getUserInfo(tokenResponse.accessToken);
+    
+    // Store auth data
+    await storeAuthData(
+      tokenResponse.accessToken,
+      tokenResponse.refreshToken!,
+      userData
+    );
+
+    setUser(userData);
+    
+    // Clear code verifier
+    await AsyncStorage.removeItem('code_verifier');
+  };
+
   // Logout function
   const logout = async () => {
     try {
@@ -252,6 +300,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Check existing auth on app startup
   const checkAuth = async () => {
     try {
+      // Check for OAuth callback on web
+      if (Platform.OS === 'web') {
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const error = urlParams.get('error');
+        
+        if (code) {
+          console.log('OAuth callback detected, processing code...');
+          // Clean up URL
+          window.history.replaceState({}, document.title, window.location.pathname);
+          
+          // Process the OAuth callback
+          await handleOAuthCallback(code);
+          return;
+        } else if (error) {
+          console.error('OAuth error:', error);
+          Alert.alert('OAuth Error', `Authentication failed: ${error}`);
+          return;
+        }
+      }
+
       const [accessToken, userDataString] = await AsyncStorage.multiGet([
         STORAGE_KEYS.ACCESS_TOKEN,
         STORAGE_KEYS.USER_DATA,

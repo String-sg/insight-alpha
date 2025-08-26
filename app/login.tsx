@@ -23,12 +23,11 @@ export default function LoginScreen() {
 
   console.log('LoginScreen render - isLoading:', isLoading, 'isOffline:', isOffline);
 
+
+
   const handleLogin = async () => {
     console.log('Login button pressed');
     console.log('Button state - isLoading:', isLoading, 'isOffline:', isOffline);
-    
-    // Test alert to see if button press is working
-    alert('Button pressed!');
     
     if (isOffline) {
       console.log('Offline detected, not proceeding with login');
@@ -43,8 +42,9 @@ export default function LoginScreen() {
     try {
       console.log('Calling login function...');
       await login();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error in handleLogin:', error);
+      alert(`Login error: ${error?.message || 'Unknown error'}`);
     }
   };
 

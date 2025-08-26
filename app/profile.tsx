@@ -1,15 +1,26 @@
 import { NavigationBar } from '@/components/NavigationBar';
 import { WebScrollView } from '@/components/WebScrollView';
 import { useAudioContext } from '@/contexts/AudioContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { router, Stack } from 'expo-router';
-import { BookOpenCheck, CheckSquare, Lightbulb } from 'lucide-react-native';
+import { BookOpenCheck, CheckSquare, Lightbulb, LogOut } from 'lucide-react-native';
 import { Image, Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 export default function ProfileScreen() {
   const { currentPodcast } = useAudioContext();
+  const { user, logout } = useAuth();
   
   // Calculate bottom padding based on mini player visibility
   const bottomPadding = currentPodcast ? 120 : 40;
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.replace('/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
 
   const content = (
     <View className="flex-1">
@@ -34,19 +45,39 @@ export default function ProfileScreen() {
         {/* Profile Card */}
         <View className="mx-6 mb-6 bg-white rounded-3xl">
           <View className="flex-row items-start p-4 gap-6">
-            <View className="w-[66px] h-[66px] bg-gray-200 rounded-full overflow-hidden">
-              <Image 
-                source={require('@/assets/images/cover-album.png')} 
-                style={{ width: 66, height: 66 }}
-                resizeMode="cover"
-              />
+            <View className="w-[66px] h-[66px] bg-gray-200 rounded-full overflow-hidden items-center justify-center">
+              {user?.name ? (
+                <Text className="text-2xl font-semibold text-gray-700">
+                  {user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                </Text>
+              ) : (
+                <Image 
+                  source={require('@/assets/images/cover-album.png')} 
+                  style={{ width: 66, height: 66 }}
+                  resizeMode="cover"
+                />
+              )}
             </View>
             
             <View className="flex-1 justify-center gap-2">
-              <Text className="text-xl font-medium text-slate-950">Alex Tan</Text>
-              <Text className="text-base text-slate-600">Balestier Hill Secondary School</Text>
-              <Text className="text-base text-slate-600">Economics</Text>
+              <Text className="text-xl font-medium text-slate-950">
+                {user?.name || 'Guest User'}
+              </Text>
+              <Text className="text-base text-slate-600">
+                {user?.email || 'No email available'}
+              </Text>
+              <Text className="text-sm text-slate-500">
+                User ID: {user?.uuid || 'N/A'}
+              </Text>
             </View>
+
+            <TouchableOpacity
+              onPress={handleLogout}
+              className="p-2 rounded-full bg-red-50"
+              activeOpacity={0.7}
+            >
+              <LogOut size={20} color="#ef4444" />
+            </TouchableOpacity>
           </View>
         </View>
 
