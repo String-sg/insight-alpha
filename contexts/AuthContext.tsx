@@ -17,9 +17,11 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   isOffline: boolean;
+  isDemoMode: boolean;
   login: () => Promise<void>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
+  enableDemoMode: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,6 +32,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
+  const [isDemoMode, setIsDemoMode] = useState(false);
 
   // Check network connectivity
   useEffect(() => {
@@ -140,6 +143,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       name: userInfo.name,
       uuid,
     };
+  };
+
+  // Enable demo mode
+  const enableDemoMode = () => {
+    setIsDemoMode(true);
+    setUser({
+      id: 'demo-user',
+      email: 'demo@moe.edu.sg',
+      name: 'Demo User',
+      uuid: 'demo-uuid-12345'
+    });
+    setIsLoading(false);
   };
 
   // Login function
@@ -345,9 +360,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     user,
     isLoading,
     isOffline,
+    isDemoMode,
     login,
     logout,
     checkAuth,
+    enableDemoMode,
   };
 
   return (
