@@ -16,13 +16,17 @@ const TestComponent = () => {
   const { user, isLoading, isOffline, login, logout } = useAuth();
   
   return (
-    <div>
-      <div data-testid="user">{user ? user.email : 'no-user'}</div>
-      <div data-testid="loading">{isLoading ? 'loading' : 'not-loading'}</div>
-      <div data-testid="offline">{isOffline ? 'offline' : 'online'}</div>
-      <button data-testid="login-btn" onPress={login}>Login</button>
-      <button data-testid="logout-btn" onPress={logout}>Logout</button>
-    </div>
+    <React.Fragment>
+      <Text testID="user">{user ? user.email : 'no-user'}</Text>
+      <Text testID="loading">{isLoading ? 'loading' : 'not-loading'}</Text>
+      <Text testID="offline">{isOffline ? 'offline' : 'online'}</Text>
+      <TouchableOpacity testID="login-btn" onPress={login}>
+        <Text>Login</Text>
+      </TouchableOpacity>
+      <TouchableOpacity testID="logout-btn" onPress={logout}>
+        <Text>Logout</Text>
+      </TouchableOpacity>
+    </React.Fragment>
   );
 };
 
