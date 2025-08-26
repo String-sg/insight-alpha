@@ -8,9 +8,9 @@ const EXPO_USERNAME = process.env.EXPO_USERNAME || 'kahhow';
 const PROJECT_SLUG = process.env.EXPO_PROJECT_SLUG || 'your-project-slug';
 
 export const GOOGLE_OAUTH_CONFIG = {
-  CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-  CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-  REDIRECT_URI: `https://auth.expo.io/@${EXPO_USERNAME}/${PROJECT_SLUG}`,
+  CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
+  CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || '',
+  REDIRECT_URI: 'http://localhost:8081/',
 };
 
 // Domain validation
