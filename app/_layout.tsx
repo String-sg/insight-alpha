@@ -10,6 +10,7 @@ import {
     GeistMono_600SemiBold,
 } from '@expo-google-fonts/geist-mono';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { Analytics } from '@vercel/analytics/next';
 import { Stack, usePathname, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, View } from 'react-native';
@@ -81,6 +82,7 @@ export default function RootLayout() {
           </NotesProvider>
         </AudioProvider>
       </AuthProvider>
+      <Analytics />
     </SafeAreaProvider>
   );
 }
