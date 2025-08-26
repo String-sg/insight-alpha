@@ -20,12 +20,6 @@ export const GOOGLE_OAUTH_CONFIG = {
     : 'http://localhost:8081/',
 };
 
-// Debug config
-console.log('OAuth Config:', {
-  CLIENT_ID: GOOGLE_OAUTH_CONFIG.CLIENT_ID ? 'SET' : 'NOT SET',
-  CLIENT_SECRET: GOOGLE_OAUTH_CONFIG.CLIENT_SECRET ? 'SET' : 'NOT SET',
-  REDIRECT_URI: GOOGLE_OAUTH_CONFIG.REDIRECT_URI
-});
 
 // Domain validation
 export const MOE_DOMAIN = 'moe.edu.sg';
