@@ -9,25 +9,39 @@ const firebaseConfig = {
   storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "your-project.appspot.com",
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || "123456789",
   appId: process.env.FIREBASE_APP_ID || "your-app-id",
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID || "your-measurement-id"
+  measurementId: process.env.FIREBASE_MEASUREMENT_ID || "your-measurement-id",
+  databaseURL: process.env.FIREBASE_DATABASE_URL || "https://your-project-default-rtdb.firebaseio.com"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// Initialize Firebase only if we have valid config
+let app: any = null;
+let analyticsInstance: any = null;
 
-// Initialize Analytics
-const analyticsInstance = analytics();
-
-// Enable analytics collection
-analyticsInstance.setAnalyticsCollectionEnabled(true);
+try {
+  // Check if we have at least the essential Firebase config
+  if (firebaseConfig.apiKey !== "your-api-key" && firebaseConfig.projectId !== "your-project-id") {
+    app = initializeApp(firebaseConfig);
+    analyticsInstance = analytics();
+    analyticsInstance.setAnalyticsCollectionEnabled(true);
+    console.log('Firebase initialized successfully');
+  } else {
+    console.log('Firebase not configured - using mock analytics');
+  }
+} catch (error) {
+  console.warn('Firebase initialization failed:', error);
+}
 
 export { analyticsInstance as analytics, app };
 
 // Analytics helper functions
 export const logEvent = (eventName: string, parameters?: Record<string, any>) => {
   try {
-    analyticsInstance.logEvent(eventName, parameters);
-    console.log(`Analytics event logged: ${eventName}`, parameters);
+    if (analyticsInstance) {
+      analyticsInstance.logEvent(eventName, parameters);
+      console.log(`Analytics event logged: ${eventName}`, parameters);
+    } else {
+      console.log(`Mock analytics event: ${eventName}`, parameters);
+    }
   } catch (error) {
     console.error('Error logging analytics event:', error);
   }
