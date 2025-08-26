@@ -1,12 +1,35 @@
-// Mock React Native components that aren't available in the test environment
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
-
 // Mock expo modules
-jest.mock('expo-auth-session');
-jest.mock('expo-crypto');
-jest.mock('expo-web-browser');
-jest.mock('@react-native-async-storage/async-storage');
-jest.mock('@react-native-community/netinfo');
+jest.mock('expo-auth-session', () => ({
+  AuthRequest: jest.fn(),
+  ResponseType: { Code: 'code' },
+  CodeChallengeMethod: { S256: 'S256' },
+  exchangeCodeAsync: jest.fn(),
+}));
+
+jest.mock('expo-crypto', () => ({
+  randomUUID: jest.fn(),
+  digestStringAsync: jest.fn(),
+  CryptoDigestAlgorithm: { SHA256: 'SHA256' },
+  CryptoEncoding: { BASE64: 'BASE64' },
+}));
+
+jest.mock('expo-web-browser', () => ({
+  openAuthSessionAsync: jest.fn(),
+}));
+
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  setItem: jest.fn(),
+  getItem: jest.fn(),
+  multiSet: jest.fn(),
+  multiGet: jest.fn(),
+  multiRemove: jest.fn(),
+  removeItem: jest.fn(),
+}));
+
+jest.mock('@react-native-community/netinfo', () => ({
+  addEventListener: jest.fn(),
+  fetch: jest.fn(),
+}));
 
 // Mock expo-router
 jest.mock('expo-router', () => ({

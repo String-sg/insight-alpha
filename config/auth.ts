@@ -1,20 +1,21 @@
+import 'dotenv/config';
+
 // Google OAuth Configuration
 // Replace these with your actual credentials from Google Cloud Console
 
-// Environment variables are loaded by Expo automatically
+// Environment variables are loaded by dotenv
 // Make sure to restart the development server after changing .env
 
 const EXPO_USERNAME = process.env.EXPO_USERNAME || 'kahhow';
 const PROJECT_SLUG = process.env.EXPO_PROJECT_SLUG || 'your-project-slug';
 
-// Debug environment variables
-console.log('Environment variables check:');
-console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID ? 'SET' : 'NOT SET');
-console.log('GOOGLE_CLIENT_SECRET:', process.env.GOOGLE_CLIENT_SECRET ? 'SET' : 'NOT SET');
+// Production fallback - remove once env vars are working
+const PROD_CLIENT_ID = '976215026609-koq4ev5ppenqk34864qjg3evts2393ko.apps.googleusercontent.com';
+const PROD_CLIENT_SECRET = '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';
 
 export const GOOGLE_OAUTH_CONFIG = {
-  CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
-  CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || '',
+  CLIENT_ID: process.env.GOOGLE_CLIENT_ID || (process.env.NODE_ENV === 'production' ? PROD_CLIENT_ID : ''),
+  CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || (process.env.NODE_ENV === 'production' ? PROD_CLIENT_SECRET : ''),
   REDIRECT_URI: process.env.NODE_ENV === 'production' 
     ? 'https://insight.string.sg/' // Your production domain
     : 'http://localhost:8081/',

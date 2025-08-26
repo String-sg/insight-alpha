@@ -144,17 +144,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Login function
   const login = async () => {
-    console.log('Login function called');
-    console.log('OAuth config:', GOOGLE_OAUTH_CONFIG);
-    
     if (isOffline) {
-      console.log('Offline detected, showing error');
       showOfflineError();
       return;
     }
 
     try {
-      console.log('Starting login process...');
       setIsLoading(true);
 
       if (Platform.OS === 'web') {
@@ -250,7 +245,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (result.type === 'success' && result.params.code) {
       await handleOAuthCallback(result.params.code);
     } else if (result.type === 'cancel') {
-      console.log('Auth cancelled by user');
+      // User cancelled authentication
     }
   };
 
@@ -310,7 +305,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const error = urlParams.get('error');
         
         if (code) {
-          console.log('OAuth callback detected, processing code...');
           // Clean up URL
           window.history.replaceState({}, document.title, window.location.pathname);
           
