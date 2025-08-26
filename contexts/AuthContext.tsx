@@ -6,6 +6,14 @@ import * as Crypto from 'expo-crypto';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Alert, Platform } from 'react-native';
 
+// Demo user configuration
+const DEMO_USER = {
+  id: 'demo-user',
+  email: 'demo@moe.edu.sg',
+  name: 'Demo User',
+  uuid: 'demo-uuid-12345'
+};
+
 interface User {
   id: string;
   email: string;
@@ -147,15 +155,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Enable demo mode
   const enableDemoMode = () => {
-    const demoUser = {
-      id: 'demo-user',
-      email: 'demo@moe.edu.sg',
-      name: 'Demo User',
-      uuid: 'demo-uuid-12345'
-    };
-    
     setIsDemoMode(true);
-    setUser(demoUser);
+    setUser(DEMO_USER);
     setIsLoading(false);
   };
 
