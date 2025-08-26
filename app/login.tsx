@@ -178,10 +178,32 @@ export default function LoginScreen() {
           activeOpacity={0.8}
         >
           {/* Google Logo */}
-          <View className="w-6 h-6 mr-3">
-            <View className="w-6 h-6 bg-white rounded-full items-center justify-center">
-              <Text className="text-lg font-bold" style={{ color: '#4285F4' }}>G</Text>
-            </View>
+          <View
+            className="w-6 h-6 mr-3"
+            accessible={true}
+            accessibilityLabel="Google logo"
+          >
+            <Svg width={24} height={24} viewBox="0 0 24 24">
+              <Path
+                d="M12 12v3.6h5.1c-.2 1.2-1.5 3.6-5.1 3.6-3.1 0-5.6-2.6-5.6-5.7s2.5-5.7 5.6-5.7c1.8 0 3 .7 3.7 1.3l2.5-2.4C16.7 5.7 14.6 4.8 12 4.8 7.6 4.8 4 8.4 4 12.8s3.6 8 8 8c4.6 0 7.6-3.2 7.6-7.7 0-.5-.1-.9-.2-1.3H12z"
+                fill="#4285F4"
+              />
+              <Path
+                d="M21.8 12.2c0-.5-.1-.9-.2-1.3H12v3.6h5.1c-.2 1.2-1.5 3.6-5.1 3.6-3.1 0-5.6-2.6-5.6-5.7s2.5-5.7 5.6-5.7c1.8 0 3 .7 3.7 1.3l2.5-2.4C16.7 5.7 14.6 4.8 12 4.8 7.6 4.8 4 8.4 4 12.8s3.6 8 8 8c4.6 0 7.6-3.2 7.6-7.7z"
+                fill="#34A853"
+                opacity={0.5}
+              />
+              <Path
+                d="M12 4.8c2.6 0 4.7.9 6.2 2.4l-2.5 2.4c-.7-.6-1.9-1.3-3.7-1.3-3.1 0-5.6 2.6-5.6 5.7s2.5 5.7 5.6 5.7c3.6 0 4.9-2.4 5.1-3.6H12v-3.6h9.6c.1.4.2.8.2 1.3 0 4.5-3 7.7-7.6 7.7-4.4 0-8-3.6-8-8s3.6-8 8-8z"
+                fill="#FBBC05"
+                opacity={0.5}
+              />
+              <Path
+                d="M12 4.8c2.6 0 4.7.9 6.2 2.4l-2.5 2.4c-.7-.6-1.9-1.3-3.7-1.3-3.1 0-5.6 2.6-5.6 5.7s2.5 5.7 5.6 5.7c3.6 0 4.9-2.4 5.1-3.6H12v-3.6h9.6c.1.4.2.8.2 1.3 0 4.5-3 7.7-7.6 7.7-4.4 0-8-3.6-8-8s3.6-8 8-8z"
+                fill="#EA4335"
+                opacity={0.5}
+              />
+            </Svg>
           </View>
           <Text className="text-white text-lg font-medium">Continue with Google</Text>
         </TouchableOpacity>
