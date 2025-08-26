@@ -193,7 +193,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Web-specific OAuth flow
   const handleWebOAuth = async () => {
     // Generate PKCE challenge
-    const codeVerifier = AuthSession.AuthRequest.generateRandomCodeVerifier();
+    const codeVerifier = Crypto.randomUUID();
     const codeChallenge = await Crypto.digestStringAsync(
       Crypto.CryptoDigestAlgorithm.SHA256,
       codeVerifier,
@@ -221,9 +221,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Mobile-specific OAuth flow
   const handleMobileOAuth = async () => {
-    // Generate PKCE code verifier and challenge using AuthSession utilities
-    const codeVerifier = AuthSession.AuthRequest.generateRandomCodeVerifier();
-    const codeChallenge = await AuthSession.AuthRequest.generateRandomCodeChallengeAsync(codeVerifier);
+    // Generate PKCE code verifier and challenge
+    const codeVerifier = Crypto.randomUUID();
+    const codeChallenge = await Crypto.digestStringAsync(
+      Crypto.CryptoDigestAlgorithm.SHA256,
+      codeVerifier,
+      { encoding: Crypto.CryptoEncoding.BASE64 }
+    ).then(result => result.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, ''));
 
     // Store code verifier for later use
     await AsyncStorage.setItem('code_verifier', codeVerifier);

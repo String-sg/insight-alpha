@@ -7,11 +7,17 @@
 const EXPO_USERNAME = process.env.EXPO_USERNAME || 'kahhow';
 const PROJECT_SLUG = process.env.EXPO_PROJECT_SLUG || 'your-project-slug';
 
+// Debug environment variables
+console.log('Environment variables check:');
+console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID ? 'SET' : 'NOT SET');
+console.log('GOOGLE_CLIENT_SECRET:', process.env.GOOGLE_CLIENT_SECRET ? 'SET' : 'NOT SET');
 export const GOOGLE_OAUTH_CONFIG = {
-  CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-  CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-  REDIRECT_URI: `https://auth.expo.io/@${EXPO_USERNAME}/${PROJECT_SLUG}`,
+  CLIENT_ID: process.env.GOOGLE_CLIENT_ID ?? undefined,
+  CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET ?? undefined,
+  REDIRECT_URI: 'http://localhost:8081/',
 };
+
+// Debug config
 
 // Domain validation
 export const MOE_DOMAIN = 'moe.edu.sg';
