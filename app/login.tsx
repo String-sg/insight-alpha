@@ -57,10 +57,8 @@ export default function LoginScreen() {
   };
 
   const handleDemoMode = () => {
-    console.log('Demo mode button clicked!');
     try {
       enableDemoMode();
-      console.log('Demo mode function called successfully');
     } catch (error) {
       console.error('Error in handleDemoMode:', error);
     }
@@ -69,7 +67,6 @@ export default function LoginScreen() {
   // Navigate to homepage when user is authenticated (including demo mode)
   useEffect(() => {
     if (user && !isLoading) {
-      console.log('User authenticated, navigating to homepage');
       router.replace('/');
     }
   }, [user, isLoading, router]);
