@@ -22,6 +22,7 @@ export interface TopicCardProps {
 }
 
 export const TopicCard: React.FC<TopicCardProps> = ({
+  id,
   title,
   subtitle,
   podcasts,
@@ -57,6 +58,12 @@ export const TopicCard: React.FC<TopicCardProps> = ({
         <View className="absolute top-6 right-6">
           {iconComponent ? (
             iconComponent
+          ) : id === 'ai' ? (
+            <Image 
+              source={require('@/assets/images/learnAI.svg')}
+              style={{ width: 60, height: 60 }}
+              resizeMode="contain"
+            />
           ) : icon ? (
             <Image 
               source={icon}
