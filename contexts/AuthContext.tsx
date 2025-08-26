@@ -193,7 +193,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Web-specific OAuth flow
   const handleWebOAuth = async () => {
     // Generate PKCE challenge
-    const codeVerifier = Crypto.randomUUID();
+    const codeVerifier = AuthSession.AuthRequest.generateRandomCodeVerifier();
     const codeChallenge = await Crypto.digestStringAsync(
       Crypto.CryptoDigestAlgorithm.SHA256,
       codeVerifier,
