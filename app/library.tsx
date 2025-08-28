@@ -17,7 +17,7 @@ export default function LibraryScreen() {
   const bottomPadding = currentPodcast ? 120 : 40;
   
   // Card height for carousel snapping
-  const cardHeight = 480 + 8; // Card height plus margin
+  const cardHeight = 360; // Match TopicCard default height
 
   // Calculate actual content counts for each topic
   const contentCounts = useMemo(() => {
@@ -41,7 +41,7 @@ export default function LibraryScreen() {
       gradientTo: '#f048cd',
       badgeBg: 'bg-purple-200',
       badgeText: 'text-purple-900',
-      textColor: 'text-white',
+      textColor: 'text-black',
       icon: require('@/assets/icon/icon-sen.svg'),
     },
     {
@@ -67,13 +67,13 @@ export default function LibraryScreen() {
       gradientTo: '#3b82f6',
       badgeBg: 'bg-teal-200',
       badgeText: 'text-teal-900',
-      textColor: 'text-white',
+      textColor: 'text-black',
       icon: require('@/assets/icon/icon-mentalhealth.svg'),
     }
   ];
 
   const renderCard = ({ item: subject }: { item: typeof learningSubjects[0] }) => (
-    <View style={{ height: cardHeight }} className="mx-6 mb-2">
+    <View style={{ height: cardHeight }} className="mx-6 mb-3">
       <TopicCard 
         {...subject} 
         onPress={() => router.push(`/topic/${subject.id}`)}
