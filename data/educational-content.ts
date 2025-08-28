@@ -4,6 +4,7 @@ export interface EducationalContent {
   id: string;
   title: string;
   description: string;
+  summary: string;
   category: string;
   author: string;
   duration: number; // in milliseconds
@@ -22,11 +23,12 @@ export interface EducationalContent {
 export const educationalContent: EducationalContent[] = [
   {
     id: '5',
-    title: 'Building Safe School Environments: Anti-Bullying Strategies',
-    description: '**Overview**\nThis comprehensive professional development session explores evidence-based strategies for creating positive school environments that actively prevent bullying and promote student wellbeing. Drawing from successful case studies in Singapore schools, this content addresses the critical need for systematic approaches to school safety.\n\n**What you will learn**\n- Identify early warning signs of bullying behavior and intervention strategies\n- Implement whole-school approaches to building positive culture and peer relationships\n- Develop effective communication protocols between students, teachers, and parents\n- Create inclusive classroom environments that celebrate diversity and reduce social exclusion\n- Apply restorative justice principles to address conflicts and repair relationships\n- Establish monitoring systems to track school climate and student wellbeing indicators',
+    title: 'Supporting Students with Dyslexia: What Every Teacher Needs to Know',
+    description: '**Overview**\nThis episode dives deep into how educators can better understand and support students with dyslexia in mainstream classrooms. Backed by current brain research and real classroom experiences, the conversation unpacks what dyslexia really is (and isn’t), why some common myths persist, and how teachers can implement practical, research-based strategies that empower struggling readers. By embracing neurodiversity and applying structured support, educators can help students with dyslexia thrive both academically and emotionally.',    
+    summary: '',
     category: 'Special Educational Needs',
-    author: 'Student Development Team',
-    duration: 780000, // 13 minutes
+    author: 'DXD Product Team',
+    duration: 780000, // 7.15 minutes
     imageUrl: 'https://picsum.photos/400/400?random=5',
     audioUrl: require('../assets/audio/building-safe-school-environments.mp3'),
     backgroundColor: 'bg-white',
@@ -77,6 +79,7 @@ export const educationalContent: EducationalContent[] = [
     id: '6',
     title: "AI's Role in Singapore's Education Transformation",
     description: '**Overview**\nThis forward-looking session examines how artificial intelligence is transforming Singapore\'s education landscape, from personalized learning platforms to intelligent administrative systems. Educators will explore practical AI applications currently being implemented in local schools and understand the implications for teaching and learning in the digital age.\n\n**What you will learn**\n- Understand Singapore\'s national AI in education strategy and implementation timeline\n- Explore AI-powered adaptive learning platforms and their impact on student outcomes\n- Analyze intelligent tutoring systems and personalized learning pathways\n- Examine AI applications in assessment, grading, and student progress tracking\n- Discuss ethical considerations and responsible AI use in educational settings\n- Identify opportunities to integrate AI tools into existing teaching practices',
+    summary: '',
     category: 'Artificial Intelligence',
     author: 'DXD',
     duration: 360000, // 6 minutes
