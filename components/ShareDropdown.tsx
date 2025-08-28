@@ -99,7 +99,7 @@ ${contentInfo.summary ? `**Key Highlights**\n${contentInfo.summary}` : ''}`;
       cleanContent += `\n\n**Further Reading:**\n`;
       sources.forEach((source, index) => {
         cleanContent += `${index + 1}. ${source.title} - ${source.author || 'Unknown'} (${source.publishedDate || 'N/A'})\n`;
-        fullContent += `   URL: ${source.url}\n`;
+        cleanContent += `   URL: ${source.url}\n`;
       });
     }
 
