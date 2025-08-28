@@ -1,8 +1,8 @@
 import { PodcastSource } from '@/types/podcast';
 import * as Clipboard from 'expo-clipboard';
 import { BookOpen, Bot, Copy, Share } from 'lucide-react-native';
-import React, { useState } from 'react';
-import { Alert, Linking, Platform, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Alert, Linking, Platform, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 
 interface ShareDropdownProps {
   contentInfo: {
@@ -18,6 +18,22 @@ interface ShareDropdownProps {
 
 export function ShareDropdown({ contentInfo, script, sources, onExamineSources }: ShareDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const { height: windowHeight } = useWindowDimensions();
+
+  // Close dropdown when clicking outside (only on web)
+  useEffect(() => {
+    if (Platform.OS === 'web' && isOpen) {
+      const handleClickOutside = (event: MouseEvent) => {
+        const target = event.target as Element;
+        if (!target.closest('[data-dropdown]')) {
+          setIsOpen(false);
+        }
+      };
+
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isOpen]);
 
   const generateSystemPrompt = (includeSources = false, encodeForUrl = true) => {
     if (!contentInfo) return '';
@@ -279,12 +295,15 @@ ${contentInfo.summary ? `**Key Highlights**\n${contentInfo.summary}` : ''}`;
   ];
 
   return (
-    <View className="relative">
+    <View className="relative" data-dropdown>
       {/* Main Button */}
       <View className="bg-white rounded-full px-4 py-2 flex-row items-center shadow-sm">
         <TouchableOpacity
-          onPress={() => setIsOpen(!isOpen)}
+          onPress={() => {
+            setIsOpen(!isOpen);
+          }}
           className="flex-row items-center"
+          activeOpacity={0.8}
         >
           <BookOpen size={16} color="#374151" strokeWidth={2} />
           <Text className="text-gray-700 text-sm font-medium ml-2">Dive deeper</Text>
@@ -293,7 +312,14 @@ ${contentInfo.summary ? `**Key Highlights**\n${contentInfo.summary}` : ''}`;
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <View className="absolute bottom-12 right-0 bg-white rounded-xl shadow-lg border border-gray-200 min-w-64" style={{ zIndex: 999999, elevation: 999999 }}>
+        <View 
+          className="absolute top-full right-0 bg-white rounded-xl shadow-lg border border-gray-200 min-w-64 mt-2" 
+          style={{ 
+            zIndex: 999999, 
+            elevation: 999999,
+          }}
+          data-dropdown
+        >
           <View className="p-2">
             {shareOptions.map((option, index) => (
               <TouchableOpacity
@@ -305,6 +331,13 @@ ${contentInfo.summary ? `**Key Highlights**\n${contentInfo.summary}` : ''}`;
                 className={`flex-row items-center p-3 rounded-lg ${
                   index === shareOptions.length - 1 ? '' : 'mb-1'
                 } active:bg-gray-50`}
+                style={{ 
+                  zIndex: 1000000, 
+                  elevation: 1000000,
+                  minHeight: 44,
+                }}
+                activeOpacity={0.7}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
                 <View className="mr-3">
                   {option.icon}
@@ -321,16 +354,6 @@ ${contentInfo.summary ? `**Key Highlights**\n${contentInfo.summary}` : ''}`;
             ))}
           </View>
         </View>
-      )}
-
-      {/* Backdrop to close dropdown */}
-      {isOpen && (
-        <TouchableOpacity
-          className="absolute inset-0 -top-12 -bottom-12 -left-12 -right-12"
-          style={{ zIndex: 999998, elevation: 999998 }}
-          onPress={() => setIsOpen(false)}
-          activeOpacity={1}
-        />
       )}
     </View>
   );

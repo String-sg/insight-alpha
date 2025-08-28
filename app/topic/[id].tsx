@@ -1,18 +1,18 @@
-import React, { useMemo } from 'react';
-import { 
-  View, 
-  Text, 
-  TouchableOpacity, 
-  SafeAreaView, 
-  Platform,
-  StatusBar
-} from 'react-native';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { Icon } from '@/components/Icon';
 import { NavigationBar } from '@/components/NavigationBar';
 import { WebScrollView } from '@/components/WebScrollView';
 import { useAudioContext } from '@/contexts/AudioContext';
-import { educationalContent, formatDuration } from '@/data/educational-content';
+import { educationalContent } from '@/data/educational-content';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useMemo } from 'react';
+import {
+    Platform,
+    SafeAreaView,
+    StatusBar,
+    Text,
+    TouchableOpacity,
+    View
+} from 'react-native';
 
 // Topic mapping
 const topicMapping: Record<string, { 
@@ -35,9 +35,9 @@ const topicMapping: Record<string, {
     name: 'Artificial Intelligence',
     shortName: 'AI in Education',
     description: 'Discover how AI is transforming education through personalized learning, intelligent tutoring systems, and data-driven insights to enhance teaching effectiveness.',
-    color: 'bg-amber-100',
-    badgeColor: 'bg-amber-200',
-    textColor: 'text-amber-900'
+    color: 'bg-yellow-100',
+    badgeColor: 'bg-yellow-200',
+    textColor: 'text-yellow-900'
   },
   'wellbeing': { 
     name: 'Teacher mental health literacy',

@@ -59,14 +59,14 @@ export const educationalContent: EducationalContent[] = [
     title: "ADHD in Classrooms: Strategies That Work",
     description: '**Overview**\nThis episode unpacks how teachers can understand and support students with Attention Deficit Hyperactivity Disorder (ADHD) in mainstream classrooms. We break down common myths, explore how ADHD presents in different students, and share practical, low-prep strategies to help learners focus, stay organized, and succeed. Learn how to work effectively with parents, use classroom adjustments, and create inclusive learning environments where all students can thrive.',
     summary: '1. Understanding ADHD Is Essential for Effective Support \n Simple, Low-Prep Strategies Make a Big Impact (structured routines, visual aids, and clear instructions—can greatly improve focus, organization, and participation) \n 3. Collaboration and Inclusivity Enhance Outcomes (parents, the entire class community)',
-    category: 'Special Education Needs',
+    category: 'Special Educational Needs',
     author: 'DXD Product Team',
     duration: 540000, // 9 minutes
     imageUrl: 'https://picsum.photos/400/400?random=6',
     audioUrl: require('../assets/audio/ADHD_in_Classrooms_Strategies_That_Work.wav'),
     backgroundColor: 'bg-white',
-    badgeColor: 'bg-yellow-200',
-    textColor: 'text-yellow-900',
+    badgeColor: 'bg-purple-200',
+    textColor: 'text-purple-900',
     timeLeft: '6m left',
     progress: 0,
     publishedDate: 'Today',
@@ -99,6 +99,39 @@ export const educationalContent: EducationalContent[] = [
         author: 'MOE SEND Team',
         publishedDate: 'Unknown'
       }    ]
+  },
+  {
+    id: '3',
+    title: "AI's Role in Singapore's Education Transformation",
+    description: '**Overview**\nThis episode explores how artificial intelligence is reshaping education in Singapore, from personalized learning experiences to administrative efficiency. We examine real-world implementations, discuss the balance between innovation and human connection, and look at how AI can support both teachers and students in creating more effective learning environments.',
+    summary: '1. AI Enhances Personalized Learning Experiences \n 2. Technology Supports Teacher Effectiveness and Administrative Efficiency \n 3. Balanced Implementation Ensures Human Connection Remains Central',
+    category: 'Artificial Intelligence',
+    author: 'DXD Product Team',
+    duration: 480000, // 8 minutes
+    imageUrl: 'https://picsum.photos/400/400?random=7',
+    audioUrl: require('../assets/audio/ais-role-in-singapores-education-transformation.wav'),
+    backgroundColor: 'bg-white',
+    badgeColor: 'bg-yellow-200',
+    textColor: 'text-yellow-900',
+    timeLeft: '8m',
+    progress: 0,
+    publishedDate: 'Today',
+    sources: [
+      {
+        title: 'EdTech Plan: Transforming Education Through Technology',
+        url: 'https://www.moe.gov.sg/education-in-sg/educational-technology',
+        type: 'article',
+        author: 'Ministry of Education, Singapore',
+        publishedDate: '2021'
+      },
+      {
+        title: 'AI in Education: Personalized Learning',
+        url: 'https://www.nie.edu.sg/research/ai-personalized-learning',
+        type: 'research',
+        author: 'National Institute of Education',
+        publishedDate: '2024'
+      }
+    ]
   }
 ];
 

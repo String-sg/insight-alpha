@@ -53,11 +53,11 @@ const getTopicColors = (category: string) => {
       };
     case 'Artificial Intelligence':
       return {
-        background: 'bg-amber-100',
-        badge: 'bg-amber-200',
-        text: 'text-amber-900',
-        hex: '#B45309', // amber-700
-        lightHex: '#FEF3C7' // amber-100
+        background: 'bg-yellow-100',
+        badge: 'bg-yellow-200',
+        text: 'text-yellow-900',
+        hex: '#CA8A04', // yellow-600
+        lightHex: '#FEFCE8' // yellow-50
       };
     case 'Teacher mental health literacy':
       return {
@@ -482,11 +482,14 @@ export default function PodcastDetailsScreen() {
               {/* Card Content */}
               <View className="p-6">
                 {/* Podcast Image */}
-                <View className="w-24 h-24 rounded-full overflow-hidden mb-4" style={{ backgroundColor: topicColors.hex }}>
+                <View className="w-12 h-12 rounded-full overflow-hidden mb-4" style={{ backgroundColor: topicColors.hex }}>
                   <Image
-                    source={require('@/assets/images/cover-album.png')}
-                    style={{ width: 96, height: 96 }}
-                    resizeMode="cover"
+                    source={content.category === 'Special Educational Needs' 
+                      ? require('@/assets/images/sen.svg')
+                      : require('@/assets/images/cover-album.png')
+                    }
+                    style={{ width: 48, height: 48 }}
+                    resizeMode={content.category === 'Special Educational Needs' ? 'contain' : 'cover'}
                   />
                 </View>
                 {/* Category Tag */}
@@ -744,9 +747,9 @@ export default function PodcastDetailsScreen() {
               <View className="space-y-2">
                 {/* Course Badges */}
                 <View className="flex-row items-center gap-2 mb-2">
-                  <View className="bg-yellow-200 rounded-full px-3 py-1">
-                    <Text className="text-yellow-900 text-xs font-semibold">
-                      Artificial Intelligent
+                  <View className={`${topicColors.badge} rounded-full px-3 py-1`}>
+                    <Text className={`${topicColors.text} text-xs font-semibold`}>
+                      {content.category}
                     </Text>
                   </View>
                   <View className="bg-slate-100 rounded-full px-3 py-1">
