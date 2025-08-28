@@ -509,75 +509,75 @@ export default function PlayerScreen() {
           </View>
           
                       {/* Script Content */}
-            {(() => {
-              const script = currentPodcast ? getScriptByPodcastId(currentPodcast.id) : null;
-              
-              if (!script) {
-                return (
-                  <View className="flex-1 items-center justify-center">
-                    <Text className="text-slate-500 text-center">
-                      No script available for this podcast
-                    </Text>
-                  </View>
-                );
-              }
-              
-              // Split script into sentences for highlighting
-              const sentences = script.content.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 0);
-              const totalSentences = sentences.length;
-              
-              // Calculate which sentence should be highlighted based on current time
-              const progress = duration > 0 ? currentTime / duration : 0;
-              const currentSentenceIndex = Math.floor(progress * totalSentences);
-              const highlightedIndex = Math.min(currentSentenceIndex, totalSentences - 1);
-              
-              // Function to handle sentence click and seek to timestamp
-              const handleSentenceClick = async (index: number) => {
-                if (duration > 0) {
-                  const sentenceProgress = index / totalSentences;
-                  const targetTime = sentenceProgress * duration;
-                  await seekTo(targetTime);
-                  
-                  // Resume playback if currently paused
-                  if (!isPlaying) {
-                    await resumePodcast();
-                  }
-                }
-              };
-              
+          {(() => {
+            const script = currentPodcast ? getScriptByPodcastId(currentPodcast.id) : null;
+            
+            if (!script) {
               return (
-                <ScrollView 
-                  className="flex-1"
-                  showsVerticalScrollIndicator={true}
-                  contentContainerStyle={{ paddingBottom: 20 }}
-                >
-                  {sentences.map((sentence, index) => {
-                    const isHighlighted = isPlaying && index === highlightedIndex;
-                    
-                    return (
-                      <TouchableOpacity
-                        key={index}
-                        onPress={() => handleSentenceClick(index)}
-                        activeOpacity={0.7}
-                        className="mb-2"
-                      >
-                        <Text
-                          className={`text-sm leading-6 ${
-                            isHighlighted 
-                              ? 'font-bold text-purple-700' 
-                              : 'text-slate-700'
-                          }`}
-                          selectable
-                        >
-                          {sentence}
-                          {index < sentences.length - 1 ? ' ' : ''}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </ScrollView>
+                <View className="flex-1 items-center justify-center">
+                  <Text className="text-slate-500 text-center">
+                    No script available for this podcast
+                  </Text>
+                </View>
               );
-            })()}
+            }
+            
+            // Split script into sentences for highlighting
+            const sentences = script.content.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 0);
+            const totalSentences = sentences.length;
+            
+            // Calculate which sentence should be highlighted based on current time
+            const progress = duration > 0 ? currentTime / duration : 0;
+            const currentSentenceIndex = Math.floor(progress * totalSentences);
+            const highlightedIndex = Math.min(currentSentenceIndex, totalSentences - 1);
+            
+            // Function to handle sentence click and seek to timestamp
+            const handleSentenceClick = async (index: number) => {
+              if (duration > 0) {
+                const sentenceProgress = index / totalSentences;
+                const targetTime = sentenceProgress * duration;
+                await seekTo(targetTime);
+                
+                // Resume playback if currently paused
+                if (!isPlaying) {
+                  await resumePodcast();
+                }
+              }
+            };
+            
+            return (
+              <ScrollView 
+                className="flex-1"
+                showsVerticalScrollIndicator={true}
+                contentContainerStyle={{ paddingBottom: 20 }}
+              >
+                {sentences.map((sentence, index) => {
+                  const isHighlighted = isPlaying && index === highlightedIndex;
+                  
+                  return (
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => handleSentenceClick(index)}
+                      activeOpacity={0.7}
+                      className="mb-2"
+                    >
+                      <Text
+                        className={`text-sm leading-6 ${
+                          isHighlighted 
+                            ? 'font-bold text-purple-700' 
+                            : 'text-slate-700'
+                        }`}
+                        selectable
+                      >
+                        {sentence}
+                        {index < sentences.length - 1 ? ' ' : ''}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </ScrollView>
+            );
+          })()}
         </View>
       </BottomSheet>
     </View>

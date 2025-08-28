@@ -72,10 +72,11 @@ ${contentInfo.summary ? `**Key Highlights**\n${contentInfo.summary}` : ''}`;
 
     // Add sources if requested
     if (includeSources && sources && sources.length > 0) {
-      fullContent += `\n\n**Further Reading:**\n`;
+      fullContent += '\n\n**Further Reading:**\n';
       sources.forEach((source, index) => {
-        fullContent += `${index + 1}. ${source.title} - ${source.author || 'Unknown'} (${source.publishedDate || 'N/A'})\n`;
-        fullContent += `   URL: ${source.url}\n`;
+        const sourceLine = `${index + 1}. ${source.title} - ${source.author || 'Unknown'} (${source.publishedDate || 'N/A'})\n`;
+        const urlLine = `   URL: ${source.url}\n`;
+        fullContent += sourceLine + urlLine;
       });
     }
 
@@ -96,10 +97,11 @@ ${contentInfo.summary ? `**Key Highlights**\n${contentInfo.summary}` : ''}`;
 
     // Add sources if requested
     if (includeSources && sources && sources.length > 0) {
-      cleanContent += `\n\n**Further Reading:**\n`;
+      cleanContent += '\n\n**Further Reading:**\n';
       sources.forEach((source, index) => {
-        cleanContent += `${index + 1}. ${source.title} - ${source.author || 'Unknown'} (${source.publishedDate || 'N/A'})\n`;
-        cleanContent += `   URL: ${source.url}\n`;
+        const sourceLine = `${index + 1}. ${source.title} - ${source.author || 'Unknown'} (${source.publishedDate || 'N/A'})\n`;
+        const urlLine = `   URL: ${source.url}\n`;
+        cleanContent += sourceLine + urlLine;
       });
     }
 
