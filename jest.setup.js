@@ -31,6 +31,11 @@ jest.mock('@react-native-community/netinfo', () => ({
   fetch: jest.fn(),
 }));
 
+jest.mock('expo-clipboard', () => ({
+  setStringAsync: jest.fn(),
+  getStringAsync: jest.fn(),
+}));
+
 // Mock expo-router
 jest.mock('expo-router', () => ({
   useRouter: () => ({
