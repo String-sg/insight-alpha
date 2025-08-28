@@ -482,7 +482,7 @@ export default function PodcastDetailsScreen() {
               {/* Card Content */}
               <View className="p-6">
                 {/* Podcast Image */}
-                <View className="w-12 h-12 rounded-full overflow-hidden mb-4" style={{ backgroundColor: topicColors.hex }}>
+                <View className="w-12 h-12 rounded-full overflow-hidden mb-4">
                   <Image
                     source={content.category === 'Special Educational Needs' 
                       ? require('@/assets/images/sen.svg')

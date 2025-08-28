@@ -1,8 +1,8 @@
 import { PodcastSource } from '@/types/podcast';
 import * as Clipboard from 'expo-clipboard';
 import { BookOpen, Bot, Copy, Share } from 'lucide-react-native';
-import React, { useEffect, useState } from 'react';
-import { Alert, Linking, Platform, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Alert, Linking, Modal, Platform, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 
 interface ShareDropdownProps {
   contentInfo: {
@@ -18,7 +18,24 @@ interface ShareDropdownProps {
 
 export function ShareDropdown({ contentInfo, script, sources, onExamineSources }: ShareDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0, width: 0, height: 0 });
+  const buttonRef = useRef<View>(null);
   const { height: windowHeight } = useWindowDimensions();
+
+  const measureButtonPosition = () => {
+    if (buttonRef.current) {
+      buttonRef.current.measureInWindow((x, y, width, height) => {
+        setDropdownPosition({ x, y, width, height });
+      });
+    }
+  };
+
+  const handleButtonPress = () => {
+    if (!isOpen) {
+      measureButtonPosition();
+    }
+    setIsOpen(!isOpen);
+  };
 
   // Close dropdown when clicking outside (only on web)
   useEffect(() => {
@@ -82,7 +99,7 @@ ${contentInfo.summary ? `**Key Highlights**\n${contentInfo.summary}` : ''}`;
       cleanContent += `\n\n**Further Reading:**\n`;
       sources.forEach((source, index) => {
         cleanContent += `${index + 1}. ${source.title} - ${source.author || 'Unknown'} (${source.publishedDate || 'N/A'})\n`;
-        cleanContent += `   URL: ${source.url}\n`;
+        fullContent += `   URL: ${source.url}\n`;
       });
     }
 
@@ -216,8 +233,6 @@ ${contentInfo.summary ? `**Key Highlights**\n${contentInfo.summary}` : ''}`;
     }
   };
 
-
-
   const handleCopyToClipboard = async () => {
     const content = generateSystemPrompt(true, false); // Include sources, don't encode
     try {
@@ -295,66 +310,92 @@ ${contentInfo.summary ? `**Key Highlights**\n${contentInfo.summary}` : ''}`;
   ];
 
   return (
-    <View className="relative" data-dropdown>
-      {/* Main Button */}
-      <View className="bg-white rounded-full px-4 py-2 flex-row items-center shadow-sm">
-        <TouchableOpacity
-          onPress={() => {
-            setIsOpen(!isOpen);
-          }}
-          className="flex-row items-center"
-          activeOpacity={0.8}
-        >
-          <BookOpen size={16} color="#374151" strokeWidth={2} />
-          <Text className="text-gray-700 text-sm font-medium ml-2">Dive deeper</Text>
-        </TouchableOpacity>
+    <>
+      <View className="relative" data-dropdown>
+        {/* Main Button */}
+        <View className="bg-white rounded-full px-4 py-2 flex-row items-center shadow-sm" ref={buttonRef}>
+          <TouchableOpacity
+            onPress={handleButtonPress}
+            className="flex-row items-center"
+            activeOpacity={0.8}
+          >
+            <BookOpen size={16} color="#374151" strokeWidth={2} />
+            <Text className="text-gray-700 text-sm font-medium ml-2">Dive deeper</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
-      {/* Dropdown Menu */}
-      {isOpen && (
-        <View 
-          className="absolute top-full right-0 bg-white rounded-xl shadow-lg border border-gray-200 min-w-64 mt-2" 
-          style={{ 
-            zIndex: 999999, 
-            elevation: 999999,
+      {/* Modal-based Dropdown */}
+      <Modal
+        visible={isOpen}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setIsOpen(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(0, 0, 0, 0.3)',
           }}
-          data-dropdown
+          pointerEvents="box-none"
         >
-          <View className="p-2">
-            {shareOptions.map((option, index) => (
-              <TouchableOpacity
-                key={option.id}
-                onPress={() => {
-                  option.action();
-                  setIsOpen(false);
-                }}
-                className={`flex-row items-center p-3 rounded-lg ${
-                  index === shareOptions.length - 1 ? '' : 'mb-1'
-                } active:bg-gray-50`}
-                style={{ 
-                  zIndex: 1000000, 
-                  elevation: 1000000,
-                  minHeight: 44,
-                }}
-                activeOpacity={0.7}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-              >
-                <View className="mr-3">
-                  {option.icon}
-                </View>
-                <View className="flex-1">
-                  <Text className="text-sm font-medium text-gray-900">
-                    {option.title}
-                  </Text>
-                  <Text className="text-xs text-gray-500">
-                    {option.subtitle}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            ))}
+          <TouchableOpacity
+            style={{
+              flex: 1,
+            }}
+            onPress={() => setIsOpen(false)}
+            activeOpacity={1}
+          />
+          <View
+            style={{
+              position: 'absolute',
+              top: dropdownPosition.y + dropdownPosition.height + 8,
+              right: 24, // Account for the px-6 padding in the player
+              backgroundColor: 'white',
+              borderRadius: 12,
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.1,
+              shadowRadius: 12,
+              elevation: 8,
+              minWidth: 256,
+              zIndex: 999999,
+            }}
+            data-dropdown
+          >
+            <View className="p-2">
+              {shareOptions.map((option, index) => (
+                <TouchableOpacity
+                  key={option.id}
+                  onPress={() => {
+                    option.action();
+                    setIsOpen(false);
+                  }}
+                  className={`flex-row items-center p-3 rounded-lg ${
+                    index === shareOptions.length - 1 ? '' : 'mb-1'
+                  } active:bg-gray-50`}
+                  style={{ 
+                    minHeight: 44,
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <View className="mr-3">
+                    {option.icon}
+                  </View>
+                  <View className="flex-1">
+                    <Text className="text-sm font-medium text-gray-900">
+                      {option.title}
+                    </Text>
+                    <Text className="text-xs text-gray-500">
+                      {option.subtitle}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
         </View>
-      )}
-    </View>
+      </Modal>
+    </>
   );
 }

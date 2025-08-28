@@ -46,8 +46,8 @@ export default function HomeScreen() {
     (content.progress && content.progress > 0 && content.progress < 1) || content.id === '6'
   );
 
-  // Get daily recommendation (AI content)
-  const dailyRecommendation = educationalContent.find(content => content.category === 'Artificial Intelligence') || educationalContent[educationalContent.length - 1];
+  // Get daily recommendation (ADHD content)
+  const dailyRecommendation = educationalContent.find(content => content.title.includes('ADHD')) || educationalContent[educationalContent.length - 1];
 
   const content = (
     <ProtectedRoute>
