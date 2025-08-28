@@ -97,8 +97,11 @@ ${contentInfo.summary ? `**Key Highlights**\n${contentInfo.summary}` : ''}`;
     // Add sources if requested
     if (includeSources && sources && sources.length > 0) {
       cleanContent += `\n\n**Further Reading:**\n`;
+<<<<<<< HEAD
       sources.forEach((source, index) => {
         cleanContent += `${index + 1}. ${source.title} - ${source.author || 'Unknown'} (${source.publishedDate || 'N/A'})\n`;
+=======
+>>>>>>> 4673af44f98c14d7e312c7663f6e7b488c6a2083
         cleanContent += `   URL: ${source.url}\n`;
       });
     }
