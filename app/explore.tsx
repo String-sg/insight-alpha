@@ -68,11 +68,6 @@ export default function ExploreScreen() {
                     {content.category}
                   </Text>
                 </View>
-                <View className="bg-slate-200 rounded-md px-2.5 py-0.5 h-[22px]">
-                  <Text className="text-black text-xs font-geist-semibold">
-                    Podcast
-                  </Text>
-                </View>
               </View>
               
               {/* Title */}

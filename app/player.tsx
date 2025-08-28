@@ -532,11 +532,16 @@ export default function PlayerScreen() {
               const highlightedIndex = Math.min(currentSentenceIndex, totalSentences - 1);
               
               // Function to handle sentence click and seek to timestamp
-              const handleSentenceClick = (index: number) => {
+              const handleSentenceClick = async (index: number) => {
                 if (duration > 0) {
                   const sentenceProgress = index / totalSentences;
                   const targetTime = sentenceProgress * duration;
-                  seekTo(targetTime);
+                  await seekTo(targetTime);
+                  
+                  // Resume playback if currently paused
+                  if (!isPlaying) {
+                    await resumePodcast();
+                  }
                 }
               };
               

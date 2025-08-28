@@ -17,6 +17,7 @@ export interface EducationalContent {
   progress?: number; // 0-1
   isCompleted?: boolean;
   publishedDate: string;
+  createdAt: Date; // Actual creation date
   sources?: PodcastSource[];
 }
 
@@ -37,6 +38,7 @@ export const educationalContent: EducationalContent[] = [
     timeLeft: '13m left',
     progress: 0.2,
     publishedDate: '1 day ago',
+    createdAt: new Date('2025-08-28'),
     sources: [
       {
         title: 'Literacy and Language Needs',
@@ -70,6 +72,7 @@ export const educationalContent: EducationalContent[] = [
     timeLeft: '6m left',
     progress: 0,
     publishedDate: 'Today',
+    createdAt: new Date('2025-08-28'),
     sources: [
       {
         title: 'Remembering an Extraordinary ADHD Educator and Advocate',
@@ -116,6 +119,7 @@ export const educationalContent: EducationalContent[] = [
     timeLeft: '8m',
     progress: 0,
     publishedDate: 'Today',
+    createdAt: new Date('2025-01-15'), // AI content created earlier
     sources: [
       {
         title: 'EdTech Plan: Transforming Education Through Technology',
@@ -155,4 +159,27 @@ export const formatDuration = (milliseconds: number): string => {
   }
   
   return `${minutes}m`;
+};
+
+export const getDaysAgo = (createdAt: Date): string => {
+  const now = new Date();
+  const diffTime = Math.abs(now.getTime() - createdAt.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+  if (diffDays === 0) {
+    return 'Today';
+  } else if (diffDays === 1) {
+    return '1 day ago';
+  } else if (diffDays < 7) {
+    return `${diffDays} days ago`;
+  } else if (diffDays < 30) {
+    const weeks = Math.floor(diffDays / 7);
+    return `${weeks} week${weeks > 1 ? 's' : ''} ago`;
+  } else if (diffDays < 365) {
+    const months = Math.floor(diffDays / 30);
+    return `${months} month${months > 1 ? 's' : ''} ago`;
+  } else {
+    const years = Math.floor(diffDays / 365);
+    return `${years} year${years > 1 ? 's' : ''} ago`;
+  }
 };

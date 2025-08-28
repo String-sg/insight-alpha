@@ -484,12 +484,23 @@ export default function PodcastDetailsScreen() {
                 {/* Podcast Image */}
                 <View className="w-12 h-12 rounded-full overflow-hidden mb-4">
                   <Image
-                    source={content.category === 'Special Educational Needs' 
-                      ? require('@/assets/images/sen.svg')
-                      : require('@/assets/images/cover-album.png')
-                    }
+                    source={(() => {
+                      if (content.category === 'Special Educational Needs') {
+                        return require('@/assets/images/sen.svg');
+                      } else if (content.category === 'Artificial Intelligence') {
+                        return require('@/assets/images/learnAI.svg');
+                      } else {
+                        return require('@/assets/images/cover-album.png');
+                      }
+                    })()}
                     style={{ width: 48, height: 48 }}
-                    resizeMode={content.category === 'Special Educational Needs' ? 'contain' : 'cover'}
+                    resizeMode={(() => {
+                      if (content.category === 'Special Educational Needs' || content.category === 'Artificial Intelligence') {
+                        return 'contain';
+                      } else {
+                        return 'cover';
+                      }
+                    })()}
                   />
                 </View>
                 {/* Category Tag */}
