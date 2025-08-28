@@ -98,7 +98,7 @@ export default function HomeScreen() {
           <View className="flex-row items-center mx-6 mb-4">
             <View className="flex-row items-center gap-1 flex-1">
               <Text className="text-black text-xl font-semibold">
-                Daily recommendation
+                Recommended
               </Text>
             </View>
             <TouchableOpacity
