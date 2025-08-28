@@ -225,7 +225,7 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
             {/* Play/Pause Button */}
             <TouchableOpacity
               onPress={handlePlayPause}
-              className="bg-white rounded-full p-3 border border-black/10"
+              className="p-3"
             >
               {isLoading ? (
                 <ActivityIndicator size="small" style={{ color: '#000000' }} />
