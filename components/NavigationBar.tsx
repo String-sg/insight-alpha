@@ -1,7 +1,8 @@
-import React from 'react';
-import { View, TouchableOpacity, ViewStyle } from 'react-native';
-import { ChevronLeft, Upload } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
+import { ChevronLeft, Upload } from 'lucide-react-native';
+import React from 'react';
+import { TouchableOpacity, View, ViewStyle } from 'react-native';
+import { ShareDropdown } from './ShareDropdown';
 
 interface NavigationBarProps {
   onBackPress?: () => void;
@@ -9,6 +10,15 @@ interface NavigationBarProps {
   onUploadPress?: () => void;
   backgroundColor?: string;
   style?: ViewStyle;
+  contentInfo?: {
+    title: string;
+    subtitle?: string;
+    description?: string;
+    summary?: string;
+  } | null;
+  script?: string;
+  sources?: any[];
+  onExamineSources?: () => void;
 }
 
 export const NavigationBar: React.FC<NavigationBarProps> = ({
@@ -17,6 +27,10 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
   onUploadPress,
   backgroundColor = 'transparent',
   style,
+  contentInfo,
+  script,
+  sources,
+  onExamineSources,
 }) => {
   const router = useRouter();
   
@@ -42,12 +56,21 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
         </TouchableOpacity>
         
         {showUploadButton && (
-          <TouchableOpacity
-            onPress={onUploadPress}
-            className="w-10 h-10 items-center justify-center rounded-full bg-white"
-          >
-            <Upload size={20} color="#000" strokeWidth={2} />
-          </TouchableOpacity>
+          contentInfo ? (
+            <ShareDropdown 
+              contentInfo={contentInfo}
+              script={script}
+              sources={sources}
+              onExamineSources={onExamineSources}
+            />
+          ) : (
+            <TouchableOpacity
+              onPress={onUploadPress}
+              className="w-10 h-10 items-center justify-center rounded-full bg-white"
+            >
+              <Upload size={20} color="#000" strokeWidth={2} />
+            </TouchableOpacity>
+          )
         )}
       </View>
     </View>

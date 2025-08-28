@@ -1,13 +1,12 @@
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { SegmentedControl } from '@/components/SegmentedControl';
-import { WebScrollView } from '@/components/WebScrollView';
 import { TopicCard } from '@/components/TopicCard';
+import { WebScrollView } from '@/components/WebScrollView';
 import { useAudioContext } from '@/contexts/AudioContext';
+import { educationalContent } from '@/data/educational-content';
 import { Stack, useRouter } from 'expo-router';
 import React from 'react';
 import { Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import { educationalContent } from '@/data/educational-content';
-import { Icon } from '@/components/Icon';
 
 export default function ExploreScreen() {
   const { currentPodcast } = useAudioContext();
@@ -67,11 +66,6 @@ export default function ExploreScreen() {
                 <View className={`${content.badgeColor} rounded-md px-2.5 py-0.5 h-[22px]`}>
                   <Text className={`${content.textColor} text-xs font-geist-semibold`}>
                     {content.category}
-                  </Text>
-                </View>
-                <View className="bg-slate-200 rounded-md px-2.5 py-0.5 h-[22px]">
-                  <Text className="text-black text-xs font-geist-semibold">
-                    Podcast
                   </Text>
                 </View>
               </View>

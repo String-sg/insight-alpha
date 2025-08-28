@@ -1,5 +1,4 @@
 import { EducationalCard } from '@/components/EducationalCard';
-import { Icon } from '@/components/Icon';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { SegmentedControl } from '@/components/SegmentedControl';
@@ -9,7 +8,7 @@ import { EducationalContent, educationalContent, weeklyProgress } from '@/data/e
 import { useAudio } from '@/hooks/useAudio';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, SafeAreaView, StatusBar, Text, View } from 'react-native';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -37,10 +36,7 @@ export default function HomeScreen() {
     await playContent(podcastFormat);
   };
 
-  const handleRefreshRecommendation = () => {
-    // Handle refresh recommendation
-    console.log('Refresh daily recommendation');
-  };
+
 
   // Calculate bottom padding based on mini player visibility
   const bottomPadding = currentPodcast ? 120 : 40;
@@ -50,8 +46,8 @@ export default function HomeScreen() {
     (content.progress && content.progress > 0 && content.progress < 1) || content.id === '6'
   );
 
-  // Get daily recommendation (newest content - the AI one)
-  const dailyRecommendation = educationalContent[educationalContent.length - 1]; // Latest added content
+  // Get daily recommendation (ADHD content)
+  const dailyRecommendation = educationalContent.find(content => content.title.includes('ADHD')) || educationalContent[educationalContent.length - 1];
 
   const content = (
     <ProtectedRoute>
@@ -95,19 +91,10 @@ export default function HomeScreen() {
 
         {/* Daily Recommendation Section */}
         <View className="mt-4" style={{ marginBottom: bottomPadding }}>
-          <View className="flex-row items-center mx-6 mb-4">
-            <View className="flex-row items-center gap-1 flex-1">
-              <Text className="text-black text-xl font-semibold">
-                Daily recommendation
-              </Text>
-            </View>
-            <TouchableOpacity
-              onPress={handleRefreshRecommendation}
-              className="w-8 h-8 bg-white rounded-full items-center justify-center"
-              activeOpacity={0.8}
-            >
-              <Icon name="refresh" size={16} color="#000000" />
-            </TouchableOpacity>
+          <View className="mx-6 mb-4">
+            <Text className="text-black text-xl font-semibold">
+              Recommended
+            </Text>
           </View>
           
           <View className="px-6">

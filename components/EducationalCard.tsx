@@ -1,4 +1,4 @@
-import { EducationalContent } from '@/data/educational-content';
+import { EducationalContent, getDaysAgo } from '@/data/educational-content';
 import { useAudio } from '@/hooks/useAudio';
 import React from 'react';
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
@@ -135,7 +135,7 @@ export const EducationalCard: React.FC<EducationalCardProps> = ({
           {/* Author and Date */}
           <View className="flex-row items-center py-1.5 mt-1">
             <Text className="text-slate-600 text-sm font-geist">
-              {content.author} • {content.publishedDate}
+              {content.author} • {getDaysAgo(content.createdAt)}
             </Text>
           </View>
         </View>

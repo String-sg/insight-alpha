@@ -5,7 +5,7 @@
 export interface PodcastSource {
   title: string;
   url: string;
-  type: 'research' | 'article' | 'study' | 'website' | 'book' | 'video' | 'other';
+  type: 'research' | 'article' | 'study' | 'website' | 'book' | 'video' | 'intranet' | 'other';
   author?: string;
   publishedDate?: string;
   description?: string;

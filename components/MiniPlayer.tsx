@@ -203,11 +203,29 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
               }}
             >
             {/* Podcast Image */}
-            <View className="w-12 h-12 rounded-full overflow-hidden mr-3 bg-purple-500">
+            <View className="w-12 h-12 rounded-full overflow-hidden mr-3">
               <Image
-                source={require('@/assets/images/cover-album.png')}
+                source={(() => {
+                  const category = currentPodcast?.category || '';
+                  if (category === 'Special Educational Needs') {
+                    return require('@/assets/images/sen.svg');
+                  } else if (category === 'Artificial Intelligence') {
+                    return require('@/assets/images/learnAI.svg');
+                  } else if (category === 'Mental Health') {
+                    return require('@/assets/images/chermentalh.svg');
+                  } else {
+                    return require('@/assets/images/cover-album.png');
+                  }
+                })()}
                 style={{ width: 48, height: 48 }}
-                resizeMode="cover"
+                resizeMode={(() => {
+                  const category = currentPodcast?.category || '';
+                  if (category === 'Special Educational Needs' || category === 'Artificial Intelligence' || category === 'Mental Health') {
+                    return 'contain';
+                  } else {
+                    return 'cover';
+                  }
+                })()}
               />
             </View>
 
@@ -225,15 +243,16 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
             {/* Play/Pause Button */}
             <TouchableOpacity
               onPress={handlePlayPause}
-              className="bg-white rounded-full p-3 border border-black/10"
+              className="p-3"
             >
               {isLoading ? (
-                <ActivityIndicator size="small" style={{ color: '#000000' }} />
+                <ActivityIndicator size="small" color="#000000" />
               ) : (
                 <Icon
                   name={isPlaying ? "pause" : "play"}
                   size={24}
-                  style={isPlaying ? { color: '#000000' } : { marginLeft: 2, color: '#000000' }}
+                  color="#000000"
+                  style={isPlaying ? {} : { marginLeft: 2 }}
                 />
               )}
             </TouchableOpacity>
@@ -270,7 +289,7 @@ export const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerPress }) => {
             <Icon
               name="sparkles"
               size={24}
-              style={{ color: '#000000' }}
+              color="#000000"
             />
             </View>
           </TouchableWithoutFeedback>

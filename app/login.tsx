@@ -73,14 +73,30 @@ export default function LoginScreen() {
 
   useEffect(() => {
     // Create initial animated stars
-    const initialStars: AnimatedStar[] = Array.from({ length: 20 }, (_, index) => ({
-      id: index,
-      x: Math.random() * 100, // Percentage of screen width
-      y: Math.random() * 100, // Percentage of screen height
-      opacity: new Animated.Value(0),
-      scale: new Animated.Value(0),
-      size: 15 + Math.random() * 25, // Random size between 15-40
-    }));
+    const initialStars: AnimatedStar[] = Array.from({ length: 20 }, (_, index) => {
+      // Define safe zones to avoid central content area
+      let x, y;
+      do {
+        x = Math.random() * 100; // Percentage of screen width
+        y = Math.random() * 100; // Percentage of screen height
+      } while (
+        // Avoid central content area (logo, title, buttons)
+        (x >= 30 && x <= 70 && y >= 25 && y <= 75) ||
+        // Avoid top area where logo and title are
+        (y >= 15 && y <= 35) ||
+        // Avoid bottom area where buttons are
+        (y >= 65 && y <= 85)
+      );
+
+      return {
+        id: index,
+        x,
+        y,
+        opacity: new Animated.Value(0),
+        scale: new Animated.Value(0),
+        size: 15 + Math.random() * 25, // Random size between 15-40
+      };
+    });
 
     setStars(initialStars);
     timeoutsRef.current = [];
@@ -135,10 +151,23 @@ export default function LoginScreen() {
                   useNativeDriver: true,
                 }),
               ]).start(() => {
-                // Reset and reposition
-                star.x = Math.random() * 100;
-                star.y = Math.random() * 100;
-                star.size = 15 + Math.random() * 25; // New random size
+                              // Reset and reposition with safe zone constraints
+              let newX, newY;
+              do {
+                newX = Math.random() * 100;
+                newY = Math.random() * 100;
+              } while (
+                // Avoid central content area (logo, title, buttons)
+                (newX >= 30 && newX <= 70 && newY >= 25 && newY <= 75) ||
+                // Avoid top area where logo and title are
+                (newY >= 15 && newY <= 35) ||
+                // Avoid bottom area where buttons are
+                (newY >= 65 && newY <= 85)
+              );
+              
+              star.x = newX;
+              star.y = newY;
+              star.size = 15 + Math.random() * 25; // New random size
                 
                 // Continue the cycle
                 const nextTimeout = setTimeout(() => animateStar(star), Math.random() * 2000);

@@ -40,18 +40,17 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ onProfilePress }) 
       </View>
       
       <View className="flex-row items-center gap-2">
-        {isDemoMode && (
-          <View className="px-2 py-1 bg-yellow-100 rounded-full">
-            <Text className="text-xs font-medium text-yellow-800">DEMO</Text>
-          </View>
-        )}
         <TouchableOpacity
           onPress={handleProfilePress}
-          className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 items-center justify-center"
+          className={`w-10 h-10 rounded-full overflow-hidden items-center justify-center ${
+            isDemoMode ? 'bg-yellow-400' : 'bg-gray-200'
+          }`}
           activeOpacity={0.8}
         >
           {user?.name ? (
-            <Text className="text-lg font-semibold text-gray-700">
+            <Text className={`text-lg font-semibold ${
+              isDemoMode ? 'text-yellow-800' : 'text-gray-700'
+            }`}>
               {user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
             </Text>
           ) : (

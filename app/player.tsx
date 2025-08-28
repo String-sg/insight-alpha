@@ -1,5 +1,6 @@
 import { BottomSheet } from '@/components/BottomSheet';
 import { Confetti } from '@/components/Confetti';
+import { ShareDropdown } from '@/components/ShareDropdown';
 import { SourceSheet } from '@/components/SourceSheet';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { educationalContent } from '@/data/educational-content';
@@ -8,17 +9,17 @@ import Slider from '@react-native-community/slider';
 import { ResizeMode, Video } from 'expo-av';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { FileText, MoreHorizontal, Pause, Play, RotateCcw, RotateCw, ScrollText, ThumbsDown, ThumbsUp, Upload, X } from 'lucide-react-native';
+import { FileText, MoreHorizontal, Pause, Play, RotateCcw, RotateCw, ScrollText, ThumbsDown, ThumbsUp, X } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import {
-    ActivityIndicator,
-    Platform,
-    ScrollView,
-    Share,
-    Text,
-    TouchableOpacity,
-    View,
-    useWindowDimensions
+  ActivityIndicator,
+  Platform,
+  ScrollView,
+  Share,
+  Text,
+  TouchableOpacity,
+  View,
+  useWindowDimensions
 } from 'react-native';
 import Animated, { FadeIn, useAnimatedStyle, useSharedValue, withSequence, withSpring } from 'react-native-reanimated';
 
@@ -29,6 +30,7 @@ export default function PlayerScreen() {
   const router = useRouter();
   const [showSourceSheet, setShowSourceSheet] = useState(false);
   const [showScriptSheet, setShowScriptSheet] = useState(false);
+
   const [likeStatus, setLikeStatus] = useState<'liked' | 'disliked' | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const { height } = useWindowDimensions(); // Dynamic dimensions
@@ -176,11 +178,15 @@ export default function PlayerScreen() {
   };
 
   const getCurrentInfo = () => {
+    // Get the latest data from educational content
+    const educationalItem = currentPodcast ? educationalContent.find(c => c.id === currentPodcast.id) : null;
+    
     if (currentEpisode) {
       return {
         title: currentEpisode.title,
         subtitle: currentPodcast?.title || '',
         description: currentEpisode.description,
+        summary: educationalItem?.summary || '',
         imageUrl: currentEpisode.imageUrl || currentPodcast?.imageUrl || '',
       };
     } else if (currentPodcast) {
@@ -188,6 +194,7 @@ export default function PlayerScreen() {
         title: currentPodcast.title,
         subtitle: currentPodcast.author,
         description: currentPodcast.description,
+        summary: educationalItem?.summary || '',
         imageUrl: currentPodcast.imageUrl,
       };
     }
@@ -276,12 +283,12 @@ export default function PlayerScreen() {
               <X size={20} color="white" strokeWidth={2} />
             </TouchableOpacity>
             
-            <TouchableOpacity
-              onPress={handleShare}
-              className="w-10 h-10 items-center justify-center bg-black/20 rounded-full"
-            >
-              <Upload size={18} color="white" strokeWidth={2} />
-            </TouchableOpacity>
+            <ShareDropdown 
+              contentInfo={contentInfo}
+              script={currentPodcast ? getScriptByPodcastId(currentPodcast.id)?.content : undefined}
+              sources={sources}
+              onExamineSources={() => setShowSourceSheet(true)}
+            />
           </View>
 
           {/* Error Display */}
@@ -293,6 +300,26 @@ export default function PlayerScreen() {
 
           {/* Spacer for layout */}
           <View className="flex-1" />
+
+          {/* Summary Section */}
+          {contentInfo?.summary && (
+            <View className="mb-6">
+              <View className="bg-black/60 rounded-2xl p-4 backdrop-blur-sm">
+                <Text className="text-white text-xl font-semibold mb-3">
+                  Key Learnings
+                </Text>
+                <ScrollView 
+                  className="max-h-42"
+                  showsVerticalScrollIndicator={true}
+                  contentContainerStyle={{ paddingBottom: 8 }}
+                >
+                  <Text className="text-white/90 text-base leading-7 font-medium">
+                    {contentInfo.summary}
+                  </Text>
+                </ScrollView>
+              </View>
+            </View>
+          )}
 
           {/* Title Section */}
           <View className="mb-4">
@@ -452,18 +479,27 @@ export default function PlayerScreen() {
         />
       </BottomSheet>
       
+
+
       {/* Script Bottom Sheet */}
       <BottomSheet
         visible={showScriptSheet}
         onClose={() => setShowScriptSheet(false)}
-        height={600}
+        height={800}
       >
         <View className="flex-1 p-4">
           {/* Header */}
           <View className="flex-row items-center justify-between mb-4 pb-4 border-b border-slate-100">
-            <Text className="text-black text-xl font-geist-medium">
-              Script
-            </Text>
+            <View className="flex-1 mr-4">
+              <Text className="text-black text-lg font-geist-medium">
+                {contentInfo?.title || 'Script'}
+              </Text>
+              {contentInfo?.subtitle && (
+                <Text className="text-slate-500 text-sm mt-1">
+                  by {contentInfo.subtitle}
+                </Text>
+              )}
+            </View>
             <TouchableOpacity
               onPress={() => setShowScriptSheet(false)}
               className="w-8 h-8 rounded-full bg-slate-100 items-center justify-center"
@@ -472,32 +508,76 @@ export default function PlayerScreen() {
             </TouchableOpacity>
           </View>
           
-          {/* Script Content */}
-          {(() => {
-            const script = currentPodcast ? getScriptByPodcastId(currentPodcast.id) : null;
-            
-            if (!script) {
+                      {/* Script Content */}
+            {(() => {
+              const script = currentPodcast ? getScriptByPodcastId(currentPodcast.id) : null;
+              
+              if (!script) {
+                return (
+                  <View className="flex-1 items-center justify-center">
+                    <Text className="text-slate-500 text-center">
+                      No script available for this podcast
+                    </Text>
+                  </View>
+                );
+              }
+              
+              // Split script into sentences for highlighting
+              const sentences = script.content.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 0);
+              const totalSentences = sentences.length;
+              
+              // Calculate which sentence should be highlighted based on current time
+              const progress = duration > 0 ? currentTime / duration : 0;
+              const currentSentenceIndex = Math.floor(progress * totalSentences);
+              const highlightedIndex = Math.min(currentSentenceIndex, totalSentences - 1);
+              
+              // Function to handle sentence click and seek to timestamp
+              const handleSentenceClick = async (index: number) => {
+                if (duration > 0) {
+                  const sentenceProgress = index / totalSentences;
+                  const targetTime = sentenceProgress * duration;
+                  await seekTo(targetTime);
+                  
+                  // Resume playback if currently paused
+                  if (!isPlaying) {
+                    await resumePodcast();
+                  }
+                }
+              };
+              
               return (
-                <View className="flex-1 items-center justify-center">
-                  <Text className="text-slate-500 text-center">
-                    No script available for this podcast
-                  </Text>
-                </View>
+                <ScrollView 
+                  className="flex-1"
+                  showsVerticalScrollIndicator={true}
+                  contentContainerStyle={{ paddingBottom: 20 }}
+                >
+                  {sentences.map((sentence, index) => {
+                    const isHighlighted = isPlaying && index === highlightedIndex;
+                    
+                    return (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => handleSentenceClick(index)}
+                        activeOpacity={0.7}
+                        className="mb-2"
+                      >
+                        <Text
+                          className={`text-sm leading-6 ${
+                            isHighlighted 
+                              ? 'font-bold text-purple-700' 
+                              : 'text-slate-700'
+                          }`}
+                          selectable
+                        >
+                          {sentence}
+                          {index < sentences.length - 1 ? ' ' : ''}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </ScrollView>
               );
-            }
-            
-            return (
-              <ScrollView 
-                className="flex-1"
-                showsVerticalScrollIndicator={true}
-                contentContainerStyle={{ paddingBottom: 20 }}
-              >
-                <Text className="text-slate-700 text-sm leading-6" selectable>
-                  {script.content}
-                </Text>
-              </ScrollView>
-            );
-          })()}
+            })()}
         </View>
       </BottomSheet>
     </View>
