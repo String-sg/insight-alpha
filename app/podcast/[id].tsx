@@ -16,20 +16,29 @@ import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-rou
 import { FileText, Lightbulb, Pause, Play, Plus, ScrollText, ThumbsDown, ThumbsUp } from 'lucide-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
-  Image,
-  Platform,
-  ScrollView,
-  Share,
-  StatusBar,
-  Text,
-  TouchableOpacity,
-  useWindowDimensions,
-  View
+    ActivityIndicator,
+    Image,
+    Platform,
+    ScrollView,
+    Share,
+    StatusBar,
+    Text,
+    TouchableOpacity,
+    useWindowDimensions,
+    View
 } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+
+// Helper function to format time
+const formatTime = (seconds: number): string => {
+  if (isNaN(seconds) || seconds < 0) return '0:00';
+  
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+};
 
 // Helper function to get topic colors based on category
 const getTopicColors = (category: string) => {
@@ -439,6 +448,15 @@ export default function PodcastDetailsScreen() {
           }}
           showUploadButton={true}
           onUploadPress={handleShare}
+          contentInfo={{
+            title: content.title,
+            subtitle: content.author,
+            description: content.description,
+            summary: content.summary,
+          }}
+          script={getScriptByPodcastId(content.id)?.content}
+          sources={content.sources}
+          onExamineSources={() => setShowSourceSheet(true)}
         />
 
         <WebScrollView 
@@ -790,9 +808,16 @@ export default function PodcastDetailsScreen() {
           <View className="flex-1 p-4">
             {/* Header */}
             <View className="flex-row items-center justify-between mb-4 pb-4 border-b border-slate-100">
-              <Text className="text-black text-xl font-geist-medium">
-                Script
-              </Text>
+              <View className="flex-1 mr-4">
+                <Text className="text-black text-lg font-geist-medium">
+                  {content.title}
+                </Text>
+                {content.author && (
+                  <Text className="text-slate-500 text-sm mt-1">
+                    by {content.author}
+                  </Text>
+                )}
+              </View>
               <TouchableOpacity
                 onPress={() => setShowScriptSheet(false)}
                 className="w-8 h-8 rounded-full bg-slate-100 items-center justify-center"
@@ -800,10 +825,13 @@ export default function PodcastDetailsScreen() {
                 <Text className="text-base text-black">×</Text>
               </TouchableOpacity>
             </View>
+
+
             
             {/* Script Content */}
             {(() => {
               const script = getScriptByPodcastId(content.id);
+              const { currentTime, duration, isPlaying, seekTo } = useAudioContext();
               
               if (!script) {
                 return (
@@ -815,15 +843,54 @@ export default function PodcastDetailsScreen() {
                 );
               }
               
+              // Split script into sentences for highlighting
+              const sentences = script.content.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 0);
+              const totalSentences = sentences.length;
+              
+              // Calculate which sentence should be highlighted based on current time
+              const progress = duration > 0 ? currentTime / duration : 0;
+              const currentSentenceIndex = Math.floor(progress * totalSentences);
+              const highlightedIndex = Math.min(currentSentenceIndex, totalSentences - 1);
+              
+              // Function to handle sentence click and seek to timestamp
+              const handleSentenceClick = (index: number) => {
+                if (duration > 0) {
+                  const sentenceProgress = index / totalSentences;
+                  const targetTime = sentenceProgress * duration;
+                  seekTo(targetTime);
+                }
+              };
+              
               return (
                 <ScrollView 
                   className="flex-1"
                   showsVerticalScrollIndicator={true}
                   contentContainerStyle={{ paddingBottom: 20 }}
                 >
-                  <Text className="text-slate-700 text-sm leading-6" selectable>
-                    {script.content}
-                  </Text>
+                  {sentences.map((sentence, index) => {
+                    const isHighlighted = isPlaying && index === highlightedIndex;
+                    
+                    return (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => handleSentenceClick(index)}
+                        activeOpacity={0.7}
+                        className="mb-2"
+                      >
+                        <Text
+                          className={`text-sm leading-6 ${
+                            isHighlighted 
+                              ? 'font-bold text-purple-700' 
+                              : 'text-slate-700'
+                          }`}
+                          selectable
+                        >
+                          {sentence}
+                          {index < sentences.length - 1 ? ' ' : ''}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
                 </ScrollView>
               );
             })()}

@@ -22,15 +22,15 @@ export interface EducationalContent {
 
 export const educationalContent: EducationalContent[] = [
   {
-    id: '5',
+    id: '1',
     title: 'Supporting Students with Dyslexia: What Every Teacher Needs to Know',
-    description: '**Overview**\nThis episode dives deep into how educators can better understand and support students with dyslexia in mainstream classrooms. Backed by current brain research and real classroom experiences, the conversation unpacks what dyslexia really is (and isn’t), why some common myths persist, and how teachers can implement practical, research-based strategies that empower struggling readers. By embracing neurodiversity and applying structured support, educators can help students with dyslexia thrive both academically and emotionally.',    
-    summary: '',
+    description: '**Overview**\nThis episode dives deep into how educators can better understand and support students with dyslexia in mainstream classrooms. Backed by current brain research and real classroom experiences, the conversation unpacks what dyslexia really is (and isn’t), why some common myths persist, and how teachers can implement practical, research-based strategies that empower struggling readers. By embracing neurodiversity and applying structured support, educators can help students with dyslexia thrive both academically and emotionally.',
+    summary: '1. Teach Reading Through Explicit, Systematic Phonics\n 2. Support Students Holistically in the Classroom (paired reading, visual support, leverage strengths; reframing lack of motivation as perhaps due to working twice as hard to decode text and hence appear disengaged)\n3. Build confidence by leveraging their strengths (oral expression, problem-solving, visual-spatial skills) and validating their effort)',
     category: 'Special Educational Needs',
     author: 'DXD Product Team',
-    duration: 780000, // 7.15 minutes
+    duration: 435000, // 7.15 minutes
     imageUrl: 'https://picsum.photos/400/400?random=5',
-    audioUrl: require('../assets/audio/building-safe-school-environments.mp3'),
+    audioUrl: require('../assets/audio/The_Hidden_Truth_about_Dyslexia-What_Every_Teacher_Needs_to_Know.wav'),
     backgroundColor: 'bg-white',
     badgeColor: 'bg-purple-200',
     textColor: 'text-purple-900',
@@ -39,52 +39,31 @@ export const educationalContent: EducationalContent[] = [
     publishedDate: '1 day ago',
     sources: [
       {
-        title: '[Understanding Special Educational Needs in Singapore: A Comprehensive Guide]',
-        url: 'https://www.moe.gov.sg/education-in-sg/special-educational-needs',
+        title: 'Literacy and Language Needs',
+        url: 'https://intranet.moe.gov.sg/Send/Resources/Pages/LiteracyandLanguageNeeds.aspx',
+        type: 'intranet',
+        author: 'MOE SEND',
+        publishedDate: '2025'
+      },
+      {
+        title: 'Strategies for Supporting Students with SEN in Mainstream Classrooms',
+        url: 'https://uldforparents.com/contents/identifying-and-diagnosing-specific-learning-disabilities/diagnostic-criteria-for-specific-learning-disorder-diagnosis/',
         type: 'article',
-        author: 'Smith, J.',
-        publishedDate: '2021'
+        author: 'Auspeld Team',
+        publishedDate: '2025'
       },
-      {
-        title: '[Strategies for Supporting Students with SEN in Mainstream Classrooms]',
-        url: 'https://www.nie.edu.sg/research/sen-support-strategies',
-        type: 'research',
-        author: 'Tan, L. & Wong, R.',
-        publishedDate: '2020'
-      },
-      {
-        title: 'Framework for Inclusive Education: Policies and Practices',
-        url: 'https://www.moe.gov.sg/education-in-sg/inclusive-education-framework',
-        type: 'article',
-        author: 'Ministry of Education, Singapore',
-        publishedDate: '2019'
-      },
-      {
-        title: '[Collaborative Teaching Approaches for Diverse Learners]',
-        url: 'https://www.singteach.nie.edu.sg/collaborative-teaching',
-        type: 'article',
-        author: 'Lee, A.',
-        publishedDate: '2018'
-      },
-      {
-        title: '[The Role of Teachers in Supporting SEN: A Singapore Perspective] Asia-Pacific Journal of Education, 42(1), 89-105.',
-        url: 'https://www.tandfonline.com/doi/abs/10.1080/02188791.2022.2031873',
-        type: 'research',
-        author: 'Chua, M.',
-        publishedDate: '2022'
-      }
     ]
   },
   {
-    id: '6',
-    title: "AI's Role in Singapore's Education Transformation",
-    description: '**Overview**\nThis forward-looking session examines how artificial intelligence is transforming Singapore\'s education landscape, from personalized learning platforms to intelligent administrative systems. Educators will explore practical AI applications currently being implemented in local schools and understand the implications for teaching and learning in the digital age.\n\n**What you will learn**\n- Understand Singapore\'s national AI in education strategy and implementation timeline\n- Explore AI-powered adaptive learning platforms and their impact on student outcomes\n- Analyze intelligent tutoring systems and personalized learning pathways\n- Examine AI applications in assessment, grading, and student progress tracking\n- Discuss ethical considerations and responsible AI use in educational settings\n- Identify opportunities to integrate AI tools into existing teaching practices',
-    summary: '',
-    category: 'Artificial Intelligence',
-    author: 'DXD',
-    duration: 360000, // 6 minutes
+    id: '2',
+    title: "ADHD in Classrooms: Strategies That Work",
+    description: '**Overview**\nThis episode unpacks how teachers can understand and support students with Attention Deficit Hyperactivity Disorder (ADHD) in mainstream classrooms. We break down common myths, explore how ADHD presents in different students, and share practical, low-prep strategies to help learners focus, stay organized, and succeed. Learn how to work effectively with parents, use classroom adjustments, and create inclusive learning environments where all students can thrive.',
+    summary: '1. Understanding ADHD Is Essential for Effective Support \n Simple, Low-Prep Strategies Make a Big Impact (structured routines, visual aids, and clear instructions—can greatly improve focus, organization, and participation) \n 3. Collaboration and Inclusivity Enhance Outcomes (parents, the entire class community)',
+    category: 'Special Education Needs',
+    author: 'DXD Product Team',
+    duration: 540000, // 9 minutes
     imageUrl: 'https://picsum.photos/400/400?random=6',
-    audioUrl: require('../assets/audio/ais-role-in-singapores-education-transformation.wav'),
+    audioUrl: require('../assets/audio/ADHD_in_Classrooms_Strategies_That_Work.wav'),
     backgroundColor: 'bg-white',
     badgeColor: 'bg-yellow-200',
     textColor: 'text-yellow-900',
@@ -93,18 +72,18 @@ export const educationalContent: EducationalContent[] = [
     publishedDate: 'Today',
     sources: [
       {
-        title: '[AI in Education: Singapore\'s National Strategy and Implementation]',
-        url: 'https://www.smartnation.gov.sg/initiatives/education/ai-education',
+        title: 'Remembering an Extraordinary ADHD Educator and Advocate',
+        url: 'https://www.additudemag.com/chris-zeigler-dendy-adhd-iceberg-educator/',
         type: 'article',
-        author: 'Smart Nation Singapore',
-        publishedDate: '2023'
+        author: 'ADDitude Editors',
+        publishedDate: '2024'
       },
       {
-        title: '[Personalized Learning Through AI: Evidence from Singapore Schools]',
+        title: 'Diagnostic and Statistical Manual of Mental Disorders, Fifth Edition (DSM-5)',
         url: 'https://www.nie.edu.sg/research/ai-personalized-learning',
-        type: 'research',
-        author: 'Lim, K.Y. & Chen, W.',
-        publishedDate: '2022'
+        type: 'book',
+        author: 'American Psychiatric Association',
+        publishedDate: '2013'
       },
       {
         title: 'EdTech Plan: Transforming Education Through Technology',
@@ -114,20 +93,12 @@ export const educationalContent: EducationalContent[] = [
         publishedDate: '2021'
       },
       {
-        title: '[AI-Powered Assessment Tools in Singapore\'s Education System]',
-        url: 'https://www.suss.edu.sg/research/ai-assessment-tools',
+        title: 'MOE SEND Intranet Resources',
+        url: 'https://intranet.moe.gov.sg/Send/Pages/Resources.aspx',
         type: 'study',
-        author: 'Tan, S.C.',
-        publishedDate: '2023'
-      },
-      {
-        title: '[Ethical Considerations for AI in Education: A Framework for Singapore] International Journal of Educational Technology, 18(3), 245-262.',
-        url: 'https://www.springer.com/journal/41239',
-        type: 'research',
-        author: 'Wong, L.H. & Looi, C.K.',
-        publishedDate: '2022'
-      }
-    ]
+        author: 'MOE SEND Team',
+        publishedDate: 'Unknown'
+      }    ]
   }
 ];
 
