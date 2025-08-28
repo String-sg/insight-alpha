@@ -164,8 +164,8 @@ ${contentInfo.summary ? `**Key Highlights**\n${contentInfo.summary}` : ''}`;
       // Wait for ChatGPT to load
       setTimeout(() => {
         try {
-          // Try direct DOM manipulation first
-          chatGPTWindow.eval(`
+          // Prepare the injection script with content
+          const injectionScript = `
             (function() {
               // Wait for ChatGPT to fully load
               const waitForInput = setInterval(() => {
@@ -180,12 +180,13 @@ ${contentInfo.summary ? `**Key Highlights**\n${contentInfo.summary}` : ''}`;
                   clearInterval(waitForInput);
                   
                   // Set the content
+                  const content = ${JSON.stringify(rawContent)};
                   if (textarea.tagName === 'TEXTAREA') {
-                    textarea.value = ${JSON.stringify(rawContent)};
+                    textarea.value = content;
                     textarea.dispatchEvent(new Event('input', { bubbles: true }));
                     textarea.dispatchEvent(new Event('change', { bubbles: true }));
                   } else if (textarea.contentEditable === 'true' || textarea.getAttribute('role') === 'textbox') {
-                    textarea.textContent = ${JSON.stringify(rawContent)};
+                    textarea.textContent = content;
                     textarea.dispatchEvent(new Event('input', { bubbles: true }));
                     textarea.dispatchEvent(new Event('change', { bubbles: true }));
                   }
@@ -221,7 +222,10 @@ ${contentInfo.summary ? `**Key Highlights**\n${contentInfo.summary}` : ''}`;
                 clearInterval(waitForInput);
               }, 15000);
             })();
-          `);
+          `;
+          
+          // Try direct DOM manipulation first
+          chatGPTWindow.eval(injectionScript);
         } catch (error) {
           console.error('ChatGPT injection failed:', error);
           // Show alert with clipboard fallback
