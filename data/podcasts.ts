@@ -5,7 +5,7 @@ import { Podcast } from '@/types/podcast';
  */
 export const mockPodcasts: Podcast[] = [
   {
-    id: '1',
+    id: '3',
     title: 'Supporting Students with Dyslexia: What Every Teacher Needs to Know',
     description: 'Comprehensive approaches to create a positive school culture that prevents bullying and promotes student safety and wellbeing.',
     imageUrl: 'https://picsum.photos/400/400?random=5',

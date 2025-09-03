@@ -2,7 +2,7 @@ import { PodcastScript } from '../types/script';
 
 export const podcastScripts: PodcastScript[] = [
   {
-    podcastId: '1',
+    podcastId: '3',
     title: "Supporting Students with Dyslexia: What Every Teacher Needs to Know",
     content: `Welcome back! I'm excited about today's topic because it's something so many of us encounter in our classrooms. Picture this - you've got a bright, articulate student who participates beautifully in class discussions, asks thoughtful questions, but the moment you ask them to read aloud, they freeze up completely.
 
@@ -154,6 +154,52 @@ And finally, be patient with yourself and with your students. Change takes time,
 Thanks so much for joining us today! We hope this gives you some practical ideas to try in your classroom this week. Don't forget to catch our next quick tip between classes, and remember - you've got this!
 
 Until next time, keep making a difference, one student at a time!`,
+    language: 'en'
+  },
+  {
+    podcastId: '1',
+    title: 'Managing Student Meltdowns with CALM & CASE (Singapore)',
+    content:`Today we’re talking about a situation almost every teacher in Singapore will face at some point: student meltdowns in the classroom.
+
+Whether you’re teaching Primary 1 or Secondary 4, knowing how to respond can mean the difference between a minor disruption and a major crisis.
+
+What is a meltdown?
+
+A meltdown isn’t a tantrum or defiance. It’s when a student experiences an intense emotional response and temporarily loses behavioural control. They might cry, scream, throw objects, or run. Importantly: they are **not in control** at this point. Traditional discipline won’t work — in fact, it can make things worse.
+
+MOE’s CALM framework
+
+Singapore schools often use the CALM approach:
+
+C Check for safety. Move other students or objects out of harm’s way.
+A Avoid power struggles. Keep your voice calm, avoid commands, and acknowledge emotions.
+L Let others know. Use your school’s system to call for help — many schools now use WhatsApp or intercom alerts.
+M Make sure an adult stays. The child should never be left alone until calm is restored.
+
+What are some warning signs & prevention?
+
+Often, there are early signals: head on the desk, “I don’t know” answers, pacing, hiding, or asking repeated anxious questions. Spotting these signs lets us step in earlier. Some schools use exit cards or calm corners so students can self-regulate before escalation.
+
+After the meltdown: the CASE framework provides some guidance on post-meltdown handling
+
+C Communicate with parents, leaders, and relevant staff in a supportive way.
+A Analyse triggers together with the student, peers, or parents.
+S Strengthen supports add routines, spaces, or trained staff.
+E Equip the student with coping strategies, and educate peers on supportive behaviour.
+
+Our classrooms are exam-focused, fast-paced, and often crowded. 
+
+Teachers juggle safety, learning, and relationships all at once. Meltdowns aren’t about disobedience; they’re about students being overwhelmed beyond coping capacity. Managing them well requires whole-school systems, collaborative support, and a mindset of compassion. Be kind and patient - not just to your students but also yourselves.
+
+Some questions to help us situate ourselves in relation to our school environment for handling meltdowns:
+
+1. How well does your school’s current SOP prepare all teachers to respond to meltdowns?
+2. Do students have safe spaces or preventive tools (like exit cards) before crises erupt?
+3. How do we ensure post-meltdown follow-up focuses on support and learning, not just discipline?
+4. What training and peer-support structures exist so no teacher has to manage these situations alone?
+
+Remember: meltdowns are not about challenging authority, but about distress. Our job is to stay CALM, follow CASE after, and build systems that prevent crises where possible. All the best! 
+`,
     language: 'en'
   },
 ];

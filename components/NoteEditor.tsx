@@ -156,7 +156,6 @@ export function NoteEditor({
               editable={!isLoading}
               style={{ 
                 minHeight: 40,
-                outlineStyle: 'none',
                 borderWidth: 0,
               }}
             />
@@ -175,7 +174,6 @@ export function NoteEditor({
               textAlignVertical="top"
               style={{ 
                 minHeight: 300,
-                outlineStyle: 'none',
                 borderWidth: 0,
               }}
               editable={!isLoading}

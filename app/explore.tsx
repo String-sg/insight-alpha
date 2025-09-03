@@ -1,6 +1,6 @@
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { SegmentedControl } from '@/components/SegmentedControl';
-import { TopicCard } from '@/components/TopicCard';
+
 import { WebScrollView } from '@/components/WebScrollView';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { educationalContent } from '@/data/educational-content';
@@ -86,26 +86,7 @@ export default function ExploreScreen() {
         </View>
       </View>
 
-      {/* Popular Topic Today Section */}
-      <View className="mx-6">
-        <Text className="text-black text-xl font-geist-semibold mb-4">
-          Popular topic today
-        </Text>
-        
-        <TopicCard
-          id="ai-topic"
-          title="Learn to use AI"
-          subtitle="Artificial Intelligence"
-          podcasts={12}
-          gradientFrom="#fbbf24"
-          gradientTo="#fde047"
-          badgeBg="bg-amber-200"
-          badgeText="text-amber-900"
-          textColor="text-black"
-          iconComponent={<Text className="text-white text-4xl">✦</Text>}
-          showStats={true}
-        />
-      </View>
+
     </WebScrollView>
   );
 

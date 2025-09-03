@@ -6,6 +6,7 @@ import { SimpleMarkdown } from '@/components/SimpleMarkdown';
 import { SourceSheet } from '@/components/SourceSheet';
 import { WebScrollView } from '@/components/WebScrollView';
 import { useAudioContext } from '@/contexts/AudioContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useNotes } from '@/contexts/NotesContext';
 import { educationalContent, EducationalContent } from '@/data/educational-content';
 import { mockQuizzes } from '@/data/quizzes';
@@ -13,19 +14,20 @@ import { getScriptByPodcastId } from '@/data/scripts';
 import { useAudio } from '@/hooks/useAudio';
 import { Note } from '@/types/notes';
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { FileText, Lightbulb, Pause, Play, Plus, ScrollText, ThumbsDown, ThumbsUp } from 'lucide-react-native';
+import { FileText, Lightbulb, Pause, Play, ScrollText, ThumbsDown, ThumbsUp } from 'lucide-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-    ActivityIndicator,
-    Image,
-    Platform,
-    ScrollView,
-    Share,
-    StatusBar,
-    Text,
-    TouchableOpacity,
-    useWindowDimensions,
-    View
+  ActivityIndicator,
+  Image,
+  Linking,
+  Platform,
+  ScrollView,
+  Share,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View
 } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 
@@ -81,6 +83,7 @@ const getTopicColors = (category: string) => {
 export default function PodcastDetailsScreen() {
   const router = useRouter();
   const { id, from, topicId } = useLocalSearchParams<{ id: string; from?: string; topicId?: string }>();
+  const { user } = useAuth(); // Get authenticated user info
   const [content, setContent] = useState<EducationalContent | null>(null);
   const [notes, setNotes] = useState<Note[]>([]);
   const [showNoteEditor, setShowNoteEditor] = useState(false);
@@ -646,10 +649,10 @@ export default function PodcastDetailsScreen() {
             </View>
           </View>
 
-          {/* Your Notes Section */}
+          {/* Add Notes Section */}
           <View className="px-6 mt-8 mb-8">
             <Text className="text-black text-base font-medium mb-4 px-1">
-              Your notes
+              Add notes
             </Text>
             
             {/* Responsive Grid Container */}
@@ -668,70 +671,72 @@ export default function PodcastDetailsScreen() {
                       activeOpacity={0.8}
                       onPress={() => handleNotePress(note.id, index)}
                     >
-                      <Animated.View 
+                      <View 
                         className={`${topicColors.badge} rounded-3xl p-4 w-full h-full justify-between`}
-                        style={[animatedStyle]}
                       >
                         <Text className="text-slate-600 text-xs">{formatNoteDate(note.createdAt)}</Text>
                         <Text className="text-slate-900 text-base font-medium leading-6" numberOfLines={2}>
                           {note.title}
                         </Text>
-                      </Animated.View>
+                      </View>
                     </TouchableOpacity>
                   </View>
                 );
               })}
 
-              {/* Placeholder cards if less than max notes */}
-              {(() => {
-                const displayedNotesCount = Math.min(notes.length, 3);
-                const maxNotesInRow = 4; // 3 notes + 1 "New note" card in 2x2 grid
-                const placeholderCount = Math.max(0, maxNotesInRow - displayedNotesCount - 1); // -1 for new note card
-                return Array.from({ length: placeholderCount }).map((_, index) => {
-                  const actualIndex = notes.length + index;
-                  const animatedStyle = actualIndex === 0 ? note1AnimatedStyle :
-                                      actualIndex === 1 ? note2AnimatedStyle :
-                                      note3AnimatedStyle;
-                  
-                  return (
-                    <View key={`placeholder-${index}`} style={{ paddingHorizontal: noteGap/2, marginBottom: noteGap }}>
-                      <TouchableOpacity 
-                        className="relative" 
-                        style={{ width: noteCardWidth, height: noteCardHeight }}
-                        activeOpacity={0.7}
-                        onPress={handleNewNotePress}
-                      >
-                        <Animated.View 
-                          className="bg-slate-50 rounded-3xl p-4 w-full h-full justify-center items-center"
-                          style={[animatedStyle]}
-                        >
-                          <Text className="text-slate-400 text-sm">No note yet</Text>
-                        </Animated.View>
-                      </TouchableOpacity>
-                    </View>
-                  );
-                });
-              })()}
 
-              {/* New Note Card */}
+
+              {/* Notion Card - Primary */}
               <View style={{ paddingHorizontal: noteGap/2, marginBottom: noteGap }}>
                 <TouchableOpacity 
                   className="relative" 
                   style={{ width: noteCardWidth, height: noteCardHeight }}
                   activeOpacity={0.7}
-                  onPress={handleNewNotePress}
+                  onPress={() => {
+                    if (Platform.OS === 'web') {
+                      window.open('https://notion.new', '_blank');
+                    } else {
+                      Linking.openURL('https://notion.new');
+                    }
+                  }}
                 >
-                  <Animated.View 
-                    className="bg-white rounded-3xl p-4 w-full h-full justify-between"
-                    style={[note4AnimatedStyle]}
+                  <View 
+                    className="bg-gradient-to-br from-blue-50 to-purple-50 border border-blue-200 rounded-3xl p-4 w-full h-full justify-between"
+                  >
+                    <View className="bg-blue-100 rounded-full p-2 self-start">
+                      <Text className="text-blue-700 text-xs font-bold">N</Text>
+                    </View>
+                    <Text className="text-blue-700 text-sm font-medium">
+                      Create in Notion
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+
+              {/* Google Docs Card - Secondary */}
+              <View style={{ paddingHorizontal: noteGap/2, marginBottom: noteGap }}>
+                <TouchableOpacity 
+                  className="relative" 
+                  style={{ width: noteCardWidth, height: noteCardHeight }}
+                  activeOpacity={0.7}
+                  onPress={() => {
+                    if (Platform.OS === 'web') {
+                      window.open('https://doc.new', '_blank');
+                    } else {
+                      Linking.openURL('https://doc.new');
+                    }
+                  }}
+                >
+                  <View 
+                    className="bg-slate-50 border border-slate-200 rounded-3xl p-4 w-full h-full justify-between"
                   >
                     <View className="bg-slate-200 rounded-full p-2 self-start">
-                      <Plus size={16} color="#000" strokeWidth={2} />
+                      <Text className="text-slate-600 text-xs font-bold">G</Text>
                     </View>
-                    <Text className="text-slate-600 text-base font-medium">
-                      New note
+                    <Text className="text-slate-600 text-sm font-medium">
+                      Create in Docs
                     </Text>
-                  </Animated.View>
+                  </View>
                 </TouchableOpacity>
               </View>
             </View>
@@ -740,49 +745,53 @@ export default function PodcastDetailsScreen() {
           {/* Next Steps Section */}
           <View className="px-6 mt-8 mb-8">
             <Text className="text-black text-xl font-medium mb-6 px-1">
-              Next steps?
+              Next steps
             </Text>
             
-            {/* Course Card */}
-            <View className="relative">
-              {/* Course Image */}
-              <View className="w-full h-50 rounded-3xl overflow-hidden mb-6">
-                <Image
-                  source={require('@/assets/images/next-step-cover-1.png')}
-                  style={{ width: '100%', height: 200 }}
-                  resizeMode="cover"
-                />
-              </View>
-              
-              {/* Course Content */}
-              <View className="space-y-2">
-                {/* Course Badges */}
-                <View className="flex-row items-center gap-2 mb-2">
-                  <View className={`${topicColors.badge} rounded-full px-3 py-1`}>
-                    <Text className={`${topicColors.text} text-xs font-semibold`}>
-                      {content.category}
-                    </Text>
-                  </View>
-                  <View className="bg-slate-100 rounded-full px-3 py-1">
-                    <Text className="text-slate-700 text-xs font-semibold">
-                      Workshop
+            {/* Coming Soon Card */}
+            <TouchableOpacity 
+              className="bg-grey from-blue-50 to-purple-50 border border-blue-200 rounded-3xl p-6"
+              onPress={() => {
+                // Build URL with user email if authenticated
+                const baseUrl = 'https://form.gov.sg/68b7d5099b55d364153be0d5';
+                const emailParam = user?.email ? `?68b7d5e965cd36be28735915=${encodeURIComponent(user.email)}` : '';
+                const fullUrl = baseUrl + emailParam;
+                
+                if (Platform.OS === 'web') {
+                  window.open(fullUrl, '_blank');
+                } else {
+                  Linking.openURL(fullUrl);
+                }
+              }}
+              activeOpacity={0.8}
+            >
+              <View className="flex-row items-center justify-between mb-4">
+                <View className="flex-row items-center gap-2">
+                  <View className="bg-blue-100 rounded-full px-3 py-1">
+                    <Text className="text-blue-700 text-xs font-semibold">
+                      Coming Soon
                     </Text>
                   </View>
                 </View>
-                
-                <Text className="text-slate-900 text-lg font-semibold leading-7">
-                  Hands-On AI for Educators: Empowering Teaching and Learning in Singapore
-                </Text>
-                
-                <Text className="text-slate-600 text-sm leading-6">
-                  Skills you'll gain: AI Literacy, Tool Integration, Curriculum Design, Data Analysis, Ethical AI Use, Practical Implementation, Collaboration with AI
-                </Text>
-                
-                <Text className="text-slate-500 text-sm">
-                  DXD • August
+                <View className="w-8 h-8 rounded-full items-center justify-center">
+                  <Text className="text-blue-600 text-lg font-bold">→</Text>
+                </View>
+              </View>
+              
+              <Text className="text-slate-900 text-lg font-semibold leading-7 mb-3">
+                What to learn next
+              </Text>
+              
+              <Text className="text-slate-600 text-sm leading-6 mb-4">
+                What would you like to see after completing a podcast? 
+              </Text>
+              
+              <View className="flex-row">
+                <Text className="text-blue-600 text-sm font-medium">
+                  Share your feedback →
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           </View>
         </WebScrollView>
         

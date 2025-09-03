@@ -2,7 +2,7 @@ import { ChatMessage } from '@/components/ChatMessage';
 import { ContextLabel } from '@/components/ContextLabel';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { useChatContext } from '@/contexts/ChatContext';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { ChevronLeft, Plus, SendHorizontal } from 'lucide-react-native';
 import React, { useEffect, useRef, useState } from 'react';
@@ -228,7 +228,7 @@ export default function ChatScreen() {
               style={{
                 backgroundColor: 'rgba(255, 255, 255, 0.5)',
                 backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)',
+
                 borderWidth: 1,
                 borderColor: 'rgba(226, 232, 240, 0.8)',
                 shadowColor: '#000',

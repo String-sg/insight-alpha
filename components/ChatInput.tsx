@@ -114,10 +114,9 @@ export function ChatInput({
             onBlur={handleBlur}
             onKeyPress={handleKeyPress}
             placeholder={placeholder}
-            className="placeholder:text-gray-400"
+            className="placeholder:text-gray-400 px-4 py-3 text-base text-slate-900 leading-5"
             multiline
             maxLength={maxLength}
-            className="px-4 py-3 text-base text-slate-900 leading-5"
             style={{
               fontFamily: 'Geist_400Regular',
               minHeight: 44,
