@@ -17,17 +17,17 @@ import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-rou
 import { FileText, Lightbulb, Pause, Play, ScrollText, ThumbsDown, ThumbsUp } from 'lucide-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
-  Image,
-  Linking,
-  Platform,
-  ScrollView,
-  Share,
-  StatusBar,
-  Text,
-  TouchableOpacity,
-  useWindowDimensions,
-  View
+    ActivityIndicator,
+    Image,
+    Linking,
+    Platform,
+    ScrollView,
+    Share,
+    StatusBar,
+    Text,
+    TouchableOpacity,
+    useWindowDimensions,
+    View
 } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 
@@ -828,7 +828,7 @@ export default function PodcastDetailsScreen() {
           onClose={() => setShowScriptSheet(false)}
           height={600}
         >
-          <View className="flex-1 p-4">
+          <View className="flex-1 px-6 py-4">
             {/* Header */}
             <View className="flex-row items-center justify-between mb-4 pb-4 border-b border-slate-100">
               <View className="flex-1 mr-4">
@@ -901,7 +901,7 @@ export default function PodcastDetailsScreen() {
                         className="mb-2"
                       >
                         <Text
-                          className={`text-sm leading-6 ${
+                          className={`text-lg leading-7 text-justify ${
                             isHighlighted 
                               ? 'font-bold text-purple-700' 
                               : 'text-slate-700'

@@ -489,7 +489,7 @@ export default function PlayerScreen() {
         onClose={() => setShowScriptSheet(false)}
         height={800}
       >
-        <View className="flex-1 p-4">
+        <View className="flex-1 px-6 py-4">
           {/* Header */}
           <View className="flex-row items-center justify-between mb-4 pb-4 border-b border-slate-100">
             <View className="flex-1 mr-4">
@@ -564,7 +564,7 @@ export default function PlayerScreen() {
                       className="mb-2"
                     >
                       <Text
-                        className={`text-sm leading-6 ${
+                        className={`text-lg leading-7 text-justify ${
                           isHighlighted 
                             ? 'font-bold text-purple-700' 
                             : 'text-slate-700'
