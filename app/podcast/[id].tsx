@@ -750,7 +750,7 @@ export default function PodcastDetailsScreen() {
             
             {/* Coming Soon Card */}
             <TouchableOpacity 
-              className="bg-gradient-to-br from-blue-50 to-purple-50 border border-blue-200 rounded-3xl p-6"
+              className="bg-grey from-blue-50 to-purple-50 border border-blue-200 rounded-3xl p-6"
               onPress={() => {
                 // Build URL with user email if authenticated
                 const baseUrl = 'https://form.gov.sg/68b7d5099b55d364153be0d5';
@@ -772,26 +772,21 @@ export default function PodcastDetailsScreen() {
                       Coming Soon
                     </Text>
                   </View>
-                  <View className="bg-purple-100 rounded-full px-3 py-1">
-                    <Text className="text-purple-700 text-xs font-semibold">
-                      Feedback
-                    </Text>
-                  </View>
                 </View>
-                <View className="w-8 h-8 bg-blue-100 rounded-full items-center justify-center">
+                <View className="w-8 h-8 rounded-full items-center justify-center">
                   <Text className="text-blue-600 text-lg font-bold">→</Text>
                 </View>
               </View>
               
               <Text className="text-slate-900 text-lg font-semibold leading-7 mb-3">
-                Help us plan the next steps
+                What to learn next
               </Text>
               
               <Text className="text-slate-600 text-sm leading-6 mb-4">
                 What would you like to see after completing a podcast? 
               </Text>
               
-              <View className="flex-row items-center justify-center">
+              <View className="flex-row">
                 <Text className="text-blue-600 text-sm font-medium">
                   Share your feedback →
                 </Text>

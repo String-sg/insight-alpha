@@ -228,7 +228,7 @@ export default function ChatScreen() {
               style={{
                 backgroundColor: 'rgba(255, 255, 255, 0.5)',
                 backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)',
+
                 borderWidth: 1,
                 borderColor: 'rgba(226, 232, 240, 0.8)',
                 shadowColor: '#000',

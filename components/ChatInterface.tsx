@@ -207,8 +207,7 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
             onChangeText={setInputText}
             placeholder={`Ask AI about ${currentTopic === 'Special Educational Needs' ? 'SEN' : currentTopic}`}
             placeholderTextColor="#64748b"
-            className="flex-1 text-sm font-geist mr-2"
-            className="text-slate-600"
+            className="flex-1 text-sm font-geist mr-2 text-slate-600"
             multiline={false}
             returnKeyType="send"
             onSubmitEditing={handleSend}
@@ -217,8 +216,7 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
           <TouchableOpacity
             onPress={handleSend}
             disabled={!inputText.trim()}
-            className="w-12 h-12 m-3 items-center justify-center rounded-full"
-            className={inputText.trim() ? 'bg-slate-950' : 'bg-slate-300'}
+            className={`w-12 h-12 m-3 items-center justify-center rounded-full ${inputText.trim() ? 'bg-slate-950' : 'bg-slate-300'}`}
             activeOpacity={0.7}
           >
             <Icon name="send" size={20} style={{ color: '#FFFFFF' }} />
