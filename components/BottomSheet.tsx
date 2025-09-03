@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import {
-  Animated,
-  Modal,
-  PanResponder,
-  TouchableWithoutFeedback,
-  View,
+    Animated,
+    Modal,
+    PanResponder,
+    Platform,
+    TouchableWithoutFeedback,
+    View,
 } from 'react-native';
 
 interface BottomSheetProps {
@@ -97,10 +98,12 @@ export function BottomSheet({ visible, onClose, children, height = 490 }: Bottom
           />
         </TouchableWithoutFeedback>
         
-        <View className="flex-1 justify-end">
+        <View className="flex-1 justify-end items-center">
           <Animated.View
             style={{
               height: height || '100%',
+              width: '100%',
+              maxWidth: Platform.OS === 'web' ? 768 : '100%', // Match WebScrollView max-w-3xl on web
               transform: [{ translateY }],
               backgroundColor: '#ffffff',
               borderTopLeftRadius: height ? 20 : 0,

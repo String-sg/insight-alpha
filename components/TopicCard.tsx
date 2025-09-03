@@ -102,7 +102,7 @@ export const TopicCard: React.FC<TopicCardProps> = ({
             {/* Stats */}
             {showStats && podcasts !== undefined && (
               <Text className={`${textColor} font-geist-regular text-sm leading-5`}>
-                {podcasts} podcasts{notes !== undefined ? `\n${notes} notes` : ''}
+                {podcasts} podcasts
               </Text>
             )}
           </View>

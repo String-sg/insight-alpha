@@ -23,12 +23,91 @@ export interface EducationalContent {
 
 export const educationalContent: EducationalContent[] = [
   {
+    id: '10',
+    title: 'Learn to Use AI: More Consistent & Controlled Image Generation with JSON Formatting',
+    description: `Using JSON style guides allows teachers to lock key visual elements (style, camera angle, and colour palette) so that AI-generated images remain consistent across lessons, reducing distractions and improving student focus on learning.
+
+You'll be able to:
+1. Apply JSON style guides to lock in core design elements (style, camera, colours) and maintain consistency across slides and teaching materials.
+2. Differentiate between fixed and variable fields in prompts so that only lesson-specific content changes while the overall look stays coherent.
+3. Implement a practical team workflow for generating visuals that align with department or school branding, making it easier for students to recognise and follow materials.`,
+    summary: `1 JSON style guides allow teachers to lock key visual elements (style, camera angle, and colour palette) for consistent AI-generated images across lessons.
+
+2 By differentiating between fixed and variable fields in prompts, only lesson-specific content changes while maintaining visual coherence.
+
+3 Implementing team workflows ensures visuals align with department or school branding, making materials easier for students to recognise and follow.`,
+    category: 'Artificial Intelligence',
+    author: 'Kahhow',
+    duration: 251000, // 4min 11s
+    imageUrl: 'https://picsum.photos/400/400?random=10',
+    audioUrl: require('../assets/audio/10 json image - isolated.mp3'),
+    backgroundColor: 'bg-white',
+    badgeColor: 'bg-yellow-200',
+    textColor: 'text-yellow-900',
+    timeLeft: '4m',
+    progress: 0,
+    publishedDate: 'Today',
+    createdAt: new Date(),
+    sources: [
+      {
+        title: 'JSON Style Guides for Controlled Image Generation with GPT-4o and GPT-Image-1',
+        url: 'https://dev.to/worldlinetech/json-style-guides-for-controlled-image-generation-with-gpt-4o-and-gpt-image-1-36p',
+        type: 'website',
+        author: 'raphiki',
+        publishedDate: '9 May 2025',
+      },
+    ]
+  },
+  {
+    id: '8',
+    title: 'Learn about AI (Safety): Prompt Injection',
+    description: `Prompt injection shows how AI systems can be tricked by carefully worded instructions, highlighting the need for awareness and critical use in education.
+
+You'll be able to:
+1. Recognise what prompt injection is and how it compares to older security issues like SQL injection.
+2. Identify at least three common techniques used in prompt injection (e.g., "ignore the above," translation tricks, role-play outlets).
+3. Evaluate why most prompt injections are reputational rather than catastrophic, and apply this understanding to classroom AI use.`,
+    summary: `1 Prompt injection is when someone sneaks extra instructions into an AI request, tricking the system into ignoring its original task.
+
+2 It shows that AI can be manipulated through language, leading to embarrassing outputs or leaked "hidden" instructions — but usually with reputational rather than catastrophic risks.
+
+3 Treat AI critically, know the common tricks ("ignore the above," translation hacks, role-play outlets), and use awareness as the best safeguard in schools.`,
+    category: 'Artificial Intelligence',
+    author: 'Kahhow',
+    duration: 201000, // 3.35 minutes in milliseconds
+    imageUrl: 'https://picsum.photos/400/400?random=8',
+    audioUrl: require('../assets/audio/8 Prompt Injection.mp3'),
+    backgroundColor: 'bg-white',
+    badgeColor: 'bg-yellow-200',
+    textColor: 'text-yellow-900',
+    timeLeft: '3m',
+    progress: 0,
+    publishedDate: 'Today',
+    createdAt: new Date(), // [PLACEHOLDER: Update with actual creation date]
+    sources: [
+      {
+        title: 'Reverse Prompt Engineering',
+        url: 'https://www.latent.space/p/reverse-prompt-eng',
+        type: 'website',
+        author: 'Latent.space',
+        publishedDate: '2022',
+      },
+      {
+        title: 'Play a game to learn about prompt injection',
+        url: 'https://gandalf.lakera.ai/baseline',
+        type: 'website',
+        author: 'Lakera.ai',
+        publishedDate: '2024',
+      },
+    ]
+  },
+  {
     id: '15',
     title: 'Learn to use AI: creating songs to help students\' remember, inspired by Eugene Teo (SJI)',
     description: 'Discover how you can use AI to turn subject content into songs, harness audio for memory, and explore sleep-based learning strategies inspired by Eugene Teo\'s (SJI) edutech experiments to support student learning outcomes.\n\nYou\'ll be able to:\n1. Use AI tools like ChatGPT, Suno, or Udio to convert subject concepts into lyrics and music, even if you\'re not musically inclined.\n2. Integrate audio-based study aids into your teaching — from playlists to paired video summaries — to reinforce learning beyond the classroom.\n3. Apply sleep research such as Targeted Memory Reactivation (TMR) by pairing summaries and lofi tracks with bedtime routines to strengthen student recall.',
     summary: '1. Turn Concepts into Lyrics – Use AI prompts to transform tricky topics (like ionic bonding) into short, catchy lines. You don\'t need to be musical — AI does the heavy lifting.\n2. Generate Songs with AI Tools – Drop your lyrics into Suno or Udio, pick a style (lofi, pop, rap), and in minutes you\'ll have a polished track for students to study with.\n3. Boost Recall with Audio & Sleep – Pair songs with NotebookLM video summaries, then encourage students to listen before bed. Research on Targeted Memory Reactivation (TMR) suggests audio cues during sleep can strengthen memory.',
     category: 'Artificial Intelligence',
-    author: 'DXD Product Team',
+    author: 'Kahhow',
     duration: 306000, // 5.1 minutes in milliseconds
     imageUrl: 'https://picsum.photos/400/400?random=7',
     audioUrl: require('../assets/audio/15 ai audio - eugene - isolated.mp3'),

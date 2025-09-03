@@ -2,21 +2,21 @@ import { EducationalCard } from '@/components/EducationalCard';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { SegmentedControl } from '@/components/SegmentedControl';
-import { useAuth } from '@/contexts/AuthContext';
 import { WebScrollView } from '@/components/WebScrollView';
 import { WeekCalendar } from '@/components/WeekCalendar';
+import { useAuth } from '@/contexts/AuthContext';
 import { EducationalContent, educationalContent, weeklyProgress } from '@/data/educational-content';
 import { useAudio } from '@/hooks/useAudio';
-import { useRouter } from 'expo-router';
 import { getFeedbackFormUrl } from '@/utils/feedback';
-import React, { useEffect, useState } from 'react';
-import { Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View, Linking } from 'react-native';
+import { useRouter } from 'expo-router';
+import React, { useState, useEffect } from 'react';
+import { Linking, Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { currentPodcast, playContent, getRecentlyPlayed } = useAudio();
+  const { currentPodcast, playContent } = useAudio();
   const { user } = useAuth();
-  const [recentlyPlayed, setRecentlyPlayed] = useState<Array<{ id: string; title: string; timestamp: number; imageUrl: string; category: string; author: string }>>([]);
+  const [recentlyPlayed, setRecentlyPlayed] = useState<{ id: string; title: string; timestamp: number; imageUrl: string; category: string; author: string }[]>([]);
   
   const handleContentPress = (content: EducationalContent) => {
     router.push(`/podcast/${content.id}`);
@@ -36,19 +36,29 @@ export default function HomeScreen() {
       category: content.category
     };
     
+    // Add to recently played when content is played
+    const newRecentlyPlayed = {
+      id: content.id,
+      title: content.title,
+      timestamp: Date.now(),
+      imageUrl: content.imageUrl,
+      category: content.category || 'Unknown',
+      author: content.author
+    };
+    
+    setRecentlyPlayed(prev => {
+      const existingIndex = prev.findIndex(item => item.id === content.id);
+      const updated = existingIndex >= 0 
+        ? [newRecentlyPlayed, ...prev.filter((_, index) => index !== existingIndex)]
+        : [newRecentlyPlayed, ...prev];
+      return updated.slice(0, 10); // Keep only last 10 items
+    });
+    
     // Use the existing audio system
     await playContent(podcastFormat);
   };
 
-  // Load recently played content
-  useEffect(() => {
-    const loadRecentlyPlayed = async () => {
-      const data = await getRecentlyPlayed();
-      setRecentlyPlayed(data);
-    };
-    
-    loadRecentlyPlayed();
-  }, [getRecentlyPlayed]);
+
 
 
 
@@ -56,6 +66,10 @@ export default function HomeScreen() {
   const bottomPadding = currentPodcast ? 120 : 40;
 
 
+
+  const allContent = educationalContent.filter(content => 
+    !(content.progress && content.progress > 0 && content.progress < 1) && content.id !== '6'
+  );
 
   const content = (
     <ProtectedRoute>
@@ -123,7 +137,7 @@ export default function HomeScreen() {
                 return (
                   <View className="text-center py-8">
                     <Text className="text-slate-600 text-base text-center">
-                      You've reached the end of the list. More content coming soon(:
+                      You&apos;ve reached the end of the list. More content coming soon(:
                     </Text>
                   </View>
                 );
@@ -153,6 +167,7 @@ export default function HomeScreen() {
                       }}
                       activeOpacity={0.7}
                     >
+
                       <Text className="text-slate-500 text-sm underline">
                         share feedback
                       </Text>

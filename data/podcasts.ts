@@ -5,13 +5,70 @@ import { Podcast } from '@/types/podcast';
  */
 export const mockPodcasts: Podcast[] = [
   {
+    id: '10',
+    title: 'Learn to Use AI: More Consistent & Controlled Image Generation with JSON Formatting',
+    description: `Using JSON style guides allows teachers to lock key visual elements (style, camera angle, and colour palette) so that AI-generated images remain consistent across lessons, reducing distractions and improving student focus on learning.
+
+You'll be able to:
+1. Apply JSON style guides to lock in core design elements (style, camera, colours) and maintain consistency across slides and teaching materials.
+2. Differentiate between fixed and variable fields in prompts so that only lesson-specific content changes while the overall look stays coherent.
+3. Implement a practical team workflow for generating visuals that align with department or school branding, making it easier for students to recognise and follow materials.`,
+    imageUrl: 'https://picsum.photos/400/400?random=10',
+    audioUrl: require('../assets/audio/10 json image - isolated.mp3'),
+    duration: 251000, // 4min 11s
+    author: 'Kahhow',
+    category: 'Artificial Intelligence',
+    sources: [
+      {
+        title: 'JSON Style Guides for Controlled Image Generation with GPT-4o and GPT-Image-1',
+        url: 'https://dev.to/worldlinetech/json-style-guides-for-controlled-image-generation-with-gpt-4o-and-gpt-image-1-36p',
+        type: 'website',
+        author: 'raphiki',
+        publishedDate: '9 May 2025',
+      },
+      // [PLACEHOLDER: Add more sources as needed]
+    ]
+  },
+  {
+    id: '8',
+    title: 'Learn about AI (Safety): Prompt Injection',
+    description: `Prompt injection shows how AI systems can be tricked by carefully worded instructions, highlighting the need for awareness and critical use in education.
+
+You'll be able to:
+1. Recognise what prompt injection is and how it compares to older security issues like SQL injection.
+2. Identify at least three common techniques used in prompt injection (e.g., "ignore the above," translation tricks, role-play outlets).
+3. Evaluate why most prompt injections are reputational rather than catastrophic, and apply this understanding to classroom AI use.`,
+    imageUrl: 'https://picsum.photos/400/400?random=8',
+    audioUrl: require('../assets/audio/8 Prompt Injection.mp3'),
+    duration: 201000, 
+    author: 'Kahhow',
+    category: 'Artificial Intelligence',
+    sources: [
+      {
+        title: '[PLACEHOLDER: Add source title]',
+        url: 'https://www.latent.space/p/reverse-prompt-eng',
+        type: 'website',
+        author: 'Latent.space',
+        publishedDate: '2022',
+      },
+      {
+        title: 'Play a game to learn about prompt injection',
+        url: 'https://gandalf.lakera.ai/baseline',
+        type: 'website',
+        author: 'Lakera.ai',
+        publishedDate: '2024',
+      },
+      // [PLACEHOLDER: Add more sources as needed]
+    ]
+  },
+  {
     id: '15',
     title: 'Learn to use AI: creating songs to help students’ remember, inspired by Eugene Teo (SJI)',
     description: 'Discover how you can use AI to turn subject content into songs, harness audio for memory, and explore sleep-based learning strategies inspired by Eugene Teo\'s (SJI) edutech experiments to support student learning outcomes.\n\nYou\'ll be able to:\n1. Use AI tools like ChatGPT, Suno, or Udio to convert subject concepts into lyrics and music, even if you\'re not musically inclined.\n2. Integrate audio-based study aids into your teaching — from playlists to paired video summaries — to reinforce learning beyond the classroom.\n3. Apply sleep research such as Targeted Memory Reactivation (TMR) by pairing summaries and lofi tracks with bedtime routines to strengthen student recall.',
     imageUrl: 'https://picsum.photos/400/400?random=7',
     audioUrl: require('../assets/audio/15 ai audio - eugene - isolated.mp3'),
     duration: 306000,
-    author: 'DXD Product Team',
+    author: 'Kahhow',
     category: 'Artificial Intelligence',
     sources: [
       {
