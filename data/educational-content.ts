@@ -23,6 +23,39 @@ export interface EducationalContent {
 
 export const educationalContent: EducationalContent[] = [
   {
+    id: '8',
+    title: '8 Prompt Injection',
+    description: 'Prompt injection shows how AI systems can be tricked by carefully worded instructions, highlighting the need for awareness and critical use in education.
+
+You’ll be able to:
+1. Recognise what prompt injection is and how it compares to older security issues like SQL injection.
+2. Identify at least three common techniques used in prompt injection (e.g., “ignore the above,” translation tricks, role-play outlets).
+3. Evaluate why most prompt injections are reputational rather than catastrophic, and apply this understanding to classroom AI use.'',
+    summary: '[PLACEHOLDER: Add 2-3 key learning points about prompt injection]',
+    category: 'Artificial Intelligence',
+    author: '[PLACEHOLDER: Add author name]',
+    duration: 0, // [PLACEHOLDER: Add actual duration in milliseconds]
+    imageUrl: 'https://picsum.photos/400/400?random=8',
+    audioUrl: require('../assets/audio/8 Prompt Injection.mp3'),
+    backgroundColor: 'bg-white',
+    badgeColor: '[PLACEHOLDER: Choose badge color - bg-yellow-200, bg-purple-200, etc.]',
+    textColor: '[PLACEHOLDER: Choose text color - text-yellow-900, text-purple-900, etc.]',
+    timeLeft: '[PLACEHOLDER: Add time left or duration - e.g., "5m", "10m left"]',
+    progress: 0,
+    publishedDate: '[PLACEHOLDER: Add published date - e.g., "Today", "1 day ago"]',
+    createdAt: new Date(), // [PLACEHOLDER: Update with actual creation date]
+    sources: [
+      {
+        title: '[PLACEHOLDER: Add source title]',
+        url: '[PLACEHOLDER: Add source URL]',
+        type: '[PLACEHOLDER: Choose type - website, video, article, book, intranet, study, other]',
+        author: '[PLACEHOLDER: Add source author]',
+        publishedDate: '[PLACEHOLDER: Add publication date]',
+      },
+      // [PLACEHOLDER: Add more sources as needed]
+    ]
+  },
+  {
     id: '15',
     title: 'Learn to use AI: creating songs to help students\' remember, inspired by Eugene Teo (SJI)',
     description: 'Discover how you can use AI to turn subject content into songs, harness audio for memory, and explore sleep-based learning strategies inspired by Eugene Teo\'s (SJI) edutech experiments to support student learning outcomes.\n\nYou\'ll be able to:\n1. Use AI tools like ChatGPT, Suno, or Udio to convert subject concepts into lyrics and music, even if you\'re not musically inclined.\n2. Integrate audio-based study aids into your teaching — from playlists to paired video summaries — to reinforce learning beyond the classroom.\n3. Apply sleep research such as Targeted Memory Reactivation (TMR) by pairing summaries and lofi tracks with bedtime routines to strengthen student recall.',

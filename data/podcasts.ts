@@ -5,6 +5,33 @@ import { Podcast } from '@/types/podcast';
  */
 export const mockPodcasts: Podcast[] = [
   {
+    id: '8',
+    title: '8 Prompt Injection',
+    description: '[PLACEHOLDER: Add description about prompt injection in AI systems]',
+    imageUrl: 'https://picsum.photos/400/400?random=8',
+    audioUrl: require('../assets/audio/8 Prompt Injection.mp3'),
+    duration: 201000, 
+    author: 'Kahhow',
+    category: 'Artificial Intelligence',
+    sources: [
+      {
+        title: '[PLACEHOLDER: Add source title]',
+        url: 'https://www.latent.space/p/reverse-prompt-eng',
+        type: 'website',
+        author: 'Latent.space',
+        publishedDate: '2022',
+      },
+      {
+        title: 'Play a game to learn about prompt injection',
+        url: 'https://gandalf.lakera.ai/baseline,
+        type: 'website',
+        author: 'Lakera.ai',
+        publishedDate: '2024',
+      },
+      // [PLACEHOLDER: Add more sources as needed]
+    ]
+  },
+  {
     id: '15',
     title: 'Learn to use AI: creating songs to help students’ remember, inspired by Eugene Teo (SJI)',
     description: 'Discover how you can use AI to turn subject content into songs, harness audio for memory, and explore sleep-based learning strategies inspired by Eugene Teo\'s (SJI) edutech experiments to support student learning outcomes.\n\nYou\'ll be able to:\n1. Use AI tools like ChatGPT, Suno, or Udio to convert subject concepts into lyrics and music, even if you\'re not musically inclined.\n2. Integrate audio-based study aids into your teaching — from playlists to paired video summaries — to reinforce learning beyond the classroom.\n3. Apply sleep research such as Targeted Memory Reactivation (TMR) by pairing summaries and lofi tracks with bedtime routines to strengthen student recall.',

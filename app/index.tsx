@@ -46,8 +46,10 @@ export default function HomeScreen() {
     (content.progress && content.progress > 0 && content.progress < 1) || content.id === '6'
   );
 
-  // Get daily recommendation (ADHD content)
-  const dailyRecommendation = educationalContent.find(content => content.title.includes('ADHD')) || educationalContent[educationalContent.length - 1];
+  // Get all content for recommendations section (excluding recently learned)
+  const allContent = educationalContent.filter(content => 
+    !(content.progress && content.progress > 0 && content.progress < 1) && content.id !== '6'
+  );
 
   const content = (
     <ProtectedRoute>
@@ -89,7 +91,7 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* Daily Recommendation Section */}
+        {/* All Content Section */}
         <View className="mt-4" style={{ marginBottom: bottomPadding }}>
           <View className="mx-6 mb-4">
             <Text className="text-black text-xl font-semibold">
@@ -98,11 +100,14 @@ export default function HomeScreen() {
           </View>
           
           <View className="px-6">
-            <EducationalCard
-              content={dailyRecommendation}
-              onPress={() => handleContentPress(dailyRecommendation)}
-              onPlayPress={() => handlePlayPress(dailyRecommendation)}
-            />
+            {allContent.map((content) => (
+              <EducationalCard
+                key={content.id}
+                content={content}
+                onPress={() => handleContentPress(content)}
+                onPlayPress={() => handlePlayPress(content)}
+              />
+            ))}
           </View>
         </View>
       </WebScrollView>
