@@ -367,7 +367,7 @@ export function AudioProvider({ children }: AudioProviderProps) {
       }
 
       // Track this as recently played
-      await trackRecentlyPlayed(podcast as any);
+      await trackRecentlyPlayed(podcast);
       
       // Initialize quiz as always available
       await initializeQuizAvailability(podcast.id);
