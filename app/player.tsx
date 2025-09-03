@@ -12,16 +12,17 @@ import { StatusBar } from 'expo-status-bar';
 import { FileText, MoreHorizontal, Pause, Play, RotateCcw, RotateCw, ScrollText, ThumbsDown, ThumbsUp, X } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
-  Platform,
-  ScrollView,
-  Share,
-  Text,
-  TouchableOpacity,
-  View,
-  useWindowDimensions
+    ActivityIndicator,
+    Platform,
+    ScrollView,
+    Share,
+    Text,
+    TouchableOpacity,
+    View,
+    useWindowDimensions
 } from 'react-native';
 import Animated, { FadeIn, useAnimatedStyle, useSharedValue, withSequence, withSpring } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
@@ -34,6 +35,7 @@ export default function PlayerScreen() {
   const [likeStatus, setLikeStatus] = useState<'liked' | 'disliked' | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const { height } = useWindowDimensions(); // Dynamic dimensions
+  const insets = useSafeAreaInsets(); // Add safe area awareness
   
   // Animation values
   const likeButtonScale = useSharedValue(1);
@@ -269,7 +271,7 @@ export default function PlayerScreen() {
 
         <View className="flex-1">
           {/* Header */}
-          <View className="flex-row items-center justify-between pt-8 pb-2">
+          <View className="flex-row items-center justify-between pt-8 pb-2" style={{ paddingTop: Math.max(8, insets.top + 8) }}>
             <TouchableOpacity
               onPress={() => {
                 if (router.canGoBack()) {
@@ -301,19 +303,19 @@ export default function PlayerScreen() {
           {/* Spacer for layout */}
           <View className="flex-1" />
 
-          {/* Summary Section */}
+          {/* Summary Section - Responsive & Scrollable */}
           {contentInfo?.summary && (
-            <View className="mb-6">
-              <View className="bg-black/60 rounded-2xl p-4 backdrop-blur-sm">
-                <Text className="text-white text-xl font-semibold mb-3">
+            <View className="flex-1 mb-4">
+              <View className="bg-black/60 rounded-2xl p-3 backdrop-blur-sm h-full">
+                <Text className="text-white text-lg font-semibold mb-2">
                   Key Learnings
                 </Text>
                 <ScrollView 
-                  className="max-h-42"
+                  className="flex-1"
                   showsVerticalScrollIndicator={true}
-                  contentContainerStyle={{ paddingBottom: 8 }}
+                  contentContainerStyle={{ paddingBottom: 4 }}
                 >
-                  <Text className="text-white/90 text-base leading-7 font-medium">
+                  <Text className="text-white/90 text-lg leading-6 font-medium">
                     {contentInfo.summary}
                   </Text>
                 </ScrollView>
@@ -322,11 +324,11 @@ export default function PlayerScreen() {
           )}
 
           {/* Title Section */}
-          <View className="mb-4">
-            <View className="bg-purple-600 px-3 py-1.5 rounded-full self-start mb-3">
+          <View className="mb-3">
+            <View className="bg-purple-600 px-3 py-1.5 rounded-full self-start mb-2">
               <Text className="text-xs font-semibold text-white">Special Educational Needs</Text>
             </View>
-            <Text className="text-2xl font-semibold text-white leading-8" numberOfLines={2}>
+            <Text className="text-xl font-semibold text-white leading-7" numberOfLines={2}>
               {contentInfo?.title || 'Navigating Special Educational Needs in Singapore: A Path to Inclusion'}
             </Text>
           </View>
@@ -357,7 +359,7 @@ export default function PlayerScreen() {
           </View>
 
           {/* Main Controls */}
-          <View className="flex-row items-center justify-center mb-6 gap-6">
+          <View className="flex-row items-center justify-center mb-4 gap-6">
             {/* More Options */}
             <TouchableOpacity className="p-2">
               <MoreHorizontal size={20} color="white" strokeWidth={2} />
@@ -407,7 +409,7 @@ export default function PlayerScreen() {
           </View>
 
           {/* Bottom Actions */}
-          <View className="pb-8">
+          <View className="pb-8" style={{ paddingBottom: Math.max(8, insets.bottom + 8) }}>
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center gap-2 sm:gap-1 md:gap-2">
                 <View style={{ position: 'relative' }}>

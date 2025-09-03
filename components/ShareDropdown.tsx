@@ -356,7 +356,9 @@ ${contentInfo.summary ? `**Key Highlights**\n${contentInfo.summary}` : ''}`;
             style={{
               position: 'absolute',
               top: dropdownPosition.y + dropdownPosition.height + 8,
-              right: 24, // Account for the px-6 padding in the player
+              left: Platform.OS === 'web' 
+                ? Math.max(24, Math.min(dropdownPosition.x - 128, window.innerWidth - 280))
+                : Math.max(24, dropdownPosition.x - 128), // Mobile: always below button
               backgroundColor: 'white',
               borderRadius: 12,
               shadowColor: '#000',
