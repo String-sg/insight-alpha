@@ -4,15 +4,19 @@ import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { SegmentedControl } from '@/components/SegmentedControl';
 import { WebScrollView } from '@/components/WebScrollView';
 import { WeekCalendar } from '@/components/WeekCalendar';
+import { useAuth } from '@/contexts/AuthContext';
 import { EducationalContent, educationalContent, weeklyProgress } from '@/data/educational-content';
 import { useAudio } from '@/hooks/useAudio';
+import { getFeedbackFormUrl } from '@/utils/feedback';
 import { useRouter } from 'expo-router';
-import React from 'react';
-import { Platform, SafeAreaView, StatusBar, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Linking, Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 export default function HomeScreen() {
   const router = useRouter();
   const { currentPodcast, playContent } = useAudio();
+  const { user } = useAuth();
+  const [recentlyPlayed, setRecentlyPlayed] = useState<{ id: string; title: string; timestamp: number; imageUrl: string; category: string; author: string }[]>([]);
   
   const handleContentPress = (content: EducationalContent) => {
     router.push(`/podcast/${content.id}`);
@@ -31,6 +35,24 @@ export default function HomeScreen() {
       sources: content.sources,
       category: content.category
     };
+    
+    // Add to recently played when content is played
+    const newRecentlyPlayed = {
+      id: content.id,
+      title: content.title,
+      timestamp: Date.now(),
+      imageUrl: content.imageUrl,
+      category: content.category || 'Unknown',
+      author: content.author
+    };
+    
+    setRecentlyPlayed(prev => {
+      const existingIndex = prev.findIndex(item => item.id === content.id);
+      const updated = existingIndex >= 0 
+        ? [newRecentlyPlayed, ...prev.filter((_, index) => index !== existingIndex)]
+        : [newRecentlyPlayed, ...prev];
+      return updated.slice(0, 10); // Keep only last 10 items
+    });
     
     // Use the existing audio system
     await playContent(podcastFormat);
@@ -71,27 +93,35 @@ export default function HomeScreen() {
           <WeekCalendar weekData={weeklyProgress} />
         </View>
         
-        {/* Recently Learned Section */}
-        <View className="mt-8 mb-4">
-          <View className="mx-6 mb-4">
-            <Text className="text-black text-xl font-semibold">
-              Recently learned
-            </Text>
+        {/* Recently Learned Section - Only show if there's content */}
+        {recentlyPlayed.length > 0 && (
+          <View className="mt-8 mb-4">
+            <View className="mx-6 mb-4">
+              <Text className="text-black text-xl font-semibold">
+                Recently learned
+              </Text>
+            </View>
+            
+            <View className="px-6">
+              {recentlyPlayed.slice(0, 3).map((item) => {
+                // Find the full content data to pass to EducationalCard
+                const content = educationalContent.find(c => c.id === item.id);
+                if (!content) return null;
+                
+                return (
+                  <EducationalCard
+                    key={item.id}
+                    content={content}
+                    onPress={() => handleContentPress(content)}
+                    onPlayPress={() => handlePlayPress(content)}
+                  />
+                );
+              })}
+            </View>
           </View>
-          
-          <View className="px-6">
-            {recentlyLearned.map((content) => (
-              <EducationalCard
-                key={content.id}
-                content={content}
-                onPress={() => handleContentPress(content)}
-                onPlayPress={() => handlePlayPress(content)}
-              />
-            ))}
-          </View>
-        </View>
+        )}
 
-        {/* All Content Section */}
+        {/* Recommended Section - Filter out duplicates from Recently Learned */}
         <View className="mt-4" style={{ marginBottom: bottomPadding }}>
           <View className="mx-6 mb-4">
             <Text className="text-black text-xl font-semibold">
@@ -100,14 +130,53 @@ export default function HomeScreen() {
           </View>
           
           <View className="px-6">
-            {allContent.map((content) => (
-              <EducationalCard
-                key={content.id}
-                content={content}
-                onPress={() => handleContentPress(content)}
-                onPlayPress={() => handlePlayPress(content)}
-              />
-            ))}
+            {(() => {
+              const filteredContent = educationalContent.filter(content => 
+                !recentlyPlayed.some(recent => recent.id === content.id)
+              );
+              
+              if (filteredContent.length === 0) {
+                return (
+                  <View className="text-center py-8">
+                    <Text className="text-slate-600 text-base text-center">
+                      You&apos;ve reached the end of the list. More content coming soon(:
+                    </Text>
+                  </View>
+                );
+              }
+              
+              return (
+                <>
+                  {filteredContent.map((content) => (
+                    <EducationalCard
+                      key={content.id}
+                      content={content}
+                      onPress={() => handleContentPress(content)}
+                      onPlayPress={() => handlePlayPress(content)}
+                    />
+                  ))}
+                  
+                  {/* Feedback link at bottom */}
+                  <View className="mt-6 text-center">
+                    <TouchableOpacity
+                      onPress={() => {
+                        const feedbackUrl = getFeedbackFormUrl(user?.email);
+                        if (Platform.OS === 'web') {
+                          window.open(feedbackUrl, '_blank');
+                        } else {
+                          Linking.openURL(feedbackUrl);
+                        }
+                      }}
+                      activeOpacity={0.7}
+                    >
+                      <Text className="text-slate-600 text-sm underline">
+                        share feedback
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              );
+            })()}
           </View>
         </View>
       </WebScrollView>
