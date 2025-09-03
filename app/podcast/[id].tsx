@@ -767,7 +767,7 @@ export default function PodcastDetailsScreen() {
               <View className="flex-row items-center justify-between mb-4">
                 <View className="flex-row items-center gap-2">
                   <View className="bg-blue-100 rounded-full px-3 py-1">
-                    <Text className="text-blue-700 text-xs font-semibold">e 
+                    <Text className="text-blue-700 text-xs font-semibold">
                       Coming Soon
                     </Text>
                   </View>
