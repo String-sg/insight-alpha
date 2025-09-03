@@ -160,36 +160,52 @@ export const educationalContent: EducationalContent[] = [
   }  
 ];
 
-export const getWeeklyProgress = () => {
-  const now = new Date();
-  const currentDay = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
-  
-  // Calculate the start of the current week (Monday)
-  const startOfWeek = new Date(now);
-  const daysToMonday = currentDay === 0 ? 6 : currentDay - 1; // Adjust for Sunday
-  startOfWeek.setDate(now.getDate() - daysToMonday);
-  
-  const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  
-  return weekDays.map((day, index) => {
-    const date = new Date(startOfWeek);
-    date.setDate(startOfWeek.getDate() + index);
-    
-    const isToday = date.toDateString() === now.toDateString();
-    
-    // For demo purposes, you can set some days as completed
-    // In a real app, this would come from user progress data
-    const isCompleted = index === 1 || index === 2; // Tuesday and Wednesday completed for demo
-    
-    return {
-      day,
-      date: date.getDate(),
-      isCompleted,
-      isToday
-    };
-  });
-};
+// Memoized version of getWeeklyProgress
+export const getWeeklyProgress = (() => {
+  let lastWeekStart: string | null = null;
+  let lastResult: any = null;
 
+  return () => {
+    const now = new Date();
+    const currentDay = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
+    
+    // Calculate the start of the current week (Monday)
+    const startOfWeek = new Date(now);
+    const daysToMonday = currentDay === 0 ? 6 : currentDay - 1; // Adjust for Sunday
+    startOfWeek.setDate(now.getDate() - daysToMonday);
+
+    // Use ISO string for week start comparison
+    const weekStartKey = startOfWeek.toISOString().slice(0, 10);
+
+    if (lastWeekStart === weekStartKey && lastResult) {
+      return lastResult;
+    }
+
+    const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+    const result = weekDays.map((day, index) => {
+      const date = new Date(startOfWeek);
+      date.setDate(startOfWeek.getDate() + index);
+      
+      const isToday = date.toDateString() === now.toDateString();
+      
+      // For demo purposes, you can set some days as completed
+      // In a real app, this would come from user progress data
+      const isCompleted = index === 1 || index === 2; // Tuesday and Wednesday completed for demo
+      
+      return {
+        day,
+        date: date.getDate(),
+        isCompleted,
+        isToday
+      };
+    });
+
+    lastWeekStart = weekStartKey;
+    lastResult = result;
+    return result;
+  };
+})();
 export const weeklyProgress = getWeeklyProgress();
 
 export const formatDuration = (milliseconds: number): string => {
