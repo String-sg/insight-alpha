@@ -6,11 +6,14 @@ import { useAudioContext } from '@/contexts/AudioContext';
 import { educationalContent } from '@/data/educational-content';
 import { Stack, useRouter } from 'expo-router';
 import React from 'react';
-import { Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View, Linking } from 'react-native';
+import { getFeedbackFormUrl } from '@/utils/feedback';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function ExploreScreen() {
   const { currentPodcast } = useAudioContext();
   const router = useRouter();
+  const { user } = useAuth();
   
   // Calculate bottom padding based on mini player visibility
   const bottomPadding = currentPodcast ? 120 : 40;
@@ -86,6 +89,24 @@ export default function ExploreScreen() {
         </View>
       </View>
 
+      {/* Feedback link at bottom */}
+      <View className="mx-6 mb-6 text-center">
+        <TouchableOpacity
+          onPress={() => {
+            const feedbackUrl = getFeedbackFormUrl(user?.email);
+            if (Platform.OS === 'web') {
+              window.open(feedbackUrl, '_blank');
+            } else {
+              Linking.openURL(feedbackUrl);
+            }
+          }}
+          activeOpacity={0.7}
+        >
+          <Text className="text-slate-500 text-sm underline">
+            share feedback
+          </Text>
+        </TouchableOpacity>
+      </View>
 
     </WebScrollView>
   );

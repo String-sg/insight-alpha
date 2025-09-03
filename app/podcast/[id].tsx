@@ -13,6 +13,7 @@ import { mockQuizzes } from '@/data/quizzes';
 import { getScriptByPodcastId } from '@/data/scripts';
 import { useAudio } from '@/hooks/useAudio';
 import { Note } from '@/types/notes';
+import { getFeedbackFormUrl } from '@/utils/feedback';
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { FileText, Lightbulb, Pause, Play, ScrollText, ThumbsDown, ThumbsUp } from 'lucide-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -752,10 +753,8 @@ export default function PodcastDetailsScreen() {
             <TouchableOpacity 
               className="bg-grey from-blue-50 to-purple-50 border border-blue-200 rounded-3xl p-6"
               onPress={() => {
-                // Build URL with user email if authenticated
-                const baseUrl = 'https://form.gov.sg/68b7d5099b55d364153be0d5';
-                const emailParam = user?.email ? `?68b7d5e965cd36be28735915=${encodeURIComponent(user.email)}` : '';
-                const fullUrl = baseUrl + emailParam;
+                        // Build URL with user email if authenticated
+        const fullUrl = getFeedbackFormUrl(user?.email);
                 
                 if (Platform.OS === 'web') {
                   window.open(fullUrl, '_blank');

@@ -2,6 +2,7 @@ import { EducationalCard } from '@/components/EducationalCard';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { SegmentedControl } from '@/components/SegmentedControl';
+import { useAuth } from '@/contexts/AuthContext';
 import { WebScrollView } from '@/components/WebScrollView';
 import { WeekCalendar } from '@/components/WeekCalendar';
 import { useAuth } from '@/contexts/AuthContext';
@@ -58,17 +59,23 @@ export default function HomeScreen() {
     await playContent(podcastFormat);
   };
 
+  // Load recently played content
+  useEffect(() => {
+    const loadRecentlyPlayed = async () => {
+      const data = await getRecentlyPlayed();
+      setRecentlyPlayed(data);
+    };
+    
+    loadRecentlyPlayed();
+  }, [getRecentlyPlayed]);
+
 
 
   // Calculate bottom padding based on mini player visibility
   const bottomPadding = currentPodcast ? 120 : 40;
 
-  // Get recently learned content (filter by progress + include new AI content)
-  const recentlyLearned = educationalContent.filter(content => 
-    (content.progress && content.progress > 0 && content.progress < 1) || content.id === '6'
-  );
 
-  // Get all content for recommendations section (excluding recently learned)
+
   const allContent = educationalContent.filter(content => 
     !(content.progress && content.progress > 0 && content.progress < 1) && content.id !== '6'
   );
@@ -139,7 +146,7 @@ export default function HomeScreen() {
                 return (
                   <View className="text-center py-8">
                     <Text className="text-slate-600 text-base text-center">
-                      You&apos;ve reached the end of the list. More content coming soon(:
+                      You've reached the end of the list. More content coming soon(:
                     </Text>
                   </View>
                 );
@@ -169,7 +176,8 @@ export default function HomeScreen() {
                       }}
                       activeOpacity={0.7}
                     >
-                      <Text className="text-slate-600 text-sm underline">
+
+                      <Text className="text-slate-500 text-sm underline">
                         share feedback
                       </Text>
                     </TouchableOpacity>
