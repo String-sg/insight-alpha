@@ -31,11 +31,11 @@ You'll be able to:
 1. Apply JSON style guides to lock in core design elements (style, camera, colours) and maintain consistency across slides and teaching materials.
 2. Differentiate between fixed and variable fields in prompts so that only lesson-specific content changes while the overall look stays coherent.
 3. Implement a practical team workflow for generating visuals that align with department or school branding, making it easier for students to recognise and follow materials.`,
-    summary: `1 Prompt injection is when someone sneaks extra instructions into an AI request, tricking the system into ignoring its original task.
+    summary: `1 JSON style guides allow teachers to lock key visual elements (style, camera angle, and colour palette) for consistent AI-generated images across lessons.
 
-2 It shows that AI can be manipulated through language, leading to embarrassing outputs or leaked "hidden" instructions — but usually with reputational rather than catastrophic risks.
+2 By differentiating between fixed and variable fields in prompts, only lesson-specific content changes while maintaining visual coherence.
 
-3 Treat AI critically, know the common tricks ("ignore the above," translation hacks, role-play outlets), and use awareness as the best safeguard in schools.`,
+3 Implementing team workflows ensures visuals align with department or school branding, making materials easier for students to recognise and follow.`,
     category: 'Artificial Intelligence',
     author: 'Kahhow',
     duration: 251000, // 4min 11s
