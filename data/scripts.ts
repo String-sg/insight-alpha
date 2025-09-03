@@ -2,20 +2,86 @@ import { PodcastScript } from '../types/script';
 
 export const podcastScripts: PodcastScript[] = [
   {
-    podcastId: '4',
+    podcastId: '15',
     title: 'Learn to use AI: creating songs to help students\' remember, inspired by Eugene Teo (SJI)',
-    content: `{BLANK - AI Podcast Script Content}
+    content: `As an educator, you’re always looking for ways to make learning stick. Sometimes it’s a clever analogy, sometimes it’s a hands-on demo… and sometimes, it might just be a song.
 
-This should be a conversational script between two educators discussing AI in education, similar to the existing scripts. Include:
+In this episode - inspired by Eugene Teo from St Joseph’s Institution (SJI) -  you’ll discover how you can use AI to turn concepts into music, how audio learning connects with sleep research, and how you can start experimenting with these tools in your own classroom. We will use Chemistry which is his teaching subject but feel free to abstract to your teaching subject! 
 
-1. Opening hook and introduction
-2. Key concepts and practical strategies
-3. Real classroom examples
-4. Common misconceptions and how to address them
-5. Actionable takeaways for teachers
-6. Closing thoughts and encouragement
+Step 1: Break Content into Lyrics (with AI Help)
 
-Format as a dialogue between two speakers, using natural conversation flow.`,
+Now, if you’re thinking, *“But I’m not musical at all — how on earth do I write lyrics?”* — don’t worry. You don’t need to be a songwriter to do this. In fact, you can use AI to transform your subject matter into lyrics for you.
+
+Here’s how:
+
+1. **Start with your key concept** — for example, *Ionic Bonding involves the transfer of electrons between atoms*.
+2. **Feed it into a prompt** that asks AI to generate simple, rhythmic lines. You can even specify the style, such as rap, lofi, or pop.
+3. **Tweak if needed** — keep it short and memorable, one idea per song.
+
+Here are some **ready-to-use prompts** you can copy and paste into ChatGPT, NotebookLM, or any AI assistant:
+
+- **Prompt for catchy but simple lyrics:**
+    
+    *“Turn this Chemistry concept into short, rhyming lyrics for a lofi-style educational song: Ionic bonding involves the transfer of electrons between atoms.”*
+    
+- **Prompt for mnemonic-style lyrics:**
+    
+    *“Summarise this concept into 4 simple, rhythmic lines that sound like a chant students could remember: Covalent bonding is the sharing of electrons between atoms.”*
+    
+- **Prompt for a playful rap:**
+    
+    *“Write 6 lines of fun, student-friendly rap lyrics to explain the difference between covalent and ionic bonding.”*
+    
+- **Prompt for lullaby-style study aid:**
+    
+    *“Write calm, soothing lyrics about the periodic table trends in a lullaby style to help students relax while revising.”*
+    
+
+You can always reference the link below for inspiration and see how others are doing it in practice.
+
+Remember, you’re not aiming for chart-toppers. You’re aiming for hooks that *lodge in memory*. The AI does the creative heavy lifting — you just decide the concept you want students to remember.
+
+Step 2: Turn Lyrics into Music
+
+Next, use an AI music generator. Two tools you can try are:
+
+- **Suno** — paste your lyrics, choose a style like “lofi hip hop” or “acoustic pop,” and it generates a full song with vocals.
+- **Udio** — another strong option with more style control.
+
+Try this workflow:
+
+1. Draft lyrics in a Google Doc.
+2. Copy them into Suno.
+3. Select “lofi” if you want calming study vibes, or “pop” if you want energy.
+4. Generate, listen, and regenerate if needed.
+
+In minutes, you’ll have a polished track your students can replay on loop.
+
+---
+
+Step 3: Share and Reinforce
+
+Once you have songs, think about delivery. You could:
+
+- Build a **Spotify or YouTube playlist** of study songs.
+- Pair each song with a **NotebookLM video summary** of the same topic.
+- Use the songs as **study cues** something students can play before class, during revision, or even on commutes.
+
+---
+
+Step 4: Connect Music with Sleep Research
+
+Here’s where it gets really fascinating. In deciding audio as the format, Eugene himself was in part inspired by Master Teacher **Cher Chong Tan**, explored the role of sleep in academic success. Research into **Targeted Memory Reactivation (TMR)** shows that when students are re-exposed to sounds linked to what they learned earlier, during deep sleep, recall improves.
+
+So imagine this: your student watches a short NotebookLM Chemistry summary before bed. Then, as they fall asleep, they play a subtle Chemistry-themed lofi track you’ve created. The music isn’t just background noise — it’s an auditory cue linked to what they revised. Could it help their brain consolidate the material more deeply overnight?
+
+We don’t know for sure yet. But it’s the kind of playful, research-informed experiment that makes teaching exciting.
+
+By combining AI music tools like Suno or Udio with insights from sleep science, you’re not just giving students another study resource. You’re creating *learning environments* — sounds that travel with them outside the classroom, into their playlists, their revision routines, even their dreams.
+
+Some students might laugh, some might cringe. But if even one formula or concept sticks because of a track you made, that’s a win.
+
+AI isn’t here to replace your pedagogy. It’s here to amplify it. To give you new ways — songs, sounds, sleep cues — to help learning last.`,
     language: 'en'
   },
   {
