@@ -2,7 +2,7 @@ import { ChatMessage } from '@/components/ChatMessage';
 import { ContextLabel } from '@/components/ContextLabel';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { useChatContext } from '@/contexts/ChatContext';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { ChevronLeft, Plus, SendHorizontal } from 'lucide-react-native';
 import React, { useEffect, useRef, useState } from 'react';
