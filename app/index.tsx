@@ -2,7 +2,6 @@ import { EducationalCard } from '@/components/EducationalCard';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { SegmentedControl } from '@/components/SegmentedControl';
-import { useAuth } from '@/contexts/AuthContext';
 import { WebScrollView } from '@/components/WebScrollView';
 import { WeekCalendar } from '@/components/WeekCalendar';
 import { useAuth } from '@/contexts/AuthContext';
@@ -10,7 +9,7 @@ import { EducationalContent, educationalContent, weeklyProgress } from '@/data/e
 import { useAudio } from '@/hooks/useAudio';
 import { getFeedbackFormUrl } from '@/utils/feedback';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Linking, Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 export default function HomeScreen() {
@@ -59,15 +58,7 @@ export default function HomeScreen() {
     await playContent(podcastFormat);
   };
 
-  // Load recently played content
-  useEffect(() => {
-    const loadRecentlyPlayed = async () => {
-      const data = await getRecentlyPlayed();
-      setRecentlyPlayed(data);
-    };
-    
-    loadRecentlyPlayed();
-  }, [getRecentlyPlayed]);
+
 
 
 
@@ -146,7 +137,7 @@ export default function HomeScreen() {
                 return (
                   <View className="text-center py-8">
                     <Text className="text-slate-600 text-base text-center">
-                      You've reached the end of the list. More content coming soon(:
+                      You&apos;ve reached the end of the list. More content coming soon(:
                     </Text>
                   </View>
                 );
