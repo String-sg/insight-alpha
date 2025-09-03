@@ -37,7 +37,7 @@ export const educationalContent: EducationalContent[] = [
     textColor: 'text-yellow-900',
     timeLeft: '{BLANK - time left, e.g., 10m left}',
     progress: 0,
-    publishedDate: '{BLANK - published date, e.g., Today, 1 day ago, 1 week ago}',
+    publishedDate: 'Today',
     createdAt: new Date('2025-08-28'),
     sources: [
       {
