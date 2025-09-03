@@ -23,19 +23,19 @@ export interface EducationalContent {
 
 export const educationalContent: EducationalContent[] = [
   {
-    id: '4',
+    id: '15',
     title: 'Learn to use AI: creating songs to help students\' remember, inspired by Eugene Teo (SJI)',
     description: 'Discover how you can use AI to turn subject content into songs, harness audio for memory, and explore sleep-based learning strategies inspired by Eugene Teo\'s (SJI) edutech experiments to support student learning outcomes.\n\nYou\'ll be able to:\n1. Use AI tools like ChatGPT, Suno, or Udio to convert subject concepts into lyrics and music, even if you\'re not musically inclined.\n2. Integrate audio-based study aids into your teaching — from playlists to paired video summaries — to reinforce learning beyond the classroom.\n3. Apply sleep research such as Targeted Memory Reactivation (TMR) by pairing summaries and lofi tracks with bedtime routines to strengthen student recall.',
     summary: '1. Turn Concepts into Lyrics – Use AI prompts to transform tricky topics (like ionic bonding) into short, catchy lines. You don\'t need to be musical — AI does the heavy lifting.\n2. Generate Songs with AI Tools – Drop your lyrics into Suno or Udio, pick a style (lofi, pop, rap), and in minutes you\'ll have a polished track for students to study with.\n3. Boost Recall with Audio & Sleep – Pair songs with NotebookLM video summaries, then encourage students to listen before bed. Research on Targeted Memory Reactivation (TMR) suggests audio cues during sleep can strengthen memory.',
     category: 'Artificial Intelligence',
     author: 'DXD Product Team',
-    duration: 600000, // {BLANK - duration in milliseconds, e.g., 600000 for 10 minutes}
+    duration: 306000, // 5.1 minutes in milliseconds
     imageUrl: 'https://picsum.photos/400/400?random=7',
     audioUrl: require('../assets/audio/15 ai audio - eugene - isolated.mp3'),
     backgroundColor: 'bg-white',
     badgeColor: 'bg-yellow-200',
     textColor: 'text-yellow-900',
-    timeLeft: '{BLANK - time left, e.g., 10m left}',
+    timeLeft: '5m left',
     progress: 0,
     publishedDate: 'Today',
     createdAt: new Date('2025-08-28'),
