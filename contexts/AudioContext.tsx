@@ -41,6 +41,7 @@ interface AudioContextFunctions {
   stopPodcast: () => Promise<void>;
   getQuizProgress: (podcastId: string) => Promise<QuizProgress | null>;
   initializeQuizAvailability: (podcastId: string) => Promise<void>;
+  getRecentlyPlayed: () => Promise<Array<{ id: string; title: string; timestamp: number; imageUrl: string; category: string; author: string }>>;
 }
 
 // Combined context interface
@@ -108,6 +109,7 @@ const STORAGE_KEYS = {
   PLAYBACK_RATE: 'audio_playback_rate',
   VOLUME: 'audio_volume',
   QUIZ_PROGRESS: 'quiz_progress',
+  RECENTLY_PLAYED: 'audio_recently_played',
 };
 
 // Audio provider component
@@ -259,6 +261,54 @@ export function AudioProvider({ children }: AudioProviderProps) {
     }
   };
 
+  // Track recently played content
+  const trackRecentlyPlayed = async (podcast: Podcast) => {
+    try {
+      const recentlyPlayedData = await AsyncStorage.getItem(STORAGE_KEYS.RECENTLY_PLAYED);
+      let recentlyPlayed: Array<{ id: string; title: string; timestamp: number; imageUrl: string; category: string; author: string }> = [];
+      
+      if (recentlyPlayedData) {
+        recentlyPlayed = JSON.parse(recentlyPlayedData);
+      }
+      
+      // Remove if already exists (to avoid duplicates)
+      recentlyPlayed = recentlyPlayed.filter(item => item.id !== podcast.id);
+      
+      // Add new item at the beginning
+      const newItem = {
+        id: podcast.id,
+        title: podcast.title,
+        timestamp: Date.now(),
+        imageUrl: podcast.imageUrl,
+        category: podcast.category,
+        author: podcast.author
+      };
+      
+      recentlyPlayed.unshift(newItem);
+      
+      // Keep only last 10 items to prevent storage bloat
+      recentlyPlayed = recentlyPlayed.slice(0, 10);
+      
+      await AsyncStorage.setItem(STORAGE_KEYS.RECENTLY_PLAYED, JSON.stringify(recentlyPlayed));
+    } catch (error) {
+      console.error('Failed to track recently played:', error);
+    }
+  };
+
+  // Get recently played content
+  const getRecentlyPlayed = async (): Promise<Array<{ id: string; title: string; timestamp: number; imageUrl: string; category: string; author: string }>> => {
+    try {
+      const recentlyPlayedData = await AsyncStorage.getItem(STORAGE_KEYS.RECENTLY_PLAYED);
+      if (recentlyPlayedData) {
+        return JSON.parse(recentlyPlayedData);
+      }
+      return [];
+    } catch (error) {
+      console.error('Failed to get recently played:', error);
+      return [];
+    }
+  };
+
   // Save current state to storage
   const saveCurrentState = async () => {
     try {
@@ -316,6 +366,9 @@ export function AudioProvider({ children }: AudioProviderProps) {
         await sound.setPositionAsync(parseInt(savedPosition));
       }
 
+      // Track this as recently played
+      await trackRecentlyPlayed(podcast as any);
+      
       // Initialize quiz as always available
       await initializeQuizAvailability(podcast.id);
       
@@ -517,6 +570,7 @@ export function AudioProvider({ children }: AudioProviderProps) {
     stopPodcast,
     getQuizProgress,
     initializeQuizAvailability,
+    getRecentlyPlayed,
   };
 
   return (
