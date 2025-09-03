@@ -9,7 +9,7 @@ import { EducationalContent, educationalContent, weeklyProgress } from '@/data/e
 import { useAudio } from '@/hooks/useAudio';
 import { getFeedbackFormUrl } from '@/utils/feedback';
 import { useRouter } from 'expo-router';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Linking, Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 export default function HomeScreen() {
