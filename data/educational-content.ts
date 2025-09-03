@@ -106,24 +106,20 @@ export const educationalContent: EducationalContent[] = [
   {
     id: '42',
     title: 'Managing Student Meltdowns with CALM & CASE (Singapore)',
-    description: 'Learn how to manage student meltdowns in Singapore classrooms using the CALM and CASE frameworks, with strategies for prevention, response, and whole-school support',
+    description: 'Learn how to manage student meltdowns in Singapore classrooms using the CALM and CASE frameworks, with strategies for prevention, response, and whole-school support.\n\nYou will be able to:\n1. Recognise the difference between meltdowns, tantrums, and defiance, and identify early warning signs unique to your students.\n2. Apply MOE\'s CALM framework during a meltdown and CASE after, ensuring safety, communication, and stronger support systems.\n3. Design classroom and school-wide routines — like calm corners, exit cards, or peer supports — that reduce escalation and build trust with students.',
     summary: [
       '1. Meltdowns Require Empathy, Not Discipline',
       '2. Frameworks Provide Clarity in Crisis and Recovery', 
       '3. Prevention and Whole-School Support Are Key'
     ],
-      'Recognise the difference between meltdowns, tantrums, and defiance, and identify early warning signs unique to your students.',
-      'Apply MOE’s CALM framework during a meltdown and CASE after, ensuring safety, communication, and stronger support systems.',
-      'Design classroom and school-wide routines — like calm corners, exit cards, or peer supports — that reduce escalation and build trust with students.'
-    ],
-    category: 'Special Educational Needs (SEN)',
+    category: 'Special Educational Needs',
     author: 'DXD Product Team',
     duration: 187000, // 3 minutes 7 seconds
     imageUrl: 'https://picsum.photos/400/400?random=42',
     audioUrl: require('../assets/audio/1 meltdown - isolated.mp3'),
     backgroundColor: 'bg-white',
-    badgeColor: 'bg-blue-200',
-    textColor: 'text-blue-900',
+    badgeColor: 'bg-purple-200',
+    textColor: 'text-purple-900',
     timeLeft: '3m 7s',
     progress: 0,
     publishedDate: 'Today',
