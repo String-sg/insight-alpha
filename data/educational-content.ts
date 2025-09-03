@@ -25,34 +25,44 @@ export const educationalContent: EducationalContent[] = [
   {
     id: '8',
     title: '8 Prompt Injection',
-    description: 'Prompt injection shows how AI systems can be tricked by carefully worded instructions, highlighting the need for awareness and critical use in education.
+    description: `Prompt injection shows how AI systems can be tricked by carefully worded instructions, highlighting the need for awareness and critical use in education.
 
-You’ll be able to:
+You'll be able to:
 1. Recognise what prompt injection is and how it compares to older security issues like SQL injection.
-2. Identify at least three common techniques used in prompt injection (e.g., “ignore the above,” translation tricks, role-play outlets).
-3. Evaluate why most prompt injections are reputational rather than catastrophic, and apply this understanding to classroom AI use.'',
-    summary: '[PLACEHOLDER: Add 2-3 key learning points about prompt injection]',
+2. Identify at least three common techniques used in prompt injection (e.g., "ignore the above," translation tricks, role-play outlets).
+3. Evaluate why most prompt injections are reputational rather than catastrophic, and apply this understanding to classroom AI use.`,
+    summary: '1 Prompt injection is when someone sneaks extra instructions into an AI request, tricking the system into ignoring its original task.
+
+2 It shows that AI can be manipulated through language, leading to embarrassing outputs or leaked “hidden” instructions — but usually with reputational rather than catastrophic risks.
+
+3 Treat AI critically, know the common tricks (“ignore the above,” translation hacks, role-play outlets), and use awareness as the best safeguard in schools.',
     category: 'Artificial Intelligence',
-    author: '[PLACEHOLDER: Add author name]',
-    duration: 0, // [PLACEHOLDER: Add actual duration in milliseconds]
+    author: 'Kahhow',
+    duration: 201000, // 3.35 minutes in milliseconds
     imageUrl: 'https://picsum.photos/400/400?random=8',
     audioUrl: require('../assets/audio/8 Prompt Injection.mp3'),
     backgroundColor: 'bg-white',
-    badgeColor: '[PLACEHOLDER: Choose badge color - bg-yellow-200, bg-purple-200, etc.]',
-    textColor: '[PLACEHOLDER: Choose text color - text-yellow-900, text-purple-900, etc.]',
-    timeLeft: '[PLACEHOLDER: Add time left or duration - e.g., "5m", "10m left"]',
+    badgeColor: 'bg-yellow-200',
+    textColor: 'text-yellow-900',
+    timeLeft: '3m',
     progress: 0,
-    publishedDate: '[PLACEHOLDER: Add published date - e.g., "Today", "1 day ago"]',
+    publishedDate: 'Today',
     createdAt: new Date(), // [PLACEHOLDER: Update with actual creation date]
     sources: [
       {
-        title: '[PLACEHOLDER: Add source title]',
-        url: '[PLACEHOLDER: Add source URL]',
-        type: '[PLACEHOLDER: Choose type - website, video, article, book, intranet, study, other]',
-        author: '[PLACEHOLDER: Add source author]',
-        publishedDate: '[PLACEHOLDER: Add publication date]',
+        title: 'Reverse Prompt Engineering',
+        url: 'https://www.latent.space/p/reverse-prompt-eng',
+        type: 'website',
+        author: 'Latent.space',
+        publishedDate: '2022',
       },
-      // [PLACEHOLDER: Add more sources as needed]
+      {
+        title: 'Play a game to learn about prompt injection',
+        url: 'https://gandalf.lakera.ai/baseline',
+        type: 'website',
+        author: 'Lakera.ai',
+        publishedDate: '2024',
+      },
     ]
   },
   {

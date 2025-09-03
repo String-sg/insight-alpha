@@ -23,7 +23,7 @@ export const mockPodcasts: Podcast[] = [
       },
       {
         title: 'Play a game to learn about prompt injection',
-        url: 'https://gandalf.lakera.ai/baseline,
+        url: 'https://gandalf.lakera.ai/baseline',
         type: 'website',
         author: 'Lakera.ai',
         publishedDate: '2024',
