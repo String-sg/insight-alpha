@@ -2,17 +2,21 @@ import { EducationalCard } from '@/components/EducationalCard';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { SegmentedControl } from '@/components/SegmentedControl';
+import { useAuth } from '@/contexts/AuthContext';
 import { WebScrollView } from '@/components/WebScrollView';
 import { WeekCalendar } from '@/components/WeekCalendar';
 import { EducationalContent, educationalContent, weeklyProgress } from '@/data/educational-content';
 import { useAudio } from '@/hooks/useAudio';
 import { useRouter } from 'expo-router';
-import React from 'react';
-import { Platform, SafeAreaView, StatusBar, Text, View } from 'react-native';
+import { getFeedbackFormUrl } from '@/utils/feedback';
+import React, { useEffect, useState } from 'react';
+import { Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View, Linking } from 'react-native';
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { currentPodcast, playContent } = useAudio();
+  const { currentPodcast, playContent, getRecentlyPlayed } = useAudio();
+  const { user } = useAuth();
+  const [recentlyPlayed, setRecentlyPlayed] = useState<Array<{ id: string; title: string; timestamp: number; imageUrl: string; category: string; author: string }>>([]);
   
   const handleContentPress = (content: EducationalContent) => {
     router.push(`/podcast/${content.id}`);
@@ -36,18 +40,22 @@ export default function HomeScreen() {
     await playContent(podcastFormat);
   };
 
+  // Load recently played content
+  useEffect(() => {
+    const loadRecentlyPlayed = async () => {
+      const data = await getRecentlyPlayed();
+      setRecentlyPlayed(data);
+    };
+    
+    loadRecentlyPlayed();
+  }, [getRecentlyPlayed]);
+
 
 
   // Calculate bottom padding based on mini player visibility
   const bottomPadding = currentPodcast ? 120 : 40;
 
-  // Get recently learned content (filter by progress + include new AI content)
-  const recentlyLearned = educationalContent.filter(content => 
-    (content.progress && content.progress > 0 && content.progress < 1) || content.id === '6'
-  );
 
-  // Get daily recommendation (ADHD content)
-  const dailyRecommendation = educationalContent.find(content => content.title.includes('ADHD')) || educationalContent[educationalContent.length - 1];
 
   const content = (
     <ProtectedRoute>
@@ -69,27 +77,35 @@ export default function HomeScreen() {
           <WeekCalendar weekData={weeklyProgress} />
         </View>
         
-        {/* Recently Learned Section */}
-        <View className="mt-8 mb-4">
-          <View className="mx-6 mb-4">
-            <Text className="text-black text-xl font-semibold">
-              Recently learned
-            </Text>
+        {/* Recently Learned Section - Only show if there's content */}
+        {recentlyPlayed.length > 0 && (
+          <View className="mt-8 mb-4">
+            <View className="mx-6 mb-4">
+              <Text className="text-black text-xl font-semibold">
+                Recently learned
+              </Text>
+            </View>
+            
+            <View className="px-6">
+              {recentlyPlayed.slice(0, 3).map((item) => {
+                // Find the full content data to pass to EducationalCard
+                const content = educationalContent.find(c => c.id === item.id);
+                if (!content) return null;
+                
+                return (
+                  <EducationalCard
+                    key={item.id}
+                    content={content}
+                    onPress={() => handleContentPress(content)}
+                    onPlayPress={() => handlePlayPress(content)}
+                  />
+                );
+              })}
+            </View>
           </View>
-          
-          <View className="px-6">
-            {recentlyLearned.map((content) => (
-              <EducationalCard
-                key={content.id}
-                content={content}
-                onPress={() => handleContentPress(content)}
-                onPlayPress={() => handlePlayPress(content)}
-              />
-            ))}
-          </View>
-        </View>
+        )}
 
-        {/* Daily Recommendation Section */}
+        {/* Recommended Section - Filter out duplicates from Recently Learned */}
         <View className="mt-4" style={{ marginBottom: bottomPadding }}>
           <View className="mx-6 mb-4">
             <Text className="text-black text-xl font-semibold">
@@ -98,11 +114,53 @@ export default function HomeScreen() {
           </View>
           
           <View className="px-6">
-            <EducationalCard
-              content={dailyRecommendation}
-              onPress={() => handleContentPress(dailyRecommendation)}
-              onPlayPress={() => handlePlayPress(dailyRecommendation)}
-            />
+            {(() => {
+              const filteredContent = educationalContent.filter(content => 
+                !recentlyPlayed.some(recent => recent.id === content.id)
+              );
+              
+              if (filteredContent.length === 0) {
+                return (
+                  <View className="text-center py-8">
+                    <Text className="text-slate-600 text-base text-center">
+                      You've reached the end of the list. More content coming soon(:
+                    </Text>
+                  </View>
+                );
+              }
+              
+              return (
+                <>
+                  {filteredContent.map((content) => (
+                    <EducationalCard
+                      key={content.id}
+                      content={content}
+                      onPress={() => handleContentPress(content)}
+                      onPlayPress={() => handlePlayPress(content)}
+                    />
+                  ))}
+                  
+                  {/* Feedback link at bottom */}
+                  <View className="mt-6 text-center">
+                    <TouchableOpacity
+                      onPress={() => {
+                        const feedbackUrl = getFeedbackFormUrl(user?.email);
+                        if (Platform.OS === 'web') {
+                          window.open(feedbackUrl, '_blank');
+                        } else {
+                          Linking.openURL(feedbackUrl);
+                        }
+                      }}
+                      activeOpacity={0.7}
+                    >
+                      <Text className="text-slate-500 text-sm underline">
+                        share feedback
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              );
+            })()}
           </View>
         </View>
       </WebScrollView>

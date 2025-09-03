@@ -27,6 +27,7 @@ export function useAudio() {
     skipForward,
     skipBackward,
     stopPodcast,
+    getRecentlyPlayed,
   } = audioContext;
 
   // Convenience function to toggle play/pause
@@ -215,6 +216,7 @@ export function useAudio() {
     getCurrentContentInfo,
     clearError,
     isContentBuffering,
+    getRecentlyPlayed,
   };
 }
 
