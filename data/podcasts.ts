@@ -20,7 +20,7 @@ export const mockPodcasts: Podcast[] = [
         type: 'website',
         author: 'Kahhow',
         publishedDate: '2025',
-      }
+      },
       {
         title: 'O Level Chemistry Lofi Study Music (Vol 1 - v1)',
         url: 'https://www.youtube.com/watch?v=sWRqbqHKa_s',
