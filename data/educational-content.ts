@@ -79,8 +79,8 @@ You'll be able to:
     audioUrl: require('../assets/audio/8 Prompt Injection.mp3'),
     backgroundColor: 'bg-white',
     badgeColor: 'bg-yellow-200',
-    textColor: '[PLACEHOLDER: Choose text color - text-yellow-900, text-purple-900, etc.]',
-    timeLeft: '[PLACEHOLDER: Add time left or duration - e.g., "5m", "10m left"]',
+    textColor: 'text-yellow-900',
+    timeLeft: '3m',
     progress: 0,
     publishedDate: 'Today',
     createdAt: new Date(), // [PLACEHOLDER: Update with actual creation date]
