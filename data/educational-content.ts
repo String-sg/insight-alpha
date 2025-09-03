@@ -23,7 +23,7 @@ export interface EducationalContent {
 
 export const educationalContent: EducationalContent[] = [
   {
-    id: '1',
+    id: '3',
     title: 'Supporting Students with Dyslexia: What Every Teacher Needs to Know',
     description: '**Overview**\nThis episode dives deep into how educators can better understand and support students with dyslexia in mainstream classrooms. Backed by current brain research and real classroom experiences, the conversation unpacks what dyslexia really is (and isn’t), why some common myths persist, and how teachers can implement practical, research-based strategies that empower struggling readers. By embracing neurodiversity and applying structured support, educators can help students with dyslexia thrive both academically and emotionally.',
     summary: '1. Teach Reading Through Explicit, Systematic Phonics\n 2. Support Students Holistically in the Classroom (paired reading, visual support, leverage strengths; reframing lack of motivation as perhaps due to working twice as hard to decode text and hence appear disengaged)\n3. Build confidence by leveraging their strengths (oral expression, problem-solving, visual-spatial skills) and validating their effort)',
@@ -104,14 +104,10 @@ export const educationalContent: EducationalContent[] = [
       }    ]
   },
   {
-    id: '42',
+    id: '1',
     title: 'Managing Student Meltdowns with CALM & CASE (Singapore)',
     description: 'Learn how to manage student meltdowns in Singapore classrooms using the CALM and CASE frameworks, with strategies for prevention, response, and whole-school support.\n\nYou will be able to:\n1. Recognise the difference between meltdowns, tantrums, and defiance, and identify early warning signs unique to your students.\n2. Apply MOE\'s CALM framework during a meltdown and CASE after, ensuring safety, communication, and stronger support systems.\n3. Design classroom and school-wide routines — like calm corners, exit cards, or peer supports — that reduce escalation and build trust with students.',
-    summary: [
-      '1. Meltdowns Require Empathy, Not Discipline',
-      '2. Frameworks Provide Clarity in Crisis and Recovery', 
-      '3. Prevention and Whole-School Support Are Key'
-    ],
+    summary: '1. Meltdowns Require Empathy, Not Discipline\n2. Frameworks Provide Clarity in Crisis and Recovery\n3. Prevention and Whole-School Support Are Key',
     category: 'Special Educational Needs',
     author: 'DXD Product Team',
     duration: 187000, // 3 minutes 7 seconds
@@ -164,15 +160,37 @@ export const educationalContent: EducationalContent[] = [
   }  
 ];
 
-export const weeklyProgress = [
-  { day: 'Mon', date: 13, isCompleted: false, isToday: false },
-  { day: 'Tue', date: 14, isCompleted: true, isToday: false },
-  { day: 'Wed', date: 15, isCompleted: true, isToday: true },
-  { day: 'Thu', date: 16, isCompleted: false, isToday: false },
-  { day: 'Fri', date: 17, isCompleted: false, isToday: false },
-  { day: 'Sat', date: 18, isCompleted: false, isToday: false },
-  { day: 'Sun', date: 19, isCompleted: false, isToday: false }
-];
+export const getWeeklyProgress = () => {
+  const now = new Date();
+  const currentDay = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
+  
+  // Calculate the start of the current week (Monday)
+  const startOfWeek = new Date(now);
+  const daysToMonday = currentDay === 0 ? 6 : currentDay - 1; // Adjust for Sunday
+  startOfWeek.setDate(now.getDate() - daysToMonday);
+  
+  const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  
+  return weekDays.map((day, index) => {
+    const date = new Date(startOfWeek);
+    date.setDate(startOfWeek.getDate() + index);
+    
+    const isToday = date.toDateString() === now.toDateString();
+    
+    // For demo purposes, you can set some days as completed
+    // In a real app, this would come from user progress data
+    const isCompleted = index === 1 || index === 2; // Tuesday and Wednesday completed for demo
+    
+    return {
+      day,
+      date: date.getDate(),
+      isCompleted,
+      isToday
+    };
+  });
+};
+
+export const weeklyProgress = getWeeklyProgress();
 
 export const formatDuration = (milliseconds: number): string => {
   const minutes = Math.floor(milliseconds / 60000);
