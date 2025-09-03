@@ -104,39 +104,68 @@ export const educationalContent: EducationalContent[] = [
       }    ]
   },
   {
-    id: '3',
-    title: "AI's Role in Singapore's Education Transformation",
-    description: '**Overview**\nThis episode explores how artificial intelligence is reshaping education in Singapore, from personalized learning experiences to administrative efficiency. We examine real-world implementations, discuss the balance between innovation and human connection, and look at how AI can support both teachers and students in creating more effective learning environments.',
-    summary: '1. AI Enhances Personalized Learning Experiences \n 2. Technology Supports Teacher Effectiveness and Administrative Efficiency \n 3. Balanced Implementation Ensures Human Connection Remains Central',
-    category: 'Artificial Intelligence',
+    id: '42',
+    title: 'Managing Student Meltdowns with CALM & CASE (Singapore)',
+    description: 'Learn how to manage student meltdowns in Singapore classrooms using the CALM and CASE frameworks, with strategies for prevention, response, and whole-school support',
+    summary: [
+      '1. Meltdowns Require Empathy, Not Discipline',
+      '2. Frameworks Provide Clarity in Crisis and Recovery', 
+      '3. Prevention and Whole-School Support Are Key'
+    ],
+      'Recognise the difference between meltdowns, tantrums, and defiance, and identify early warning signs unique to your students.',
+      'Apply MOE’s CALM framework during a meltdown and CASE after, ensuring safety, communication, and stronger support systems.',
+      'Design classroom and school-wide routines — like calm corners, exit cards, or peer supports — that reduce escalation and build trust with students.'
+    ],
+    category: 'Special Educational Needs (SEN)',
     author: 'DXD Product Team',
-    duration: 480000, // 8 minutes
-    imageUrl: 'https://picsum.photos/400/400?random=7',
-    audioUrl: require('../assets/audio/ais-role-in-singapores-education-transformation.wav'),
+    duration: 187000, // 3 minutes 7 seconds
+    imageUrl: 'https://picsum.photos/400/400?random=42',
+    audioUrl: require('../assets/audio/1 meltdown - isolated.mp3'),
     backgroundColor: 'bg-white',
-    badgeColor: 'bg-yellow-200',
-    textColor: 'text-yellow-900',
-    timeLeft: '8m',
+    badgeColor: 'bg-blue-200',
+    textColor: 'text-blue-900',
+    timeLeft: '3m 7s',
     progress: 0,
     publishedDate: 'Today',
-    createdAt: new Date('2025-01-15'), // AI content created earlier
+    createdAt: new Date('2025-09-03'),
     sources: [
       {
-        title: 'EdTech Plan: Transforming Education Through Technology',
-        url: 'https://www.moe.gov.sg/education-in-sg/educational-technology',
-        type: 'article',
-        author: 'Ministry of Education, Singapore',
-        publishedDate: '2021'
+        title: 'SEN:se Online PD Unit 4.2 Managing Meltdown',
+        url: 'https://www.opal2.moe.edu.sg/app/learner/detail/course/76f2e6d2-ac95-4b3c-8102-c5ecf223d9d0',
+        type: 'other',
+        author: 'MOE (SEN:se)',
+        publishedDate: '—'
       },
       {
-        title: 'AI in Education: Personalized Learning',
-        url: 'https://www.nie.edu.sg/research/ai-personalized-learning',
-        type: 'research',
-        author: 'National Institute of Education',
-        publishedDate: '2024'
+        title: 'Modifications to Physical Spaces',
+        url: 'https://file.notion.so/f/f/859c0b29-8cad-46b7-9f58-b12ad54a080a/27ca9427-be63-4b28-a738-e83dcb0c545c/Modification_to_Physical_Spaces_FINAL.pdf?table=block&id=25d970a3-87f2-80da-81c4-dbfdaaf220e0&spaceId=859c0b29-8cad-46b7-9f58-b12ad54a080a&expirationTimestamp=1756896134461&signature=TB5u3peFHa-puc3YJeaxd1MsV1RB-T-rNTkZ21fW5bI&downloadName=Modification+to+Physical+Spaces_FINAL.pdf',
+        type: 'other',
+        author: 'SEND',
+        publishedDate: '—'
+      },
+      {
+        title: 'Managing Meltdown – Facilitation Guide for Teachers (Contact Time)',
+        url: 'https://file.notion.so/f/f/859c0b29-8cad-46b7-9f58-b12ad54a080a/3417a89f-56d5-4693-9d90-b6f83b6b2a11/MOE_Managing_Meltdown_Facilitation_Guide_for_teachers_(Contact_Time)_FINAL.pdf?table=block&id=25d970a3-87f2-80da-81c4-dbfdaaf220e0&spaceId=859c0b29-8cad-46b7-9f58-b12ad54a080a&expirationTimestamp=1756896105776&signature=0ic6ly-uzg10Jj37jR3T6r7WWTSH9dDmapCyiQPsy6k&downloadName=MOE+Managing+Meltdown+Facilitation+Guide+for+teachers+%28Contact+Time%29_FINAL.pdf',
+        type: 'other',
+        author: 'SEND',
+        publishedDate: '—'
+      },
+      {
+        title: 'Guiding Schools in Implementing School-Level SEN Support',
+        url: 'https://file.notion.so/f/f/859c0b29-8cad-46b7-9f58-b12ad54a080a/6adfc6d3-24df-4254-851e-1e732df6e298/Guiding_Schools_in_Implementing_School-Level_SEN_Support.pdf?table=block&id=25d970a3-87f2-80da-81c4-dbfdaaf220e0&spaceId=859c0b29-8cad-46b7-9f58-b12ad54a080a&expirationTimestamp=1756896084760&signature=wvruBI1y3uyfEl7UyI04z4hoqqPoXZdn94N8c2--DNk&downloadName=Guiding+Schools+in+Implementing+School-Level+SEN+Support.pdf',
+        type: 'other',
+        author: 'SEND',
+        publishedDate: '—'
+      },
+      {
+        title: 'Circle of Friends',
+        url: 'https://file.notion.so/f/f/859c0b29-8cad-46b7-9f58-b12ad54a080a/9859b7f0-9c92-4306-92d2-4be8b7f29e74/Circles_of_Friends.pdf?table=block&id=25d970a3-87f2-80da-81c4-dbfdaaf220e0&spaceId=859c0b29-8cad-46b7-9f58-b12ad54a080a&expirationTimestamp=1756896057718&signature=4JrrjyEzOqyBMQbPJbjLtEpkm8oWznQ7LhDP-PfKnNE&downloadName=Circles+of+Friends.pdf',
+        type: 'other',
+        author: 'SEND',
+        publishedDate: '—'
       }
     ]
-  }
+  }  
 ];
 
 export const weeklyProgress = [
