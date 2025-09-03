@@ -50,7 +50,7 @@ export const educationalContent: EducationalContent[] = [
       {
         title: 'Chemistry NotebookLM summaries in a YouTube playlist by Eugene Teo, SJI',
         url: 'https://www.youtube.com/playlist?list=PLRyjE27lCUbxefJzi6Ys7Fka_ZrN1EIPt',
-        type: 'article',
+        type: 'video',
         author: 'Eugene Teo, SJI',
         publishedDate: '2025'
       },
