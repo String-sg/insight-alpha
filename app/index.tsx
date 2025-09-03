@@ -2,17 +2,20 @@ import { EducationalCard } from '@/components/EducationalCard';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { SegmentedControl } from '@/components/SegmentedControl';
+import { useAuth } from '@/contexts/AuthContext';
 import { WebScrollView } from '@/components/WebScrollView';
 import { WeekCalendar } from '@/components/WeekCalendar';
 import { EducationalContent, educationalContent, weeklyProgress } from '@/data/educational-content';
 import { useAudio } from '@/hooks/useAudio';
 import { useRouter } from 'expo-router';
+import { getFeedbackFormUrl } from '@/utils/feedback';
 import React, { useEffect, useState } from 'react';
-import { Platform, SafeAreaView, StatusBar, Text, View } from 'react-native';
+import { Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View, Linking } from 'react-native';
 
 export default function HomeScreen() {
   const router = useRouter();
   const { currentPodcast, playContent, getRecentlyPlayed } = useAudio();
+  const { user } = useAuth();
   const [recentlyPlayed, setRecentlyPlayed] = useState<Array<{ id: string; title: string; timestamp: number; imageUrl: string; category: string; author: string }>>([]);
   
   const handleContentPress = (content: EducationalContent) => {
@@ -111,16 +114,53 @@ export default function HomeScreen() {
           </View>
           
           <View className="px-6">
-            {educationalContent
-              .filter(content => !recentlyPlayed.some(recent => recent.id === content.id))
-              .map((content) => (
-                <EducationalCard
-                  key={content.id}
-                  content={content}
-                  onPress={() => handleContentPress(content)}
-                  onPlayPress={() => handlePlayPress(content)}
-                />
-              ))}
+            {(() => {
+              const filteredContent = educationalContent.filter(content => 
+                !recentlyPlayed.some(recent => recent.id === content.id)
+              );
+              
+              if (filteredContent.length === 0) {
+                return (
+                  <View className="text-center py-8">
+                    <Text className="text-slate-600 text-base text-center">
+                      You've reached the end of the list. More content coming soon(:
+                    </Text>
+                  </View>
+                );
+              }
+              
+              return (
+                <>
+                  {filteredContent.map((content) => (
+                    <EducationalCard
+                      key={content.id}
+                      content={content}
+                      onPress={() => handleContentPress(content)}
+                      onPlayPress={() => handlePlayPress(content)}
+                    />
+                  ))}
+                  
+                  {/* Feedback link at bottom */}
+                  <View className="mt-6 text-center">
+                    <TouchableOpacity
+                      onPress={() => {
+                        const feedbackUrl = getFeedbackFormUrl(user?.email);
+                        if (Platform.OS === 'web') {
+                          window.open(feedbackUrl, '_blank');
+                        } else {
+                          Linking.openURL(feedbackUrl);
+                        }
+                      }}
+                      activeOpacity={0.7}
+                    >
+                      <Text className="text-slate-500 text-sm underline">
+                        share feedback
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              );
+            })()}
           </View>
         </View>
       </WebScrollView>
