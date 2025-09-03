@@ -5,6 +5,46 @@ import { Podcast } from '@/types/podcast';
  */
 export const mockPodcasts: Podcast[] = [
   {
+    id: '4',
+    title: 'Learn to use AI: creating songs to help students’ remember, inspired by Eugene Teo (SJI)',
+    description: 'Discover how you can use AI to turn subject content into songs, harness audio for memory, and explore sleep-based learning strategies inspired by Eugene Teo\'s (SJI) edutech experiments to support student learning outcomes.\n\nYou\'ll be able to:\n1. Use AI tools like ChatGPT, Suno, or Udio to convert subject concepts into lyrics and music, even if you\'re not musically inclined.\n2. Integrate audio-based study aids into your teaching — from playlists to paired video summaries — to reinforce learning beyond the classroom.\n3. Apply sleep research such as Targeted Memory Reactivation (TMR) by pairing summaries and lofi tracks with bedtime routines to strengthen student recall.',
+    imageUrl: 'https://picsum.photos/400/400?random=7',
+    audioUrl: require('../assets/audio/15 ai audio - eugene - isolated.mp3'),
+    duration: 600000, // {BLANK - duration in milliseconds, e.g., 600000 for 10 minutes}
+    author: 'DXD Product Team',
+    category: 'Artificial Intelligence',
+    sources: [
+      {
+        title: 'Prompts for Suno to generate songs for your subject',
+        url: 'https://medium.com/string/suno-ready-prompts-for-learning-via-audio-first-35e87af221e4',
+        type: 'website',
+        author: 'Kahhow',
+        publishedDate: '2025',
+      }
+      {
+        title: 'O Level Chemistry Lofi Study Music (Vol 1 - v1)',
+        url: 'https://www.youtube.com/watch?v=sWRqbqHKa_s',
+        type: 'video',
+        author: 'Eugene Teo, SJI',
+        publishedDate: '2025'
+      },
+      {
+        title: 'Chemistry NotebookLM summaries in a YouTube playlist by Eugene Teo, SJI',
+        url: 'https://www.youtube.com/playlist?list=PLRyjE27lCUbxefJzi6Ys7Fka_ZrN1EIPt',
+        type: 'video',
+        author: 'Eugene Teo, SJI',
+        publishedDate: '2025'
+      },
+      {
+        title: 'Eugene\'s Original Linkedin Post, reposted with consent',
+        url: 'https://www.linkedin.com/feed/update/urn:li:activity:7357597913297932289/',
+        type: 'article',
+        author: 'Eugene Teo, SJI',
+        publishedDate: '2025'
+      },
+    ]
+  },
+  {
     id: '3',
     title: 'Supporting Students with Dyslexia: What Every Teacher Needs to Know',
     description: 'Comprehensive approaches to create a positive school culture that prevents bullying and promotes student safety and wellbeing.',

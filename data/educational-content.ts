@@ -23,6 +23,47 @@ export interface EducationalContent {
 
 export const educationalContent: EducationalContent[] = [
   {
+    id: '4',
+    title: 'Learn to use AI: creating songs to help students\' remember, inspired by Eugene Teo (SJI)',
+    description: 'Discover how you can use AI to turn subject content into songs, harness audio for memory, and explore sleep-based learning strategies inspired by Eugene Teo\'s (SJI) edutech experiments to support student learning outcomes.\n\nYou\'ll be able to:\n1. Use AI tools like ChatGPT, Suno, or Udio to convert subject concepts into lyrics and music, even if you\'re not musically inclined.\n2. Integrate audio-based study aids into your teaching — from playlists to paired video summaries — to reinforce learning beyond the classroom.\n3. Apply sleep research such as Targeted Memory Reactivation (TMR) by pairing summaries and lofi tracks with bedtime routines to strengthen student recall.',
+    summary: '1. Turn Concepts into Lyrics – Use AI prompts to transform tricky topics (like ionic bonding) into short, catchy lines. You don\'t need to be musical — AI does the heavy lifting.\n2. Generate Songs with AI Tools – Drop your lyrics into Suno or Udio, pick a style (lofi, pop, rap), and in minutes you\'ll have a polished track for students to study with.\n3. Boost Recall with Audio & Sleep – Pair songs with NotebookLM video summaries, then encourage students to listen before bed. Research on Targeted Memory Reactivation (TMR) suggests audio cues during sleep can strengthen memory.',
+    category: 'Artificial Intelligence',
+    author: 'DXD Product Team',
+    duration: 600000, // {BLANK - duration in milliseconds, e.g., 600000 for 10 minutes}
+    imageUrl: 'https://picsum.photos/400/400?random=7',
+    audioUrl: require('../assets/audio/15 ai audio - eugene - isolated.mp3'),
+    backgroundColor: 'bg-white',
+    badgeColor: 'bg-yellow-200',
+    textColor: 'text-yellow-900',
+    timeLeft: '{BLANK - time left, e.g., 10m left}',
+    progress: 0,
+    publishedDate: '{BLANK - published date, e.g., Today, 1 day ago, 1 week ago}',
+    createdAt: new Date('2025-08-28'),
+    sources: [
+      {
+        title: 'O Level Chemistry Lofi Study Music (Vol 1 - v1)',
+        url: 'https://www.youtube.com/watch?v=sWRqbqHKa_s',
+        type: 'video',
+        author: 'Eugene Teo, SJI',
+        publishedDate: '2025'
+      },
+      {
+        title: 'Chemistry NotebookLM summaries in a YouTube playlist by Eugene Teo, SJI',
+        url: 'https://www.youtube.com/playlist?list=PLRyjE27lCUbxefJzi6Ys7Fka_ZrN1EIPt',
+        type: 'article',
+        author: 'Eugene Teo, SJI',
+        publishedDate: '2025'
+      },
+      {
+        title: 'Eugene\'s Original Linkedin Post, reposted with consent',
+        url: 'https://www.linkedin.com/feed/update/urn:li:activity:7357597913297932289/',
+        type: 'article',
+        author: 'Eugene Teo, SJI',
+        publishedDate: '2025'
+      },
+    ]
+  },
+  {
     id: '3',
     title: 'Supporting Students with Dyslexia: What Every Teacher Needs to Know',
     description: '**Overview**\nThis episode dives deep into how educators can better understand and support students with dyslexia in mainstream classrooms. Backed by current brain research and real classroom experiences, the conversation unpacks what dyslexia really is (and isn’t), why some common myths persist, and how teachers can implement practical, research-based strategies that empower struggling readers. By embracing neurodiversity and applying structured support, educators can help students with dyslexia thrive both academically and emotionally.',
@@ -60,7 +101,7 @@ export const educationalContent: EducationalContent[] = [
     id: '2',
     title: "ADHD in Classrooms: Strategies That Work",
     description: '**Overview**\nThis episode unpacks how teachers can understand and support students with Attention Deficit Hyperactivity Disorder (ADHD) in mainstream classrooms. We break down common myths, explore how ADHD presents in different students, and share practical, low-prep strategies to help learners focus, stay organized, and succeed. Learn how to work effectively with parents, use classroom adjustments, and create inclusive learning environments where all students can thrive.',
-    summary: '1. Understanding ADHD Is Essential for Effective Support \n Simple, Low-Prep Strategies Make a Big Impact (structured routines, visual aids, and clear instructions—can greatly improve focus, organization, and participation) \n 3. Collaboration and Inclusivity Enhance Outcomes (parents, the entire class community)',
+    summary: '1. Understanding ADHD Is Essential for Effective Support \nSimple, Low-Prep Strategies Make a Big Impact (structured routines, visual aids, and clear instructions—can greatly improve focus, organization, and participation) \n 3. Collaboration and Inclusivity Enhance Outcomes (parents, the entire class community)',
     category: 'Special Educational Needs',
     author: 'DXD Product Team',
     duration: 540000, // 9 minutes
@@ -160,52 +201,36 @@ export const educationalContent: EducationalContent[] = [
   }  
 ];
 
-// Memoized version of getWeeklyProgress
-export const getWeeklyProgress = (() => {
-  let lastWeekStart: string | null = null;
-  let lastResult: any = null;
-
-  return () => {
-    const now = new Date();
-    const currentDay = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
+export const getWeeklyProgress = () => {
+  const now = new Date();
+  const currentDay = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
+  
+  // Calculate the start of the current week (Monday)
+  const startOfWeek = new Date(now);
+  const daysToMonday = currentDay === 0 ? 6 : currentDay - 1; // Adjust for Sunday
+  startOfWeek.setDate(now.getDate() - daysToMonday);
+  
+  const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  
+  return weekDays.map((day, index) => {
+    const date = new Date(startOfWeek);
+    date.setDate(startOfWeek.getDate() + index);
     
-    // Calculate the start of the current week (Monday)
-    const startOfWeek = new Date(now);
-    const daysToMonday = currentDay === 0 ? 6 : currentDay - 1; // Adjust for Sunday
-    startOfWeek.setDate(now.getDate() - daysToMonday);
+    const isToday = date.toDateString() === now.toDateString();
+    
+    // For demo purposes, you can set some days as completed
+    // In a real app, this would come from user progress data
+    const isCompleted = index === 1 || index === 2; // Tuesday and Wednesday completed for demo
+    
+    return {
+      day,
+      date: date.getDate(),
+      isCompleted,
+      isToday
+    };
+  });
+};
 
-    // Use ISO string for week start comparison
-    const weekStartKey = startOfWeek.toISOString().slice(0, 10);
-
-    if (lastWeekStart === weekStartKey && lastResult) {
-      return lastResult;
-    }
-
-    const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
-    const result = weekDays.map((day, index) => {
-      const date = new Date(startOfWeek);
-      date.setDate(startOfWeek.getDate() + index);
-      
-      const isToday = date.toDateString() === now.toDateString();
-      
-      // For demo purposes, you can set some days as completed
-      // In a real app, this would come from user progress data
-      const isCompleted = index === 1 || index === 2; // Tuesday and Wednesday completed for demo
-      
-      return {
-        day,
-        date: date.getDate(),
-        isCompleted,
-        isToday
-      };
-    });
-
-    lastWeekStart = weekStartKey;
-    lastResult = result;
-    return result;
-  };
-})();
 export const weeklyProgress = getWeeklyProgress();
 
 export const formatDuration = (milliseconds: number): string => {

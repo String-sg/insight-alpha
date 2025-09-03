@@ -2,6 +2,23 @@ import { PodcastScript } from '../types/script';
 
 export const podcastScripts: PodcastScript[] = [
   {
+    podcastId: '4',
+    title: 'Learn to use AI: creating songs to help students\' remember, inspired by Eugene Teo (SJI)',
+    content: `{BLANK - AI Podcast Script Content}
+
+This should be a conversational script between two educators discussing AI in education, similar to the existing scripts. Include:
+
+1. Opening hook and introduction
+2. Key concepts and practical strategies
+3. Real classroom examples
+4. Common misconceptions and how to address them
+5. Actionable takeaways for teachers
+6. Closing thoughts and encouragement
+
+Format as a dialogue between two speakers, using natural conversation flow.`,
+    language: 'en'
+  },
+  {
     podcastId: '3',
     title: "Supporting Students with Dyslexia: What Every Teacher Needs to Know",
     content: `Welcome back! I'm excited about today's topic because it's something so many of us encounter in our classrooms. Picture this - you've got a bright, articulate student who participates beautifully in class discussions, asks thoughtful questions, but the moment you ask them to read aloud, they freeze up completely.
